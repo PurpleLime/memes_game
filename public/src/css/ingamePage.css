@@ -1,0 +1,204 @@
+.players-сircle {
+    position: relative;
+    width: 82.5%;
+    height: 70%;
+    /*margin-top: 12.6vh;*/
+}
+
+.players-сircle__container {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.ingame-page-upper-cap {
+    width: 100%;
+    height: 12.6%;
+}
+
+.ingame-menu-button {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+}
+
+.ingame-pull-out-mode-button {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+}
+
+.ingame-confirm-button {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+}
+
+.cur-situation-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 340px;
+    width: 251px;
+    background: #1769E3;
+    border: 5px solid #AD00FF;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 28px;
+    padding: 20px;
+}
+
+.situation-card-deck {
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    height: 185px;
+    width: 137px;
+    background: #1769E3;
+    border: 5px solid #AD00FF;
+    border-radius: 8px;
+}
+
+.meme-card-deck {
+    position: absolute;
+    top: 50%;
+    left: 75%;
+    transform: translate(-50%, -50%);
+    height: 185px;
+    width: 137px;
+    background: #A00CC6;
+    border: 5px solid #EE3434;
+    border-radius: 8px;
+}
+
+.player-hand {
+    position: absolute;
+    left: 50%;
+    bottom: 100px;
+    display: flex;
+    transform: translate(-50%);
+    width: 100%;
+    justify-content: center;
+}
+
+.meme-card {
+    height: 185px;
+    width: 137px;
+    background: url(../img/defaultBackground.png) repeat center/40%,
+    #A00CC6 no-repeat center/cover;
+    border: 5px solid #EE3434;
+    border-radius: 8px;
+    transition: all 0.1s linear 0s;
+}
+
+.meme-card:hover {
+    border-color: #6FEE34;
+}
+
+.meme-card_rotation {
+    /*margin-left: -30px;*/
+    margin-left: -2.17%;
+}
+
+.meme-card_rotation:nth-child(1) {
+    margin-left: 0;
+    transform: rotate(-21deg) translate(0, 63px);
+}
+
+.meme-card_rotation:nth-child(1):hover {
+    border-color: #6FEE34;
+    z-index: 100;
+    transform: rotate(-21deg) scale(1.5);
+}
+
+.meme-card_rotation:nth-child(2) {
+    transform: rotate(-14deg) translate(0, 29px);
+}
+
+.meme-card_rotation:nth-child(2):hover {
+    border-color: #6FEE34;
+    z-index: 100;
+    transform: rotate(-14deg) scale(1.5);
+}
+
+.meme-card_rotation:nth-child(3) {
+    transform: rotate(-7deg) translate(0, 8px);
+}
+
+.meme-card_rotation:nth-child(3):hover {
+    border-color: #6FEE34;
+    z-index: 100;
+    transform: rotate(-7deg) scale(1.5);
+}
+
+.meme-card_rotation:nth-child(4) {
+    transform: rotate(0deg) translate(0, 0);
+
+}
+
+.meme-card_rotation:nth-child(4):hover {
+    border-color: #6FEE34;
+    z-index: 100;
+    transform: scale(1.5);
+}
+
+.meme-card_rotation:nth-child(5) {
+    transform: rotate(7deg) translate(0, 8px);
+}
+
+.meme-card_rotation:nth-child(5):hover {
+    border-color: #6FEE34;
+    z-index: 100;
+    transform: rotate(7deg) scale(1.5);
+}
+
+.meme-card_rotation:nth-child(6) {
+    transform: rotate(14deg) translate(0, 29px);
+}
+
+.meme-card_rotation:nth-child(6):hover {
+    border-color: #6FEE34;
+    z-index: 100;
+    transform: rotate(14deg) scale(1.5);
+}
+
+.meme-card_rotation:nth-child(7) {
+    transform: rotate(21deg) translate(0, 63px);
+}
+
+.meme-card_rotation:nth-child(7):hover {
+    border-color: #6FEE34;
+    z-index: 100;
+    transform: rotate(21deg) scale(1.5);
+}
+
+.meme-card__meme {
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    background-image: url(../img/shrekMeme.jpg);
+}
+
+.meme-card_size_m {
+    /*transform: scale(1.5);*/
+    width: 205px;
+    height: 276px;
+}
+
+.results-list {
+    width: 100%;
+    margin: auto 0 auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    column-gap: 7%;
+    row-gap: 5vh;
+}

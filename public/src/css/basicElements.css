@@ -1,0 +1,53 @@
+.standart-button {
+    border-radius: 50%;
+    background-color: #FCD162;
+    border: 1px solid #E49620;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    transition: all 0.1s linear 0s;
+}
+
+.standart-button:hover {
+    transform: scale(1.1, 1.1);
+}
+
+.standart-button_size_l {
+    width: 150px;
+    height: 150px;
+}
+
+.standart-button_size_m {
+    width: 113px;
+    height: 113px;
+}
+
+.standart-button_size_s {
+    width: 44px;
+    height: 44px;
+}
+
+.menu-icon {
+    width: 50%;
+    height: 50%;
+    background: url(../img/menuIcon.svg) no-repeat center/cover;
+}
+
+.pull-out-mode-icon {
+    width: 50%;
+    height: 50%;
+    background: url(../img/pullOutModeIcon.svg) no-repeat center/cover;
+}
+
+.confirm-icon {
+    width: 50%;
+    height: 50%;
+    background: url(../img/confirmIcon.svg) no-repeat center/cover;
+}
+
+.star-icon {
+    width: 28px;
+    height: 28px;
+    background: url(../img/starIcon.svg) no-repeat center/cover;
+}
