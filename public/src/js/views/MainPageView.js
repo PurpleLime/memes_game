@@ -1,11 +1,10 @@
 import BaseView from './BaseView.js'
 
-const fs = require('fs');
-
 export default class MainPageView extends BaseView {
 
-    constructor() {
+    constructor(MainPageModel) {
         super();
+        this._model = MainPageModel;
         this.wrapper = document.getElementById('wrapper');
     }
 
@@ -13,7 +12,12 @@ export default class MainPageView extends BaseView {
         window.scroll(0, 0);
         document.title = 'Главная страница';
 
-        this.wrapper.innerHTML = '';
+        this.wrapper.innerHTML = mainPageTemplate({});
+
+        let userNickname = document.getElementById("usernameInput");
+        userNickname.value = this._model.userNickname;
+        userNickname.addEventListener('input', () => {this.emit("UserNicknameChanged", userNickname.value)});
+
     }
 
 }
