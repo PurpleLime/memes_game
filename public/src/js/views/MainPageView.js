@@ -8,6 +8,10 @@ export default class MainPageView extends BaseView {
         this.wrapper = document.getElementById('wrapper');
     }
 
+    init() {
+        this.renderMainPage();
+    }
+
     renderMainPage() {
         window.scroll(0, 0);
         document.title = 'Главная страница';
