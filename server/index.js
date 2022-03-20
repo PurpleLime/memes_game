@@ -1,24 +1,21 @@
-// const http = require('http');
-// const fs = require('fs');
-// const mime = require('mime');
-// const ws = require('ws');
-
 import http from 'http';
 import fs from 'fs';
 import mime from 'mime';
 import {WebSocketServer} from 'ws';
 import express from 'express';
+import path from 'path';
 
+const __dirname = path.resolve();
 const PORT = process.env.PORT ?? 3000;
-
-const app = express();
-
 
 const wss = new WebSocketServer({noServer: true}, () => console.log("WebSocket server started"));
 
-const server = http.createServer((req, res) => {
+const app = express();
+
+app.get('*', (req, res) => {
 
     console.log(acceptWS(req, res));
+
     if (acceptWS(req, res)) {
         try {
             wss.handleUpgrade(req, req.socket, Buffer.alloc(0), onSocketConnect);
@@ -37,24 +34,17 @@ const server = http.createServer((req, res) => {
         file = req.url.replace('/', '')
     }
 
-    fs.readFile(`public/${file}`, (err, data) => {
-        if (err) {
-            console.log('error', err);
-            res.end();
-            return;
-        }
+    console.log('mime: ', mime.getType(path.resolve(__dirname, 'public', file)));
+    // res.setHeader('Content-Type', mime.getType(`public/${file}`));
 
-        console.log('mime: ', mime.getType(`public/${file}`));
-        res.setHeader('Content-Type', mime.getType(`public/${file}`));
-        res.write(data);
-        res.end();  //заканчиваем ответ сервера (иначе в браузере будет бесконечно крутиться спиннер загрузки страницы)
-    })
-
+    res.sendFile(path.resolve(__dirname, 'public', file));
 })
 
 const clients = new Set();
 
-server.listen(3000);
+app.listen(PORT, () => {
+    console.log(`Server has been started on port ${PORT}...`);
+})
 
 
 //websocket:
