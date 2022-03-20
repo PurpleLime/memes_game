@@ -1,6 +1,6 @@
 import BaseModel from "./BaseModel.js";
 
-export default class MainPageModel extends BaseModel {
+class MainPageModel extends BaseModel {
     constructor() {
         super();
     }
@@ -14,5 +14,6 @@ export default class MainPageModel extends BaseModel {
         console.log(this.userNickname);
     }
 
-
 }
+
+export default new MainPageModel();

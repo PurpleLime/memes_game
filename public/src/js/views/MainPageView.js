@@ -1,6 +1,7 @@
 import BaseView from './BaseView.js'
+import MainPageModel from "../models/MainPageModel.js";
 
-export default class MainPageView extends BaseView {
+class MainPageView extends BaseView {
 
     constructor(MainPageModel) {
         super();
@@ -42,3 +43,5 @@ export default class MainPageView extends BaseView {
     }
 
 }
+
+export default new MainPageView(MainPageModel);

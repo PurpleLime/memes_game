@@ -1,6 +1,7 @@
 import BaseView from './BaseView.js'
+import LobbyModel from "../models/LobbyModel.js";
 
-export default class LobbyView extends BaseView {
+class LobbyView extends BaseView {
 
     constructor(LobbyModel) {
         super();
@@ -21,3 +22,5 @@ export default class LobbyView extends BaseView {
     }
 
 }
+
+export default new LobbyView(LobbyModel);

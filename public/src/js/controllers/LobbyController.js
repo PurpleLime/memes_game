@@ -1,7 +1,9 @@
 import BaseController from './BaseController.js';
 import Router from "../Router.js";
+import LobbyModel from "../models/LobbyModel.js";
+import LobbyView from "../views/LobbyView.js";
 
-export default class LobbyController extends BaseController {
+class LobbyController extends BaseController {
     constructor(LobbyModel, LobbyView) {
         super();
         this._model = LobbyModel;
@@ -23,3 +25,5 @@ export default class LobbyController extends BaseController {
     }
 
 }
+
+export default new LobbyController(LobbyModel, LobbyView);

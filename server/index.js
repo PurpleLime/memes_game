@@ -1,4 +1,4 @@
-import http from 'http';
+import https from 'https';
 import fs from 'fs';
 import mime from 'mime';
 import {WebSocketServer} from 'ws';
@@ -12,11 +12,31 @@ const wss = new WebSocketServer({noServer: true}, () => console.log("WebSocket s
 
 const app = express();
 
+// app.on('upgrade', function upgrade(request, socket, head) {
+//
+//     console.log(acceptWS(request));
+//
+//     if (acceptWS(request)) {
+//         try {
+//             wss.handleUpgrade(request, socket, Buffer.alloc(0), onSocketConnect);
+//         }
+//         catch (e) {
+//             console.log(e);
+//         }
+//         return
+//     }
+// })
+
+// const httpsOptions = {
+//     cert: fs.readFileSync('path...'),
+//     key: fs.readFileSync('path..')
+// }
+
 app.get('*', (req, res) => {
 
-    console.log(acceptWS(req, res));
+    console.log(acceptWS(req));
 
-    if (acceptWS(req, res)) {
+    if (acceptWS(req)) {
         try {
             wss.handleUpgrade(req, req.socket, Buffer.alloc(0), onSocketConnect);
         }
@@ -41,6 +61,10 @@ app.get('*', (req, res) => {
 })
 
 const clients = new Set();
+
+// https.createServer(httpsOptions, app).listen(PORT, () => {
+//     console.log(`Server has been started on port ${PORT}...`);
+// })
 
 app.listen(PORT, () => {
     console.log(`Server has been started on port ${PORT}...`);
@@ -69,7 +93,7 @@ function onSocketConnect(ws) {
 
 }
 
-function acceptWS(req, res) {
+function acceptWS(req) {
     // все входящие запросы должны использовать websockets
     if (!req.headers.upgrade || req.headers.upgrade.toLowerCase() != 'websocket') {
         // res.end();

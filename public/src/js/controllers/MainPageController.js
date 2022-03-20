@@ -1,7 +1,9 @@
 import BaseController from './BaseController.js';
 import Router from "../Router.js";
+import MainPageModel from "../models/MainPageModel.js";
+import MainPageView from "../views/MainPageView.js";
 
-export default class MainPageController extends BaseController {
+class MainPageController extends BaseController {
     constructor(MainPageModel, MainPageView) {
         super();
         this._model = MainPageModel;
@@ -24,3 +26,5 @@ export default class MainPageController extends BaseController {
     }
 
 }
+
+export default new MainPageController(MainPageModel, MainPageView);

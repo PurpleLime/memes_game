@@ -1,6 +1,6 @@
 import BaseModel from "./BaseModel.js";
 
-export default class LobbyModel extends BaseModel {
+class LobbyModel extends BaseModel {
     constructor() {
         super();
     }
@@ -9,3 +9,5 @@ export default class LobbyModel extends BaseModel {
     }
 
 }
+
+export default new LobbyModel();

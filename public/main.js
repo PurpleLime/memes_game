@@ -6,13 +6,11 @@ import LobbyModel from "./src/js/models/LobbyModel.js";
 import LobbyView from "./src/js/views/LobbyView.js";
 import LobbyController from "./src/js/controllers/LobbyController.js";
 
-const mainPageModel = new MainPageModel();
-const mainPageView = new MainPageView(mainPageModel);
-const mainPageController = new MainPageController(mainPageModel, mainPageView);
-const lobbyModel = new LobbyModel();
-const lobbyView = new LobbyView(lobbyModel);
-const lobbyController = new LobbyController(lobbyModel, lobbyView);
+// const mainPageModel = new MainPageModel();
+// const mainPageView = new MainPageView(MainPageModel);
+// const mainPageController = new MainPageController(MainPageModel, MainPageView);
 
 Router.emit("mainPage");
+
 
 
