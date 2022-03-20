@@ -3,10 +3,14 @@ import BaseModel from "./BaseModel.js";
 class MainPageModel extends BaseModel {
     constructor() {
         super();
+        this.init();
+    }
+
+    init() {
+        this.userNickname = 'Имечко';
     }
 
     update() {
-        this.userNickname = 'Имечко';
     }
 
     changeUserNickname(newUserNickname) {

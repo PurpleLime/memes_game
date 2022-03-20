@@ -1,5 +1,6 @@
 import BaseView from './BaseView.js'
 import MainPageModel from "../models/MainPageModel.js";
+import Router from "../Router.js";
 
 class MainPageView extends BaseView {
 
@@ -7,10 +8,18 @@ class MainPageView extends BaseView {
         super();
         this._model = MainPageModel;
         this.wrapper = document.getElementById('wrapper');
+
+        this.socket = null;
+
+        this.init();
+    }
+
+    init() {
     }
 
     update() {
         this.renderMainPage();
+
     }
 
     renderMainPage() {
@@ -21,25 +30,44 @@ class MainPageView extends BaseView {
 
         let userNickname = document.getElementById("usernameInput");
         userNickname.value = this._model.userNickname;
-        userNickname.addEventListener('input', (e) => {
-            e.preventDefault();
-            this.emit("UserNicknameChanged", userNickname.value)
-        });
+        userNickname.addEventListener('input', this.userNicknameClickHandler.bind(this));
 
 
 
         //websocket:
-        let socket = new WebSocket("ws://localhost:3000");
+        this.socket = new WebSocket("ws://localhost:3000");
 
-        socket.onmessage = function (event) {
+        this.socket.onmessage = function (event) {
             console.log(event.data);
         }
 
+        let createButton = document.getElementById('createButton');
+        createButton.addEventListener('click', this.createButtonClickHandler);
+
         let connectButton = document.getElementById("connectButton");
         connectButton.addEventListener('click', (e) => {
-            socket.send(userNickname.value);
+            this.socket.send(userNickname.value);
         })
 
+    }
+
+    leave() {
+        this.socket.close(1000, "переход на другую страницу");
+
+        let userNickname = document.getElementById("usernameInput");
+        userNickname.removeEventListener('input', this.userNicknameClickHandler.bind(this));
+
+        let createButton = document.getElementById('createButton');
+        createButton.removeEventListener('click', this.createButtonClickHandler);
+    }
+
+    userNicknameClickHandler(e) {
+        e.preventDefault();
+        this.emit("UserNicknameChanged", e.target.value);
+    }
+
+    createButtonClickHandler(e) {
+        Router.emit('lobby');
     }
 
 }

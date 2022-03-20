@@ -15,13 +15,17 @@ class LobbyController extends BaseController {
     }
 
     addEvents() {
-        Router.on("lobby", this.update.bind(this));
 
     }
 
     update() {
+        super.update();
         this._model.update();
         this._view.update();
+    }
+
+    leave() {
+        super.leave();
     }
 
 }

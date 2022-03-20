@@ -1,3 +1,4 @@
+import Router from "../Router.js";
 import BaseView from './BaseView.js'
 import LobbyModel from "../models/LobbyModel.js";
 
@@ -18,6 +19,11 @@ class LobbyView extends BaseView {
         document.title = 'Лобби';
 
         this.wrapper.innerHTML = lobbyTemplate({});
+
+        let exitButton = document.getElementById('exitButton');
+        exitButton.addEventListener('click', (e) => {
+            Router.emit('mainPage');
+        })
 
     }
 
