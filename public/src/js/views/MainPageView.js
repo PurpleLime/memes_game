@@ -8,7 +8,7 @@ export default class MainPageView extends BaseView {
         this.wrapper = document.getElementById('wrapper');
     }
 
-    init() {
+    update() {
         this.renderMainPage();
     }
 
@@ -20,7 +20,24 @@ export default class MainPageView extends BaseView {
 
         let userNickname = document.getElementById("usernameInput");
         userNickname.value = this._model.userNickname;
-        userNickname.addEventListener('input', () => {this.emit("UserNicknameChanged", userNickname.value)});
+        userNickname.addEventListener('input', (e) => {
+            e.preventDefault();
+            this.emit("UserNicknameChanged", userNickname.value)
+        });
+
+
+
+        //websocket:
+        let socket = new WebSocket("ws://localhost:3000");
+
+        socket.onmessage = function (event) {
+            console.log(event.data);
+        }
+
+        let connectButton = document.getElementById("connectButton");
+        connectButton.addEventListener('click', (e) => {
+            socket.send(userNickname.value);
+        })
 
     }
 

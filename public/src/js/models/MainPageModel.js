@@ -5,7 +5,7 @@ export default class MainPageModel extends BaseModel {
         super();
     }
 
-    init() {
+    update() {
         this.userNickname = 'Имечко';
     }
 

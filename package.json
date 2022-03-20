@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node server",
     "pug-build": "./pug.sh",
@@ -19,8 +20,13 @@
   },
   "homepage": "https://github.com/PurpleLime/memes_game#readme",
   "dependencies": {
+    "express": "^4.17.3",
     "mime": "^3.0.0",
     "pug": "^3.0.2",
-    "pug-cli": "^1.0.0-alpha6"
+    "pug-cli": "^1.0.0-alpha6",
+    "ws": "^8.5.0"
+  },
+  "optionalDependencies": {
+    "utf-8-validate": "^5.0.9"
   }
 }

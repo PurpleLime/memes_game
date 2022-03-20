@@ -1,5 +1,5 @@
 import BaseController from './BaseController.js';
-import Router from "../models/Router.js";
+import Router from "../Router.js";
 
 export default class MainPageController extends BaseController {
     constructor(MainPageModel, MainPageView) {
@@ -13,14 +13,14 @@ export default class MainPageController extends BaseController {
     }
 
     addEvents() {
-        Router.on("mainPage", this.init.bind(this));
+        Router.on("mainPage", this.update.bind(this));
 
         this._view.on('UserNicknameChanged', this._model.changeUserNickname.bind(this._model));
     }
 
-    init() {
-        this._model.init();
-        this._view.init();
+    update() {
+        this._model.update();
+        this._view.update();
     }
 
 }
