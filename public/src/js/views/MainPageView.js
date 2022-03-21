@@ -9,7 +9,7 @@ class MainPageView extends BaseView {
         this._model = MainPageModel;
         this.wrapper = document.getElementById('wrapper');
 
-        this.socket = null;
+        // this.socket = null;
 
         this.init();
     }
@@ -35,30 +35,29 @@ class MainPageView extends BaseView {
 
 
         //websocket:
-        this.socket = new WebSocket("ws://localhost:3000");
-
-        this.socket.onmessage = function (event) {
-            console.log(event.data);
-        }
+        // this.socket = new WebSocket("ws://localhost:3000");
+        //
+        // this.socket.onmessage = function (event) {
+        //     console.log(event.data);
+        // }
 
         let createButton = document.getElementById('createButton');
         createButton.addEventListener('click', this.createButtonClickHandler);
 
-        let connectButton = document.getElementById("connectButton");
-        connectButton.addEventListener('click', (e) => {
-            this.socket.send(userNickname.value);
-        })
+        let joinButton = document.getElementById("joinButton");
+        // joinButton.addEventListener('click', (e) => {
+        //     this.socket.send(JSON.stringify({
+        //         name: userNickname.value,
+        //         age: 77,
+        //     }));
+        // })
+
+        joinButton.addEventListener('click', this.joinButtonHandler);
 
     }
 
     leave() {
-        this.socket.close(1000, "переход на другую страницу");
-
-        let userNickname = document.getElementById("usernameInput");
-        userNickname.removeEventListener('input', this.userNicknameClickHandler.bind(this));
-
-        let createButton = document.getElementById('createButton');
-        createButton.removeEventListener('click', this.createButtonClickHandler);
+        // this.socket.close(1000, "переход на другую страницу");
     }
 
     userNicknameClickHandler(e) {
@@ -68,6 +67,10 @@ class MainPageView extends BaseView {
 
     createButtonClickHandler(e) {
         Router.emit('lobby');
+    }
+
+    joinButtonHandler(e) {
+        Router.emit('joinLobby');
     }
 
 }

@@ -24,6 +24,7 @@
     "mime": "^3.0.0",
     "pug": "^3.0.2",
     "pug-cli": "^1.0.0-alpha6",
+    "uuid": "^8.3.2",
     "ws": "^8.5.0"
   },
   "optionalDependencies": {

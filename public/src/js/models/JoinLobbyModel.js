@@ -1,6 +1,6 @@
 import BaseModel from "./BaseModel.js";
 
-class LobbyModel extends BaseModel {
+class JoinLobbyModel extends BaseModel {
     constructor() {
         super();
     }
@@ -14,4 +14,4 @@ class LobbyModel extends BaseModel {
 
 }
 
-export default new LobbyModel();
+export default new JoinLobbyModel();

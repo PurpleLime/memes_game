@@ -1,0 +1,25 @@
+.lobby-code {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.lobby-code__text {
+    font-size: 64px;
+    font-weight: bold;
+    color: #FAF009;
+    margin-right: 10%;
+}
+
+.lobby-code__input-block {
+    background: #ECEADA;
+    border-radius: 40px;
+    width: 260px;
+    height: 127px;
+    padding: 35px 33px 35px 33px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

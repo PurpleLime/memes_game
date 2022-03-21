@@ -25,7 +25,6 @@ class MainPageController extends BaseController {
 
     leave() {
         super.leave();
-        this.isActive = false;
         this._view.leave();
     }
 

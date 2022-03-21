@@ -51,3 +51,22 @@
     height: 28px;
     background: url(../img/starIcon.svg) no-repeat center/cover;
 }
+
+.standart-input {
+    background-color: transparent;
+    border: none;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    font-size: 48px;
+    line-height: 56px;
+    font-weight: bold;
+}
+
+.standart-input:focus {
+    outline: none;
+}
+
+.standart-input__uppercase {
+    text-transform: uppercase;
+}

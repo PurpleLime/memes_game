@@ -13,6 +13,10 @@ class MainPageModel extends BaseModel {
     update() {
     }
 
+    leave() {
+
+    }
+
     changeUserNickname(newUserNickname) {
         this.userNickname = newUserNickname;
         console.log(this.userNickname);

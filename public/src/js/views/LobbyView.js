@@ -14,6 +14,10 @@ class LobbyView extends BaseView {
         this.renderLobbyPage();
     }
 
+    leave() {
+
+    }
+
     renderLobbyPage() {
         window.scroll(0, 0);
         document.title = 'Лобби';

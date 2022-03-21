@@ -4,6 +4,8 @@ import mime from 'mime';
 import {WebSocketServer} from 'ws';
 import express from 'express';
 import path from 'path';
+import GameSlot from "./js/GameSlot.js";
+import Lobby from "./js/Lobby.js";
 
 const __dirname = path.resolve();
 const PORT = process.env.PORT ?? 3000;
@@ -39,8 +41,7 @@ app.get('*', (req, res) => {
     if (acceptWS(req)) {
         try {
             wss.handleUpgrade(req, req.socket, Buffer.alloc(0), onSocketConnect);
-        }
-        catch (e) {
+        } catch (e) {
             console.log(e);
         }
         return
@@ -62,6 +63,9 @@ app.get('*', (req, res) => {
 
 const clients = new Set();
 
+const lobbies = [];
+lobbies.push(new Lobby('XXXX'));
+
 // https.createServer(httpsOptions, app).listen(PORT, () => {
 //     console.log(`Server has been started on port ${PORT}...`);
 // })
@@ -77,17 +81,42 @@ function onSocketConnect(ws) {
 
     clients.add(ws);
 
-    ws.on('message', function(message) {
-        message = message.slice(0, 50); // максимальный размер сообщения 50
-        console.log("Получено сообщение: ", String(message));
+    ws.on('message', function (message) {
+        message = JSON.parse(message);
+        console.log("Получено сообщение: ", message);
 
-        for(let client of clients) {
-            // client.send(message);
-            client.send("Получено");
+        // for (let client of clients) {
+        //     client.send("Получено");
+        // }
+
+        switch (message.messageType) {
+            case 'connectLobby':
+                let desiredLobby = lobbies.filter(lobby => lobby.code === message.lobbyCode);
+
+                if (desiredLobby[0] !== undefined) {
+                    let slot = new GameSlot(message.userNickname);
+
+                    if (!desiredLobby[0].isFull()) {
+                        desiredLobby[0].addPlayer(slot);
+                        ws.send(JSON.stringify({
+                            header: "lobbyInfo/ok",
+                            data: desiredLobby[0],
+                        }));
+                    } else {
+                        ws.send(JSON.stringify({
+                            header: "lobbyInfo/error",
+                            errorMessage: "Лобби заполнено"
+                        }));
+                    }
+                }
+                break;
+
+            default:
+                break;
         }
     });
 
-    ws.on('close', function() {
+    ws.on('close', function () {
         clients.delete(ws);
     });
 
