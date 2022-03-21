@@ -116,7 +116,8 @@ function onSocketConnect(ws) {
         }
     });
 
-    ws.on('close', function () {
+    ws.on('close', function (code, reason) {
+        console.log(`WebSocket закрыт с кодом ${code} причина: ${String(reason)}`);
         clients.delete(ws);
     });
 

@@ -15,7 +15,7 @@ class JoinLobbyController extends BaseController {
     }
 
     addEvents() {
-
+        this._view.on('joinLobby', this._model.joinLobby.bind(this._model));
     }
 
     update() {

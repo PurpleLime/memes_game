@@ -11,42 +11,46 @@ class JoinLobbyView extends BaseView {
     constructor(LobbyModel) {
         super();
         this._model = JoinLobbyModel;
-        this.socket = null;
+        // this.socket = null;
         this.wrapper = document.getElementById('wrapper');
     }
 
     update() {
-        this.renderLobbyPage();
+        this.renderJoinLobbyPage();
     }
 
     leave() {
-        this.socket.close(1000, "переход на другую страницу");
+        // this.socket.close(1000, "переход на другую страницу");
     }
 
-    renderLobbyPage() {
+    renderJoinLobbyPage() {
         window.scroll(0, 0);
         document.title = 'Присоединиться к лобби';
 
         this.wrapper.innerHTML = joinLobbyTemplate({});
 
         //websocket:
-        this.socket = new WebSocket(wsServer);
-
-        this.socket.onmessage = function (event) {
-            console.log(JSON.parse(event.data));
-        }
+        // this.socket = new WebSocket(wsServer);
+        //
+        // this.socket.onmessage = function (event) {
+        //     console.log(JSON.parse(event.data));
+        // }
 
         let lobbyCode = document.getElementById('lobbyCodeInput');
 
         let joinButton = document.getElementById("joinButton");
 
         joinButton.addEventListener('click', (e) => {
-            this.socket.send(JSON.stringify({
-                messageType: 'connectLobby',
-                userNickname: MainPageModel.userNickname,
+            // this.socket.send(JSON.stringify({
+            //     messageType: 'connectLobby',
+            //     userNickname: MainPageModel.userNickname,
+            //     lobbyCode: lobbyCode.value.toUpperCase(),
+            //     age: 77,
+            // }));
+            this.emit("joinLobby", {
                 lobbyCode: lobbyCode.value.toUpperCase(),
-                age: 77,
-            }));
+                userNickname: MainPageModel.userNickname,
+            });
         })
 
         let exitButton = document.getElementById('exitButton');
