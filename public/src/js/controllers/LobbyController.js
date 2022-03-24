@@ -15,17 +15,18 @@ class LobbyController extends BaseController {
     }
 
     addEvents() {
+        this._model.on('updateView', this._view.update.bind(this._view));
 
     }
 
-    update() {
+    update(...args) {
         super.update();
-        this._model.update();
-        this._view.update();
+        this._model.update(...args);
     }
 
-    leave() {
+    leave(...args) {
         super.leave();
+        this._model.leave(...args);
     }
 
 }

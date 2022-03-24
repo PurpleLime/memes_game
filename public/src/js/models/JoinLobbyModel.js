@@ -1,3 +1,4 @@
+import Router from "../Router.js";
 import BaseModel from "./BaseModel.js";
 import {wsServer} from "../network.js";
 import MainPageModel from "./MainPageModel.js";
@@ -9,7 +10,9 @@ class JoinLobbyModel extends BaseModel {
     }
 
     update() {
-        this.connectWebSocket();
+        return this.connectWebSocket().then(() => {
+            this.emit('updateView');
+        })
     }
 
     leave() {
@@ -17,20 +20,38 @@ class JoinLobbyModel extends BaseModel {
     }
 
     connectWebSocket() {
-        this.socket = new WebSocket(wsServer);
-
-        this.socket.onmessage = function (event) {
-            console.log(JSON.parse(event.data));
-        }
+        return new Promise((resolve, reject) => {
+                this.socket = new WebSocket(wsServer);
+                this.socket.onmessage = this.joinLobbyHandleResponse.bind(this);
+                this.socket.onopen = () => resolve();
+            }
+        )
     }
 
-    joinLobby({lobbyCode, userNickname}) {
+
+    checkLobbyAvailability({lobbyCode}) {
         this.socket.send(JSON.stringify({
-            messageType: 'connectLobby',
-            userNickname: userNickname,
+            header: 'checkLobby',
             lobbyCode: lobbyCode,
-            age: 77,
         }));
+    }
+
+    joinLobbyHandleResponse(event) {
+        let message = JSON.parse(event.data);
+        console.log(message);
+        switch (message.header) {
+            case 'checkLobby/ok':
+                Router.emit("lobbyPage", {
+                    userNickname: MainPageModel.userNickname,
+                    lobbyCode: message.lobbyCode,
+                });
+                break;
+            case 'checkLobby/error':
+                console.log(`Ошибка: ${message.errorMessage}`);
+                break;
+            default:
+                break;
+        }
     }
 
 }

@@ -7,10 +7,10 @@ class Router {
     constructor() {
         this.on("mainPage", this.changePage.bind(this))
         this.on("mainPage", MainPageController.update.bind(MainPageController));
-        this.on("lobby", this.changePage.bind(this));
-        this.on("lobby", LobbyController.update.bind(LobbyController));
-        this.on("joinLobby", this.changePage.bind(this));
-        this.on("joinLobby", JoinLobbyController.update.bind(JoinLobbyController));
+        this.on("lobbyPage", this.changePage.bind(this));
+        this.on("lobbyPage", LobbyController.update.bind(LobbyController));
+        this.on("joiningTheLobbyPage", this.changePage.bind(this));
+        this.on("joiningTheLobbyPage", JoinLobbyController.update.bind(JoinLobbyController));
     }
 
     controllers = [

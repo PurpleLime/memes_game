@@ -11,6 +11,7 @@ class MainPageModel extends BaseModel {
     }
 
     update() {
+        this.emit('updateView');
     }
 
     leave() {

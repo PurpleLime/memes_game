@@ -15,16 +15,17 @@ class MainPageController extends BaseController {
 
     addEvents() {
         this._view.on('UserNicknameChanged', this._model.changeUserNickname.bind(this._model));
+        this._model.on('updateView', this._view.update.bind(this._view));
     }
 
     update() {
         super.update();
         this._model.update();
-        this._view.update();
     }
 
     leave() {
         super.leave();
+        this._model.leave();
         this._view.leave();
     }
 

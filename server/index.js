@@ -89,26 +89,61 @@ function onSocketConnect(ws) {
         //     client.send("Получено");
         // }
 
-        switch (message.messageType) {
-            case 'connectLobby':
-                let desiredLobby = lobbies.filter(lobby => lobby.code === message.lobbyCode);
+        let desiredLobby = [];
+
+        switch (message.header) {
+            case 'checkLobby':
+                desiredLobby = lobbies.filter(lobby => lobby.code === message.lobbyCode);
 
                 if (desiredLobby[0] !== undefined) {
-                    let slot = new GameSlot(message.userNickname);
 
                     if (!desiredLobby[0].isFull()) {
-                        desiredLobby[0].addPlayer(slot);
+                        // desiredLobby[0].addPlayer(slot);
                         ws.send(JSON.stringify({
-                            header: "lobbyInfo/ok",
-                            data: desiredLobby[0],
+                            header: "checkLobby/ok",
+                            lobbyCode: message.lobbyCode,
+                            // data: desiredLobby[0],
                         }));
                     } else {
                         ws.send(JSON.stringify({
-                            header: "lobbyInfo/error",
+                            header: "checkLobby/error",
                             errorMessage: "Лобби заполнено"
                         }));
                     }
                 }
+                break;
+
+            case 'enterLobby':
+                desiredLobby = lobbies.filter(lobby => lobby.code === message.lobbyCode);
+
+                if (desiredLobby[0] !== undefined) {
+                    let slot = new GameSlot(message.userNickname, ws);
+
+                    if (!desiredLobby[0].isFull()) {
+                        desiredLobby[0].addPlayer(slot);
+                        ws.send(JSON.stringify({
+                            header: "enterLobby/ok",
+                            userId: slot.id,
+                            data: desiredLobby[0],
+                        }));
+
+                        ws.on('close', function () {
+                            desiredLobby[0].deletePlayerByWS(ws);
+
+                        });
+
+                    } else {
+                        ws.send(JSON.stringify({
+                            header: "enterLobby/error",
+                            errorMessage: "Лобби заполнено"
+                        }));
+                    }
+                }
+
+                break;
+
+            case 'leaveLobby':
+                ws.close(1000, "выход из лобби");
                 break;
 
             default:
@@ -116,16 +151,17 @@ function onSocketConnect(ws) {
         }
     });
 
-    ws.on('close', function (code, reason) {
-        console.log(`WebSocket закрыт с кодом ${code} причина: ${String(reason)}`);
-        clients.delete(ws);
-    });
+    // ws.on('close', function (code, reason) {
+    //     console.log(`WebSocket закрыт с кодом ${code} причина: ${String(reason)}`);
+    //     clients.delete(ws);
+    // });
 
 }
 
 function acceptWS(req) {
     // все входящие запросы должны использовать websockets
-    if (!req.headers.upgrade || req.headers.upgrade.toLowerCase() != 'websocket') {
+    //а примере было !=
+    if (!req.headers.upgrade || req.headers.upgrade.toLowerCase() !== 'websocket') {
         // res.end();
         return false;
     }

@@ -9,8 +9,6 @@ class MainPageView extends BaseView {
         this._model = MainPageModel;
         this.wrapper = document.getElementById('wrapper');
 
-        // this.socket = null;
-
         this.init();
     }
 
@@ -32,32 +30,16 @@ class MainPageView extends BaseView {
         userNickname.value = this._model.userNickname;
         userNickname.addEventListener('input', this.userNicknameClickHandler.bind(this));
 
-
-
-        //websocket:
-        // this.socket = new WebSocket("ws://localhost:3000");
-        //
-        // this.socket.onmessage = function (event) {
-        //     console.log(event.data);
-        // }
-
         let createButton = document.getElementById('createButton');
         createButton.addEventListener('click', this.createButtonClickHandler);
 
         let joinButton = document.getElementById("joinButton");
-        // joinButton.addEventListener('click', (e) => {
-        //     this.socket.send(JSON.stringify({
-        //         name: userNickname.value,
-        //         age: 77,
-        //     }));
-        // })
 
         joinButton.addEventListener('click', this.joinButtonHandler);
 
     }
 
     leave() {
-        // this.socket.close(1000, "переход на другую страницу");
     }
 
     userNicknameClickHandler(e) {
@@ -66,11 +48,11 @@ class MainPageView extends BaseView {
     }
 
     createButtonClickHandler(e) {
-        Router.emit('lobby');
+        Router.emit('lobbyPage');
     }
 
     joinButtonHandler(e) {
-        Router.emit('joinLobby');
+        Router.emit('joiningTheLobbyPage');
     }
 
 }
