@@ -6,7 +6,7 @@ export default class Lobby {
         this.code = code;
     }
 
-    static maxPlayers = 2;
+    static maxPlayers = 8;
 
     playersAmount() {
         return this.slots.length;
@@ -49,6 +49,14 @@ export default class Lobby {
                 this.slots.splice(slotIndex, 1);
             }
         }
+    }
+
+    sendAllExcept(json, excluded) {
+        this.slots.forEach((slot) => {
+            if (slot !== excluded) {
+                slot.websocket.send(JSON.stringify(json));
+            }
+        });
     }
 
 }

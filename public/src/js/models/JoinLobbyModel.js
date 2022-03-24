@@ -9,10 +9,16 @@ class JoinLobbyModel extends BaseModel {
         this.socket = null;
     }
 
-    update() {
+    init() {
         return this.connectWebSocket().then(() => {
-            this.emit('updateView');
+            this.emit('initView');
         })
+    }
+
+    update() {
+        // return this.connectWebSocket().then(() => {
+        //     this.emit('updateView');
+        // })
     }
 
     leave() {

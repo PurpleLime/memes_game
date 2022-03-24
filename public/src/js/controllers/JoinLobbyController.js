@@ -16,12 +16,17 @@ class JoinLobbyController extends BaseController {
 
     addEvents() {
         this._view.on('checkLobbyAvailability', this._model.checkLobbyAvailability.bind(this._model));
-        this._model.on('updateView', this._view.update.bind(this._view));
+        this._model.on('initView', this._view.init.bind(this._view));
+    }
+
+    init() {
+        super.update();
+        this._model.init();
     }
 
     update() {
-        super.update();
-        this._model.update();
+        // super.update();
+        // this._model.update();
     }
 
     leave() {

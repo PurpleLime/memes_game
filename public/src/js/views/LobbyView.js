@@ -10,11 +10,15 @@ class LobbyView extends BaseView {
         this.wrapper = document.getElementById('wrapper');
     }
 
-    update() {
+    init() {
         return new Promise((resolve, reject) => {
             this.renderLobbyPage();
             resolve();
         })
+    }
+
+    update() {
+        this.renderLobbySlots();
     }
 
     leave() {
@@ -32,6 +36,15 @@ class LobbyView extends BaseView {
             Router.emit('mainPage');
         })
 
+        this.renderLobbySlots();
+
+    }
+
+    renderLobbySlots() {
+        let usersList = document.getElementById('usersList');
+        console.log(usersList);
+        usersList.innerHTML = lobbySlotsTemplate({});
+
         let slots = this._model.slots;
         slots.forEach((slot, slotIndex) => {
             let curSlot = document.getElementById(`user${slotIndex + 1}`);
@@ -40,7 +53,6 @@ class LobbyView extends BaseView {
             nameContainer.textContent = slot.nickname;
             nameContainer.classList.remove("none");
         });
-
     }
 
 }

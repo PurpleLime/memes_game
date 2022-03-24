@@ -98,11 +98,9 @@ function onSocketConnect(ws) {
                 if (desiredLobby[0] !== undefined) {
 
                     if (!desiredLobby[0].isFull()) {
-                        // desiredLobby[0].addPlayer(slot);
                         ws.send(JSON.stringify({
                             header: "checkLobby/ok",
                             lobbyCode: message.lobbyCode,
-                            // data: desiredLobby[0],
                         }));
                     } else {
                         ws.send(JSON.stringify({
@@ -121,6 +119,12 @@ function onSocketConnect(ws) {
 
                     if (!desiredLobby[0].isFull()) {
                         desiredLobby[0].addPlayer(slot);
+
+                        desiredLobby[0].sendAllExcept({
+                            header: "updateLobby",
+                            data: desiredLobby[0],
+                        }, slot);
+
                         ws.send(JSON.stringify({
                             header: "enterLobby/ok",
                             userId: slot.id,
@@ -129,6 +133,11 @@ function onSocketConnect(ws) {
 
                         ws.on('close', function () {
                             desiredLobby[0].deletePlayerByWS(ws);
+
+                            desiredLobby[0].sendAllExcept({
+                                header: "updateLobby",
+                                data: desiredLobby[0],
+                            }, slot);
 
                         });
 

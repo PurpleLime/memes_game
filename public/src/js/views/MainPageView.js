@@ -9,14 +9,14 @@ class MainPageView extends BaseView {
         this._model = MainPageModel;
         this.wrapper = document.getElementById('wrapper');
 
-        this.init();
     }
 
     init() {
+        this.renderMainPage();
     }
 
     update() {
-        this.renderMainPage();
+        // this.renderMainPage();
 
     }
 

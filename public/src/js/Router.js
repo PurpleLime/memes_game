@@ -6,11 +6,11 @@ import JoinLobbyController from "./controllers/JoinLobbyController.js";
 class Router {
     constructor() {
         this.on("mainPage", this.changePage.bind(this))
-        this.on("mainPage", MainPageController.update.bind(MainPageController));
-        this.on("lobbyPage", this.changePage.bind(this));
-        this.on("lobbyPage", LobbyController.update.bind(LobbyController));
+        this.on("mainPage", MainPageController.init.bind(MainPageController));
         this.on("joiningTheLobbyPage", this.changePage.bind(this));
-        this.on("joiningTheLobbyPage", JoinLobbyController.update.bind(JoinLobbyController));
+        this.on("joiningTheLobbyPage", JoinLobbyController.init.bind(JoinLobbyController));
+        this.on("lobbyPage", this.changePage.bind(this));
+        this.on("lobbyPage", LobbyController.init.bind(LobbyController));
     }
 
     controllers = [

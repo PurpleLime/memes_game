@@ -15,7 +15,7 @@ class LobbyModel extends BaseModel {
 
     }
 
-    update({ userNickname, lobbyCode }) {
+    init({ userNickname, lobbyCode }) {
         this.lobbyCode = lobbyCode;
         return this.connectWebSocket().then(() => {
             this.socket.send(JSON.stringify({
@@ -24,6 +24,17 @@ class LobbyModel extends BaseModel {
                 lobbyCode,
             }));
         });
+    }
+
+    update({ userNickname, lobbyCode }) {
+        // this.lobbyCode = lobbyCode;
+        // return this.connectWebSocket().then(() => {
+        //     this.socket.send(JSON.stringify({
+        //         header: 'enterLobby',
+        //         userNickname,
+        //         lobbyCode,
+        //     }));
+        // });
     }
 
     leave() {
@@ -43,16 +54,23 @@ class LobbyModel extends BaseModel {
     lobbyHandleResponse(event) {
         let message = JSON.parse(event.data);
         console.log(message);
+        let data = null;
         switch (message.header) {
             case 'enterLobby/ok':
                 this.userId = message.userId;
-                let data = message.data;
+                data = message.data;
                 this.playersAmount = data.playersAmount;
                 this.slots = data.slots.slice();
-                this.emit('updateView');
+                this.emit('initView');
                 break;
             case 'enterLobby/error':
                 console.log(`Ошибка: ${message.errorMessage}`);
+                break;
+            case 'updateLobby':
+                data = message.data;
+                this.playersAmount = data.playersAmount;
+                this.slots = data.slots.slice();
+                this.emit('updateView');
                 break;
             default:
                 break;

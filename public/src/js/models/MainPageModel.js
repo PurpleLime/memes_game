@@ -8,10 +8,11 @@ class MainPageModel extends BaseModel {
 
     init() {
         this.userNickname = 'Имечко';
+        this.emit('initView');
     }
 
     update() {
-        this.emit('updateView');
+        // this.emit('updateView');
     }
 
     leave() {

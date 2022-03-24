@@ -12,10 +12,16 @@ class JoinLobbyView extends BaseView {
         this.wrapper = document.getElementById('wrapper');
     }
 
-    update() {
+    init() {
         return new Promise((resolve, reject) => {
             this.renderJoinLobbyPage();
         })
+    }
+
+    update() {
+        // return new Promise((resolve, reject) => {
+        //     this.renderJoinLobbyPage();
+        // })
     }
 
     leave() {
