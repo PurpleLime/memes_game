@@ -23,8 +23,12 @@ export default class Lobby {
     addPlayer(slot) {
         if (this.isFull()) {
             throw new Error("Лобби заполнено");
+        } else {
+            if (this.isEmpty()) {
+                slot.isHost = true;
+            }
+            this.slots.push(slot);
         }
-        this.slots.push(slot);
     }
 
     deletePlayerById(userId) {
@@ -41,12 +45,20 @@ export default class Lobby {
 
     deletePlayerByWS(websocket) {
         if (!this.isEmpty()) {
+            //индекс удаляемого игрока в списке игроков
             let slotIndex = this.slots.findIndex(slot => {
                 return slot.websocket === websocket;
             });
 
             if (slotIndex !== -1) {
+                //флаг, показывающий, был ли удаляемый игрок хостом
+                let wasHost = this.slots[slotIndex].isHost;
                 this.slots.splice(slotIndex, 1);
+
+                //если лобби теперь не пустое и удаленный игрок был хостом, то сделать хостом первого в списке игрока
+                if (!this.isEmpty() && wasHost) {
+                    this.slots[0].isHost = true;
+                }
             }
         }
     }

@@ -15,6 +15,7 @@ class MainPageController extends BaseController {
 
     addEvents() {
         this._view.on('UserNicknameChanged', this._model.changeUserNickname.bind(this._model));
+        this._view.on('createLobby', this._model.createLobby.bind(this._model));
         // this._model.on('updateView', this._view.update.bind(this._view));
         this._model.on('initView', this._view.init.bind(this._view));
     }

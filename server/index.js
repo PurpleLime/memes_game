@@ -6,6 +6,7 @@ import express from 'express';
 import path from 'path';
 import GameSlot from "./js/GameSlot.js";
 import Lobby from "./js/Lobby.js";
+import LobbiesContainer from "./js/LobbiesContainer.js";
 
 const __dirname = path.resolve();
 const PORT = process.env.PORT ?? 3000;
@@ -33,6 +34,14 @@ const app = express();
 //     cert: fs.readFileSync('path...'),
 //     key: fs.readFileSync('path..')
 // }
+
+app.get("/createLobby", (req, res) => {
+    console.log(`request for creating lobby: ${req.query.nickname}`);
+    // res.send("123");
+    if  (req.query.nickname) {
+        res.json({name: "123"});
+    }
+});
 
 app.get('*', (req, res) => {
 
@@ -63,8 +72,10 @@ app.get('*', (req, res) => {
 
 const clients = new Set();
 
-const lobbies = [];
-lobbies.push(new Lobby('XXXX'));
+const lobbies = new LobbiesContainer();
+lobbies.addNewLobby('XXXX');
+
+// lobbies.push(new Lobby('XXXX'));
 
 // https.createServer(httpsOptions, app).listen(PORT, () => {
 //     console.log(`Server has been started on port ${PORT}...`);
@@ -89,15 +100,16 @@ function onSocketConnect(ws) {
         //     client.send("Получено");
         // }
 
-        let desiredLobby = [];
+        let desiredLobby;
 
         switch (message.header) {
             case 'checkLobby':
-                desiredLobby = lobbies.filter(lobby => lobby.code === message.lobbyCode);
+                // desiredLobby = lobbies.find(lobby => lobby.code === message.lobbyCode);
+                desiredLobby = lobbies.findLobbyByCode(message.lobbyCode);
 
-                if (desiredLobby[0] !== undefined) {
+                if (desiredLobby !== undefined) {
 
-                    if (!desiredLobby[0].isFull()) {
+                    if (!desiredLobby.isFull()) {
                         ws.send(JSON.stringify({
                             header: "checkLobby/ok",
                             lobbyCode: message.lobbyCode,
@@ -112,31 +124,32 @@ function onSocketConnect(ws) {
                 break;
 
             case 'enterLobby':
-                desiredLobby = lobbies.filter(lobby => lobby.code === message.lobbyCode);
+                // desiredLobby = lobbies.find(lobby => lobby.code === message.lobbyCode);
+                desiredLobby = lobbies.findLobbyByCode(message.lobbyCode);
 
-                if (desiredLobby[0] !== undefined) {
+                if (desiredLobby !== undefined) {
                     let slot = new GameSlot(message.userNickname, ws);
 
-                    if (!desiredLobby[0].isFull()) {
-                        desiredLobby[0].addPlayer(slot);
+                    if (!desiredLobby.isFull()) {
+                        desiredLobby.addPlayer(slot);
 
-                        desiredLobby[0].sendAllExcept({
+                        desiredLobby.sendAllExcept({
                             header: "updateLobby",
-                            data: desiredLobby[0],
+                            data: desiredLobby,
                         }, slot);
 
                         ws.send(JSON.stringify({
                             header: "enterLobby/ok",
                             userId: slot.id,
-                            data: desiredLobby[0],
+                            data: desiredLobby,
                         }));
 
                         ws.on('close', function () {
-                            desiredLobby[0].deletePlayerByWS(ws);
+                            desiredLobby.deletePlayerByWS(ws);
 
-                            desiredLobby[0].sendAllExcept({
+                            desiredLobby.sendAllExcept({
                                 header: "updateLobby",
-                                data: desiredLobby[0],
+                                data: desiredLobby,
                             }, slot);
 
                         });

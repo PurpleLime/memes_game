@@ -42,17 +42,27 @@ class LobbyView extends BaseView {
 
     renderLobbySlots() {
         let usersList = document.getElementById('usersList');
-        console.log(usersList);
+        //зполнение стандартными заглушками
         usersList.innerHTML = lobbySlotsTemplate({});
 
         let slots = this._model.slots;
+
+        //элемент-метка хоста
+        let hostLabel = document.createElement('div');
+        hostLabel.className = "user-game-avatar__host-label";
+
+        //обновление заглушек на реальных игроков (слева направо)
         slots.forEach((slot, slotIndex) => {
             let curSlot = document.getElementById(`user${slotIndex + 1}`);
             let nameContainer = curSlot.querySelector('.user-game-avatar__name-container');
             curSlot.classList.add("user-game-avatar_default_avatar");
             nameContainer.textContent = slot.nickname;
             nameContainer.classList.remove("none");
+            if (slot.isHost) {
+                curSlot.append(hostLabel);
+            }
         });
+
     }
 
 }

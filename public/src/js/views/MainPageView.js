@@ -31,7 +31,7 @@ class MainPageView extends BaseView {
         userNickname.addEventListener('input', this.userNicknameClickHandler.bind(this));
 
         let createButton = document.getElementById('createButton');
-        createButton.addEventListener('click', this.createButtonClickHandler);
+        createButton.addEventListener('click', this.createButtonClickHandler.bind(this));
 
         let joinButton = document.getElementById("joinButton");
 
@@ -48,7 +48,8 @@ class MainPageView extends BaseView {
     }
 
     createButtonClickHandler(e) {
-        Router.emit('lobbyPage');
+        // Router.emit('lobbyPage');
+        this.emit("createLobby");
     }
 
     joinButtonHandler(e) {
