@@ -7,7 +7,9 @@ export default class LobbiesContainer {
 
     addNewLobby(code) {
         if (!code) {
-            code = this.generateLobbyCode(4);
+            do {
+                code = this.generateLobbyCode(4);
+            } while (this.findLobbyByCode(code) === -1);
         }
         this.lobbies.push(new Lobby(code));
         return code;

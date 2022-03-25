@@ -30,16 +30,21 @@ const app = express();
 //     }
 // })
 
+
+
 // const httpsOptions = {
 //     cert: fs.readFileSync('path...'),
 //     key: fs.readFileSync('path..')
 // }
 
+const lobbies = new LobbiesContainer();
+lobbies.addNewLobby('XXXX');
+
 app.get("/createLobby", (req, res) => {
     console.log(`request for creating lobby: ${req.query.nickname}`);
-    // res.send("123");
     if  (req.query.nickname) {
-        res.json({name: "123"});
+        let newLobbyCode = lobbies.addNewLobby();
+        res.json({lobbyCode: newLobbyCode});
     }
 });
 
@@ -71,9 +76,6 @@ app.get('*', (req, res) => {
 })
 
 const clients = new Set();
-
-const lobbies = new LobbiesContainer();
-lobbies.addNewLobby('XXXX');
 
 // lobbies.push(new Lobby('XXXX'));
 

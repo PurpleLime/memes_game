@@ -1,5 +1,6 @@
 import BaseModel from "./BaseModel.js";
 import {httpServer} from "../network.js";
+import Router from "../Router.js";
 
 class MainPageModel extends BaseModel {
     constructor() {
@@ -28,7 +29,13 @@ class MainPageModel extends BaseModel {
     createLobby() {
         let url = new URL('/createLobby' ,httpServer);
         url.searchParams.append('nickname', this.userNickname);
-        fetch(url).then(response => response.json()). then(json => console.log(json));
+        fetch(url).then(response => response.json()). then(json => {
+            Router.emit("lobbyPage", {
+                userNickname: this.userNickname,
+                lobbyCode: json.lobbyCode,
+            });
+        });
+
     }
 
 }

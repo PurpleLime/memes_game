@@ -42,7 +42,7 @@ class LobbyView extends BaseView {
 
     renderLobbySlots() {
         let usersList = document.getElementById('usersList');
-        //зполнение стандартными заглушками
+        //заполнение стандартными заглушками
         usersList.innerHTML = lobbySlotsTemplate({});
 
         let slots = this._model.slots;
