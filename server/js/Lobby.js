@@ -63,6 +63,12 @@ export default class Lobby {
         }
     }
 
+    findPlayerByWS(websocket) {
+        return this.slots.find(slot => {
+            return slot.websocket === websocket;
+        })
+    }
+
     sendAllExcept(json, excluded) {
         this.slots.forEach((slot) => {
             if (slot !== excluded) {

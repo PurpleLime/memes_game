@@ -38,10 +38,19 @@ class LobbyModel extends BaseModel {
         // });
     }
 
-    leave() {
+    leave(data) {
+        if (data?.routeInfo !== 'lobbyToIngame') {
+            this.socket.send(JSON.stringify({
+                header: 'leaveLobby',
+            }));
+        }
+    }
+
+    startGame() {
         this.socket.send(JSON.stringify({
-            header: 'leaveLobby',
-        }));
+            header: 'startGame',
+            lobbyCode: this.lobbyCode,
+        }))
     }
 
     connectWebSocket() {

@@ -171,6 +171,14 @@ function onSocketConnect(ws) {
                 ws.close(1000, "выход из лобби");
                 break;
 
+            case 'startGame':
+                desiredLobby = lobbies.findLobbyByCode(message.lobbyCode);
+                let slot = desiredLobby.findPlayerByWS(ws);
+                if (slot.isHost) {
+                    console.log("Начало игры");
+                }
+                break;
+
             default:
                 break;
         }

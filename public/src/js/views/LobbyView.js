@@ -37,6 +37,11 @@ class LobbyView extends BaseView {
             Router.emit('mainPage');
         })
 
+        let beginButton = document.getElementById('beginButton');
+        beginButton.addEventListener('click', (e) => {
+            this.emit("startGame");
+        });
+
         this.renderLobbySlots();
         this.renderBeginButton();
 

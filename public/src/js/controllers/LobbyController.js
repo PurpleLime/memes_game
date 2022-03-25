@@ -17,6 +17,7 @@ class LobbyController extends BaseController {
     addEvents() {
         this._model.on('initView', this._view.init.bind(this._view));
         this._model.on('updateView', this._view.update.bind(this._view));
+        this._view.on('startGame', this._model.startGame.bind(this._model));
 
     }
 

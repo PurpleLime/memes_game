@@ -19,10 +19,10 @@ class Router {
         JoinLobbyController
     ]
 
-    changePage() {
+    changePage(...args) {
         this.controllers.forEach(contr => {
             if (contr.isActive) {
-                contr.leave();
+                contr.leave(...args);
             }
         })
     }
