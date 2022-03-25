@@ -142,6 +142,7 @@ function onSocketConnect(ws) {
 
                         ws.send(JSON.stringify({
                             header: "enterLobby/ok",
+                            isHost: slot.isHost,
                             userId: slot.id,
                             data: desiredLobby,
                         }));

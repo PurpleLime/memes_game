@@ -32,6 +32,10 @@
     text-align: center;
 }
 
+.menu-item_none {
+    display: none;
+}
+
 .menu-item:hover {
     background: rgba(255, 0, 0, 0.5);
 }

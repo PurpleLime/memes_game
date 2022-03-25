@@ -12,6 +12,7 @@ class LobbyModel extends BaseModel {
         this.slots = [];
         this.lobbyCode = '';
         this.userId = '';
+        this.isHost = false;
 
     }
 
@@ -58,6 +59,7 @@ class LobbyModel extends BaseModel {
         switch (message.header) {
             case 'enterLobby/ok':
                 this.userId = message.userId;
+                this.isHost = message.isHost;
                 data = message.data;
                 this.playersAmount = data.playersAmount;
                 this.slots = data.slots.slice();
@@ -67,6 +69,7 @@ class LobbyModel extends BaseModel {
                 console.log(`Ошибка: ${message.errorMessage}`);
                 break;
             case 'updateLobby':
+                this.isHost = message.isHost;
                 data = message.data;
                 this.playersAmount = data.playersAmount;
                 this.slots = data.slots.slice();

@@ -19,6 +19,7 @@ class LobbyView extends BaseView {
 
     update() {
         this.renderLobbySlots();
+        this.renderBeginButton();
     }
 
     leave() {
@@ -37,6 +38,7 @@ class LobbyView extends BaseView {
         })
 
         this.renderLobbySlots();
+        this.renderBeginButton();
 
     }
 
@@ -57,12 +59,21 @@ class LobbyView extends BaseView {
             let nameContainer = curSlot.querySelector('.user-game-avatar__name-container');
             curSlot.classList.add("user-game-avatar_default_avatar");
             nameContainer.textContent = slot.nickname;
-            nameContainer.classList.remove("none");
+            nameContainer.classList.remove("user-game-avatar__name-container_none");
             if (slot.isHost) {
                 curSlot.append(hostLabel);
             }
         });
 
+    }
+
+    renderBeginButton() {
+        let beginButton = document.getElementById('beginButton');
+        if (this._model.isHost) {
+            beginButton.classList.remove("menu-item_none");
+        } else {
+            beginButton.classList.add("menu-item_none");
+        }
     }
 
 }

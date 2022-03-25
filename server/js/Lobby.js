@@ -66,6 +66,7 @@ export default class Lobby {
     sendAllExcept(json, excluded) {
         this.slots.forEach((slot) => {
             if (slot !== excluded) {
+                json.isHost = slot.isHost;
                 slot.websocket.send(JSON.stringify(json));
             }
         });
