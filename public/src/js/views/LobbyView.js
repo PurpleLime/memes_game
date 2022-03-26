@@ -32,6 +32,10 @@ class LobbyView extends BaseView {
 
         this.wrapper.innerHTML = lobbyTemplate({});
 
+        let lobbyCodeInput = document.getElementById('lobbyCodeInput');
+        lobbyCodeInput.readOnly = true;
+        lobbyCodeInput.value = this._model.lobbyCode;
+
         let exitButton = document.getElementById('exitButton');
         exitButton.addEventListener('click', (e) => {
             Router.emit('mainPage');
