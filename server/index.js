@@ -109,9 +109,6 @@ function onSocketConnect(ws) {
 
                 if (desiredRoom !== undefined) {
 
-                    console.log(123);
-
-
                     if (!desiredRoom.isFull()) {
                         ws.send(JSON.stringify({
                             header: "checkRoom/ok",
@@ -149,6 +146,8 @@ function onSocketConnect(ws) {
 
                         ws.on('close', function () {
                             desiredRoom.deletePlayerByWS(ws);
+
+                            console.log(rooms);
 
                             desiredRoom.sendToAllExcept({
                                 header: "updateRoom",

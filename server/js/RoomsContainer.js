@@ -11,7 +11,9 @@ export default class RoomsContainer {
                 code = this.generateRoomCode(4);
             } while (this.findRoomByCode(code) === -1);
         }
-        this.rooms.push(new Room(code));
+        let newRoom = new Room(code);
+        newRoom.on('deleteMe', this.deleteRoom.bind(this));
+        this.rooms.push(newRoom);
         return code;
     }
 
@@ -26,5 +28,10 @@ export default class RoomsContainer {
             code += chars[Math.floor(Math.random() * chars.length)];
         }
         return code;
+    }
+
+    deleteRoom(code) {
+        let deletingRoomIndex = this.rooms.findIndex(room => room.code === code);
+        this.rooms.splice(deletingRoomIndex, 1);
     }
 }

@@ -1,6 +1,8 @@
 import GameSlot from "./GameSlot.js";
+import Observable from "../../public/src/js/Observable.js";
+import BaseModel from "../../public/src/js/models/BaseModel.js";
 
-export default class Room {
+class Room {
     constructor(code) {
         this.slots = [];
         this.code = code;
@@ -58,8 +60,10 @@ export default class Room {
                 this.slots.splice(slotIndex, 1);
 
                 //если лобби теперь не пустое и удаленный игрок был хостом, то сделать хостом первого в списке игрока
-                if (!this.isEmpty() && wasHost) {
-                    this.slots[0].isHost = true;
+                if (!this.isEmpty()) {
+                    if (wasHost) this.slots[0].isHost = true;
+                } else {
+                    this.emit('deleteMe');
                 }
 
             }
@@ -117,3 +121,7 @@ export default class Room {
     }
 
 }
+
+Object.assign(Room.prototype, Observable);
+
+export default Room;

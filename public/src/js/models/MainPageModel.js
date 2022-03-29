@@ -27,12 +27,12 @@ class MainPageModel extends BaseModel {
     }
 
     createLobby() {
-        let url = new URL('/createLobby' ,httpServer);
+        let url = new URL('/createRoom' ,httpServer);
         url.searchParams.append('nickname', this.userNickname);
         fetch(url).then(response => response.json()). then(json => {
             Router.emit("lobbyPage", {
                 userNickname: this.userNickname,
-                lobbyCode: json.lobbyCode,
+                roomCode: json.roomCode,
             });
         });
 
