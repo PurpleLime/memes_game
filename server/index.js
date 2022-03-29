@@ -5,8 +5,8 @@ import {WebSocketServer} from 'ws';
 import express from 'express';
 import path from 'path';
 import GameSlot from "./js/GameSlot.js";
-import Lobby from "./js/Lobby.js";
-import LobbiesContainer from "./js/LobbiesContainer.js";
+import Room from "./js/Room.js";
+import RoomsContainer from "./js/RoomsContainer.js";
 
 const __dirname = path.resolve();
 const PORT = process.env.PORT ?? 3000;
@@ -37,14 +37,14 @@ const app = express();
 //     key: fs.readFileSync('path..')
 // }
 
-const lobbies = new LobbiesContainer();
-lobbies.addNewLobby('XXXX');
+const rooms = new RoomsContainer();
+rooms.addNewRoom('XXXX');
 
-app.get("/createLobby", (req, res) => {
-    console.log(`request for creating lobby: ${req.query.nickname}`);
+app.get("/createRoom", (req, res) => {
+    console.log(`request for creating room: ${req.query.nickname}`);
     if  (req.query.nickname) {
-        let newLobbyCode = lobbies.addNewLobby();
-        res.json({lobbyCode: newLobbyCode});
+        let newRoomCode = rooms.addNewRoom();
+        res.json({roomCode: newRoomCode});
     }
 });
 
@@ -77,8 +77,6 @@ app.get('*', (req, res) => {
 
 const clients = new Set();
 
-// lobbies.push(new Lobby('XXXX'));
-
 // https.createServer(httpsOptions, app).listen(PORT, () => {
 //     console.log(`Server has been started on port ${PORT}...`);
 // })
@@ -102,65 +100,67 @@ function onSocketConnect(ws) {
         //     client.send("Получено");
         // }
 
-        let desiredLobby;
+        let desiredRoom;
 
         switch (message.header) {
-            case 'checkLobby':
-                // desiredLobby = lobbies.find(lobby => lobby.code === message.lobbyCode);
-                desiredLobby = lobbies.findLobbyByCode(message.lobbyCode);
+            case 'checkRoom':
+                // desiredRoom = rooms.find(room => room.code === message.roomCode);
+                desiredRoom = rooms.findRoomByCode(message.roomCode);
 
-                if (desiredLobby !== undefined) {
+                if (desiredRoom !== undefined) {
 
-                    if (!desiredLobby.isFull()) {
+                    console.log(123);
+
+
+                    if (!desiredRoom.isFull()) {
                         ws.send(JSON.stringify({
-                            header: "checkLobby/ok",
-                            lobbyCode: message.lobbyCode,
+                            header: "checkRoom/ok",
+                            roomCode: message.roomCode,
                         }));
                     } else {
                         ws.send(JSON.stringify({
-                            header: "checkLobby/error",
-                            errorMessage: "Лобби заполнено"
+                            header: "checkRoom/error",
+                            errorMessage: "Комната заполнена"
                         }));
                     }
                 }
                 break;
 
-            case 'enterLobby':
-                // desiredLobby = lobbies.find(lobby => lobby.code === message.lobbyCode);
-                desiredLobby = lobbies.findLobbyByCode(message.lobbyCode);
+            case 'enterRoom':
+                desiredRoom = rooms.findRoomByCode(message.roomCode);
 
-                if (desiredLobby !== undefined) {
+                if (desiredRoom !== undefined) {
                     let slot = new GameSlot(message.userNickname, ws);
 
-                    if (!desiredLobby.isFull()) {
-                        desiredLobby.addPlayer(slot);
+                    if (!desiredRoom.isFull()) {
+                        desiredRoom.addPlayer(slot);
 
-                        desiredLobby.sendAllExcept({
-                            header: "updateLobby",
-                            data: desiredLobby,
+                        desiredRoom.sendToAllExcept({
+                            header: "updateRoom",
+                            data: desiredRoom,
                         }, slot);
 
                         ws.send(JSON.stringify({
-                            header: "enterLobby/ok",
+                            header: "enterRoom/ok",
                             isHost: slot.isHost,
                             userId: slot.id,
-                            data: desiredLobby,
+                            data: desiredRoom,
                         }));
 
                         ws.on('close', function () {
-                            desiredLobby.deletePlayerByWS(ws);
+                            desiredRoom.deletePlayerByWS(ws);
 
-                            desiredLobby.sendAllExcept({
-                                header: "updateLobby",
-                                data: desiredLobby,
+                            desiredRoom.sendToAllExcept({
+                                header: "updateRoom",
+                                data: desiredRoom,
                             }, slot);
 
                         });
 
                     } else {
                         ws.send(JSON.stringify({
-                            header: "enterLobby/error",
-                            errorMessage: "Лобби заполнено"
+                            header: "enterRoom/error",
+                            errorMessage: "Комната заполнена"
                         }));
                     }
                 }
@@ -172,10 +172,14 @@ function onSocketConnect(ws) {
                 break;
 
             case 'startGame':
-                desiredLobby = lobbies.findLobbyByCode(message.lobbyCode);
-                let slot = desiredLobby.findPlayerByWS(ws);
+                desiredRoom = rooms.findRoomByCode(message.roomCode);
+                let slot = desiredRoom.findPlayerByWS(ws);
                 if (slot.isHost) {
                     console.log("Начало игры");
+                    desiredRoom.startGame();
+                    desiredRoom.sendToAll({
+                        header: 'startGame/ok'
+                    });
                 }
                 break;
 
@@ -193,7 +197,7 @@ function onSocketConnect(ws) {
 
 function acceptWS(req) {
     // все входящие запросы должны использовать websockets
-    //а примере было !=
+    //в примере было !=
     if (!req.headers.upgrade || req.headers.upgrade.toLowerCase() !== 'websocket') {
         // res.end();
         return false;

@@ -1,11 +1,11 @@
-.players-сircle {
+.players-circle {
     position: relative;
     width: 82.5%;
     height: 70%;
     /*margin-top: 12.6vh;*/
 }
 
-.players-сircle__container {
+.players-circle__container {
     position: relative;
     display: block;
     width: 100%;

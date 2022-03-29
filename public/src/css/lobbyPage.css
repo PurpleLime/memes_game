@@ -69,3 +69,7 @@
     height: 40%;
     background: url(../img/judgeEmblemIcon.png) no-repeat center/cover;
 }
+
+.user-game-avatar__judge-emblem_none {
+    display: none;
+}

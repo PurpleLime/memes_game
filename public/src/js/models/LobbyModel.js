@@ -10,24 +10,24 @@ class LobbyModel extends BaseModel {
         this.userNickname = '';
         this.playersAmount = 0;
         this.slots = [];
-        this.lobbyCode = '';
-        this.userId = '';
+        this.roomCode = '';
+        this.playerId = '';
         this.isHost = false;
 
     }
 
-    init({ userNickname, lobbyCode }) {
-        this.lobbyCode = lobbyCode;
+    init({ userNickname, roomCode }) {
+        this.roomCode = roomCode;
         return this.connectWebSocket().then(() => {
             this.socket.send(JSON.stringify({
-                header: 'enterLobby',
+                header: 'enterRoom',
                 userNickname,
-                lobbyCode,
+                roomCode,
             }));
         });
     }
 
-    update({ userNickname, lobbyCode }) {
+    update({ userNickname, roomCode }) {
         // this.lobbyCode = lobbyCode;
         // return this.connectWebSocket().then(() => {
         //     this.socket.send(JSON.stringify({
@@ -39,7 +39,7 @@ class LobbyModel extends BaseModel {
     }
 
     leave(data) {
-        if (data?.routeInfo !== 'lobbyToIngame') {
+        if (data?.routerInfo !== 'lobbyToIngame') {
             this.socket.send(JSON.stringify({
                 header: 'leaveLobby',
             }));
@@ -49,7 +49,7 @@ class LobbyModel extends BaseModel {
     startGame() {
         this.socket.send(JSON.stringify({
             header: 'startGame',
-            lobbyCode: this.lobbyCode,
+            roomCode: this.roomCode,
         }))
     }
 
@@ -66,23 +66,33 @@ class LobbyModel extends BaseModel {
         console.log(message);
         let data = null;
         switch (message.header) {
-            case 'enterLobby/ok':
-                this.userId = message.userId;
+            case 'enterRoom/ok':
+                this.playerId = message.userId;
                 this.isHost = message.isHost;
                 data = message.data;
                 this.playersAmount = data.playersAmount;
                 this.slots = data.slots.slice();
                 this.emit('initView');
                 break;
-            case 'enterLobby/error':
+            case 'enterRoom/error':
                 console.log(`Ошибка: ${message.errorMessage}`);
                 break;
-            case 'updateLobby':
+            case 'updateRoom':
                 this.isHost = message.isHost;
                 data = message.data;
                 this.playersAmount = data.playersAmount;
                 this.slots = data.slots.slice();
                 this.emit('updateView');
+                break;
+            case 'startGame/ok':
+                Router.emit('ingamePage', {
+                    routerInfo: "lobbyToIngame",
+                    socket: this.socket,
+                    slots: this.slots,
+                    isHost: this.isHost,
+                    playerId: this.playerId,
+
+                });
                 break;
             default:
                 break;

@@ -1,9 +1,11 @@
 import GameSlot from "./GameSlot.js";
 
-export default class Lobby {
+export default class Room {
     constructor(code) {
         this.slots = [];
         this.code = code;
+        this.status = 'lobby';
+        this.curPlayerIndex = 0;
     }
 
     static maxPlayers = 8;
@@ -13,7 +15,7 @@ export default class Lobby {
     }
 
     isFull() {
-        return this.playersAmount() === Lobby.maxPlayers;
+        return this.playersAmount() === Room.maxPlayers;
     }
 
     isEmpty() {
@@ -59,6 +61,7 @@ export default class Lobby {
                 if (!this.isEmpty() && wasHost) {
                     this.slots[0].isHost = true;
                 }
+
             }
         }
     }
@@ -69,13 +72,48 @@ export default class Lobby {
         })
     }
 
-    sendAllExcept(json, excluded) {
+    sendToAll(json) {
+        this.slots.forEach((slot) => {
+            json.isHost = slot.isHost;
+            slot.websocket.send(JSON.stringify(json));
+        });
+    }
+
+    sendToAllExcept(json, excluded) {
         this.slots.forEach((slot) => {
             if (slot !== excluded) {
                 json.isHost = slot.isHost;
                 slot.websocket.send(JSON.stringify(json));
             }
         });
+    }
+
+    sleep(ms) {
+        return new Promise((resolve) => {
+            setTimeout(resolve, ms);
+        });
+    }
+
+    func() {
+        return new Promise((resolve) => {
+            setTimeout(resolve, 3000);
+        }).then(value => {
+
+            this.curPlayerIndex = (this.curPlayerIndex + 1) % this.slots.length
+            this.sendToAll({
+                header: 'updateGame',
+                curPlayerIndex: this.curPlayerIndex,
+            });
+        })
+    }
+
+    async startGame() {
+        this.status = 'game';
+        console.log("startGameLoop")
+        while (true) {
+            await this.func();
+        }
+
     }
 
 }

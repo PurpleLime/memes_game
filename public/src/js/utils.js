@@ -1,130 +1,12 @@
-//шаг, с которым мы будем искать длину эллипса
-const diffStep = 0.1;
-
-document.addEventListener("DOMContentLoaded", function (event) {
-    init();
-});
-
-function init() {
-    setUsersPositionsByCoords();
-}
-
 /**
  * Перевод из градусов в радианы
  * @param {number} degrees - величина угла в градусах
  * @return {number} - величина угла в радианах
  */
-function percentsToRadians(degrees) {
+export function percentsToRadians(degrees) {
     return degrees * Math.PI / 180;
 }
 
-/**
- * Располагает иконки пользователей на игровом поле, используя координаты точек на эллипсе
- * @param {number} areaAngle - угол дуги эллипса, на которой могут располагаться игроки
- */
-function setUsersPositionsByCoords(areaAngle = 310) {
-
-    let playersCircle = document.querySelector('#playersCircle'),
-        container = playersCircle.querySelector('.players-circle__container'),
-        users = container.querySelectorAll('.user-game-avatar'),
-        playersCircleSizes = {
-            w: playersCircle.getBoundingClientRect().width,
-            h: playersCircle.getBoundingClientRect().height,
-            userW: users[0].getBoundingClientRect().width,
-            userH: users[0].getBoundingClientRect().height
-        }
-
-    users = container.querySelectorAll('.user-game-avatar');
-
-    //размер зоны (угол в градусах), в которой не располагаются пользователи(зона снизу)
-    let notUsedAngle = 360 - areaAngle;
-
-    //ширина эллипса / 2 (радиус эллипса в 0 градусов)
-    let ellipseHorAxe = playersCircleSizes.w / 2;
-    //высота эллипса / 2 (радиус эллипса в 90 градусах)
-    let ellipseVertAxe = playersCircleSizes.h / 2;
-
-    //угол, с которого начинается зона расположения пользователей
-    let startAngle = 270 - notUsedAngle / 2;
-    //угол, на котором заканчивается зона расположения пользователей
-    let endAngle = -90 + notUsedAngle / 2;
-
-    let coords = getCoordsByArcLength(ellipseHorAxe, ellipseVertAxe, endAngle, startAngle, users.length);
-
-    let coord;
-
-    for (let i = 0; i < users.length; i++) {
-
-        coord = coords[i + 1];
-
-        let transformX = coord.x - playersCircleSizes.userW / 2;
-
-        let transformY = -(coord.y + playersCircleSizes.userH / 2);
-
-        users[i].style.position = "absolute";
-        users[i].style.top = "50%";
-        users[i].style.left = "50%";
-        users[i].style.transform = "translate(" + transformX + "px, " + transformY + "px)";
-
-    }
-}
-
-/**
- * Располагает иконки пользователей на игровом поле, используя углы точек на эллипсе
- * @param {number} areaAngle - угол дуги эллипса, на которой могут располагаться игроки
- */
-function setUsersPositionsByAngles(areaAngle = 300) {
-
-    let playersCircle = document.querySelector('#playersCircle'),
-        container = playersCircle.querySelector('.players-circle__container'),
-        users = container.querySelectorAll('.user-game-avatar'),
-        playersCircleSizes = {
-            w: playersCircle.getBoundingClientRect().width,
-            h: playersCircle.getBoundingClientRect().height,
-            userW: users[0].getBoundingClientRect().width,
-            userH: users[0].getBoundingClientRect().height
-        }
-
-    users = container.querySelectorAll('.user-game-avatar');
-
-    //размер зоны (угол в градусах), в которой не располагаются пользователи(зона снизу)
-    let notUsedAngle = 360 - areaAngle;
-
-    //ширина эллипса / 2 (радиус эллипса в 0 градусов)
-    let ellipseHorAxe = playersCircleSizes.w / 2;
-    //высота эллипса / 2 (радиус эллипса в 90 градусах)
-    let ellipseVertAxe = playersCircleSizes.h / 2;
-
-    //угол, с которого начинается зона расположения пользователей
-    let startAngle = 270 - notUsedAngle / 2;
-    //угол, на котором заканчивается зона расположения пользователей
-    let endAngle = -90 + notUsedAngle / 2;
-
-    let angles = getAnglesByArcLength(ellipseHorAxe, ellipseVertAxe, endAngle, startAngle, users.length);
-
-    let angle;
-
-    for (let i = 0; i < users.length; i++) {
-
-        angle = angles[i + 1];
-        // let angle = startAngle;
-
-        let sin = Math.sin(percentsToRadians(angle));
-        let cos = Math.cos(percentsToRadians(angle));
-
-        let ellipseRadius = ellipseHorAxe * ellipseVertAxe / Math.sqrt((ellipseHorAxe ** 2) * (sin ** 2) + (ellipseVertAxe ** 2) * (cos ** 2));
-
-        let transformY = -(sin * ellipseRadius + playersCircleSizes.userH / 2);
-
-        let transformX = cos * ellipseRadius - playersCircleSizes.userW / 2;
-
-
-        users[i].style.position = "absolute";
-        users[i].style.top = "50%";
-        users[i].style.left = "50%";
-        users[i].style.transform = "translate(" + transformX + "px, " + transformY + "px)";
-    }
-}
 
 /**
  * Вычисляет расстояние между двумя точками
@@ -136,9 +18,10 @@ function setUsersPositionsByAngles(areaAngle = 300) {
  * @param {number} coords2.y - координата второй точки по оси Y
  * @returns {number} - расстояние между точками
  */
-function getDistanceBetweenCoords({x: x1, y: y1}, {x: x2, y: y2}) {
+export function getDistanceBetweenCoords({x: x1, y: y1}, {x: x2, y: y2}) {
     return Math.sqrt(Math.pow(Math.abs(x1 - x2), 2) + Math.pow(Math.abs(y1 - y2), 2));
 }
+
 
 /**
  * Вычисляет координату точки на эллипсе
@@ -148,7 +31,7 @@ function getDistanceBetweenCoords({x: x1, y: y1}, {x: x2, y: y2}) {
  * направлении горизонтальной оси)
  * @returns {Object} - объект с двумя свойствами 'x' и 'y', содержащими координаты по оси X и по оси Y соответственно
  */
-function getEllipseDotCoord(a, b, angle) {
+export function getEllipseDotCoord(a, b, angle) {
     let sin = Math.sin(percentsToRadians(angle));
     let cos = Math.cos(percentsToRadians(angle));
 
@@ -162,6 +45,7 @@ function getEllipseDotCoord(a, b, angle) {
 
 }
 
+
 /**
  * Вычисляет длину дуги эллипса
  * @param {number} a - горизонтальная полуось эллипса
@@ -174,7 +58,7 @@ function getEllipseDotCoord(a, b, angle) {
  * вычисления длины дуги (определяет точность подсчета длины дуги)
  * @returns {number} - длина дуги эллипса
  */
-function getEllipseArcLength(a, b, t1, t2, diffStep = 0.1) {
+export function getEllipseArcLength(a, b, t1, t2, diffStep = 0.1) {
 
     let prevCoord = getEllipseDotCoord(a, b, t1);
     let curCoord;
@@ -193,6 +77,7 @@ function getEllipseArcLength(a, b, t1, t2, diffStep = 0.1) {
 
 }
 
+
 /**
  * Вычисляет углы равноудаленных друг от друга(вдоль дуги) точек на дуге эллипса
  * @param {number} a - горизонтальная полуось эллипса
@@ -207,7 +92,7 @@ function getEllipseArcLength(a, b, t1, t2, diffStep = 0.1) {
  * @returns {Array} - массив полученных углов от угла начала дуги до угла конца в очередности обхода(против
  * часовой стрелки)
  */
-function getAnglesByArcLength(a, b, t1, t2, dotsAmount, diffStep = 0.1) {
+export function getAnglesByArcLength(a, b, t1, t2, dotsAmount, diffStep = 0.1) {
 
     if (dotsAmount === 0) {
         console.log("Ошибка: нет точек");
@@ -246,6 +131,7 @@ function getAnglesByArcLength(a, b, t1, t2, dotsAmount, diffStep = 0.1) {
 
 }
 
+
 /**
  * Вычисляет координаты равноудаленных друг от друга(вдоль дуги) точек на дуге эллипса
  * @param {number} a - горизонтальная полуось эллипса
@@ -261,7 +147,7 @@ function getAnglesByArcLength(a, b, t1, t2, dotsAmount, diffStep = 0.1) {
  * содержащими координаты по оси X и по оси Y соответственно) от угла начала дуги до угла конца в очередности
  * обхода(против часовой стрелки)
  */
-function getCoordsByArcLength(a, b, t1, t2, dotsAmount, diffStep = 0.1) {
+export function getCoordsByArcLength(a, b, t1, t2, dotsAmount, diffStep = 0.1) {
 
     if (dotsAmount === 0) {
         console.log("Ошибка: нет точек");
@@ -298,3 +184,4 @@ function getCoordsByArcLength(a, b, t1, t2, dotsAmount, diffStep = 0.1) {
 
     return coords;
 }
+

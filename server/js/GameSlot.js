@@ -7,7 +7,8 @@ export default class GameSlot {
         this.nickname = nickname;
         this.isHost = false;
         this.websocket = websocket;
-        this.type = 'user';
+        this.type = 'player';
+        this.cards = [];
     }
 
     toJSON() {
@@ -15,6 +16,7 @@ export default class GameSlot {
             id: this.id,
             nickname: this.nickname,
             isHost: this.isHost,
+            type: this.type,
         }
     }
 

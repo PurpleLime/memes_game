@@ -35,10 +35,10 @@ class JoinLobbyModel extends BaseModel {
     }
 
 
-    checkLobbyAvailability({lobbyCode}) {
+    checkLobbyAvailability({roomCode}) {
         this.socket.send(JSON.stringify({
-            header: 'checkLobby',
-            lobbyCode: lobbyCode,
+            header: 'checkRoom',
+            roomCode: roomCode,
         }));
     }
 
@@ -46,13 +46,13 @@ class JoinLobbyModel extends BaseModel {
         let message = JSON.parse(event.data);
         console.log(message);
         switch (message.header) {
-            case 'checkLobby/ok':
+            case 'checkRoom/ok':
                 Router.emit("lobbyPage", {
                     userNickname: MainPageModel.userNickname,
-                    lobbyCode: message.lobbyCode,
+                    roomCode: message.roomCode,
                 });
                 break;
-            case 'checkLobby/error':
+            case 'checkRoom/error':
                 console.log(`Ошибка: ${message.errorMessage}`);
                 break;
             default:

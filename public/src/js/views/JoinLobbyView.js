@@ -33,14 +33,14 @@ class JoinLobbyView extends BaseView {
 
         this.wrapper.innerHTML = joinLobbyTemplate({});
 
-        let lobbyCode = document.getElementById('lobbyCodeInput');
+        let roomCode = document.getElementById('roomCodeInput');
 
         let joinButton = document.getElementById("joinButton");
 
         joinButton.addEventListener('click', (e) => {
 
             this.emit("checkLobbyAvailability", {
-                lobbyCode: lobbyCode.value.toUpperCase(),
+                roomCode: roomCode.value.toUpperCase(),
             });
         })
 
