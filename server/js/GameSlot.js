@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import CardsList from "./CardsList.js";
 
 export default class GameSlot {
 
@@ -8,7 +9,10 @@ export default class GameSlot {
         this.isHost = false;
         this.websocket = websocket;
         this.type = 'player';
-        this.cards = [];
+        this.cards = new CardsList();
+        for (let i = 1; i <= 7; ++i) {
+            this.cards.addCard(i);
+        }
     }
 
     toJSON() {
@@ -17,6 +21,7 @@ export default class GameSlot {
             nickname: this.nickname,
             isHost: this.isHost,
             type: this.type,
+            cards: this.cards.getAllCards(),
         }
     }
 

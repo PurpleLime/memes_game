@@ -33,8 +33,9 @@ class IngameView extends BaseView {
         this.wrapper.innerHTML = ingameTemplate({});
 
         this.renderPlayers();
-
         this.setUsersPositionsByCoords();
+
+        this.renderPlayerHand();
     }
 
 
@@ -64,6 +65,40 @@ class IngameView extends BaseView {
                 userNickname.textContent = slot.nickname;
             }
         })
+
+    }
+
+    renderPlayerHand() {
+        let playerHand = document.getElementById('playerHand');
+
+        // for (let i = 0; i < 7; ++i) {
+        //     playerHand.insertAdjacentHTML('beforeend', ingameCardTemplate({}));
+        // }
+
+        // playerHand.querySelectorAll('.meme-card__meme').forEach((meme, memeIndex) => {
+        //     meme.style.backgroundImage = `url(src/img/memes/${memeIndex + 1})`;
+        // })
+
+        let playerSlot = this._model.slots.find(slot => slot.id === this._model.playerId);
+        let playerCards = playerSlot.cards;
+
+        //удаляем из руки карты, которых не должно быть
+        playerHand.querySelectorAll('.meme-card').forEach((memeCard) => {
+            if (!playerCards.find(card => card.id === memeCard.id)) {
+                memeCard.remove();
+            }
+        })
+
+        //добавляем в руку карты, которых не хватает
+        playerCards.forEach(card => {
+            if (!playerHand.querySelector(`#card${card.id}`)) {
+                playerHand.insertAdjacentHTML('beforeend', ingameCardTemplate({}));
+                let cardsList = playerHand.querySelectorAll('.meme-card');
+                let addedCard = cardsList[cardsList.length - 1];
+                addedCard.id = `cardID${card.id}`;
+                addedCard.querySelector('.meme-card__meme').style.backgroundImage = `url(src/img/memes/${card.id})`;
+            }
+        });
 
     }
 

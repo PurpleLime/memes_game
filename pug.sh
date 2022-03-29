@@ -6,3 +6,4 @@
 (pug -c -E js -n ingameTemplate public/templates/ingame/ingame.pug)
 (pug -c -E js -n ingamePlayerTemplate public/templates/ingame/ingamePlayer.pug)
 (pug -c -E js -n ingameChoiceTemplate public/templates/ingame/ingameChoice.pug)
+(pug -c -E js -n ingameCardTemplate public/templates/ingame/ingameCard.pug)
