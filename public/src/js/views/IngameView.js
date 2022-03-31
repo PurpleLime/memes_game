@@ -9,6 +9,10 @@ class IngameView extends BaseView {
         super();
         this._model = IngameModel;
         this.wrapper = document.getElementById('wrapper');
+        //часть карты, перекрываемая следующей картой
+        this.cardCoverArea = 1 / 5;
+        //угол поворота между двумя соседними картами
+        this.cardBetweenAngle = 7;
     }
 
     init() {
@@ -71,14 +75,6 @@ class IngameView extends BaseView {
     renderPlayerHand() {
         let playerHand = document.getElementById('playerHand');
 
-        // for (let i = 0; i < 7; ++i) {
-        //     playerHand.insertAdjacentHTML('beforeend', ingameCardTemplate({}));
-        // }
-
-        // playerHand.querySelectorAll('.meme-card__meme').forEach((meme, memeIndex) => {
-        //     meme.style.backgroundImage = `url(src/img/memes/${memeIndex + 1})`;
-        // })
-
         let playerSlot = this._model.slots.find(slot => slot.id === this._model.playerId);
         let playerCards = playerSlot.cards;
 
@@ -93,13 +89,109 @@ class IngameView extends BaseView {
         playerCards.forEach(card => {
             if (!playerHand.querySelector(`#card${card.id}`)) {
                 playerHand.insertAdjacentHTML('beforeend', ingameCardTemplate({}));
-                let cardsList = playerHand.querySelectorAll('.meme-card');
-                let addedCard = cardsList[cardsList.length - 1];
+                let addedCard = document.querySelector('#playerHand > .meme-card:last-child');
                 addedCard.id = `cardID${card.id}`;
                 addedCard.querySelector('.meme-card__meme').style.backgroundImage = `url(src/img/memes/${card.id})`;
             }
         });
 
+        this.arrangeCardsInHand();
+
+        playerHand.querySelectorAll('.meme-card').forEach((card) => {
+
+            // let origin = card.style.transformOrigin;
+
+            card.addEventListener('mouseover', (e) => {
+                if (!card.style.transform.includes('scale')) {
+                    // card.style.transformOrigin = 'center top';
+                    //при наведении, карты из левой половины увеличиваются и перекрывают карты справа,
+                    // для исправления нужно при наведении немного сдвигать их влево (увеличивать так,
+                    // как если бы transform-origin был бы по центру верхней грани)
+                    let fixningTranslate = parseFloat(card.style.transformOrigin) - 50;
+                    card.style.transform += ` translate( ${fixningTranslate < 0 ? fixningTranslate : 0}%, -${card.clientHeight / 2}px) scale(1.5)`;
+                }
+            });
+
+            card.addEventListener('mouseleave', () => {
+                if (card.style.transform.includes('scale')) {
+                    let index = card.style.transform.lastIndexOf('translate');
+                    card.style.transform = card.style.transform.slice(0, index);
+                    // card.style.transformOrigin = origin;
+                }
+            });
+        });
+
+    }
+
+    //повернуть(и сдвинуть) карты в руке
+    arrangeCardsInHand() {
+        let playerHand = document.getElementById('playerHand');
+        let playerCards = playerHand.querySelectorAll('.meme-card');
+
+        if (playerCards.length === 0) return;
+
+        //угол поворота между первой и последней картами
+        let entireAngle = (playerCards.length - 1) * this.cardBetweenAngle;
+        //угол поворота текущей карты (начинаем с карйней левой)
+        let curAngle = - entireAngle / 2;
+
+        let cardWidth = playerCards[0].getBoundingClientRect().width;
+
+        playerCards.forEach((card, cardIndex) => {
+            // let deltaHeight = Math.floor(cardWidth * Math.sin(percentsToRadians(Math.abs(curAngle)) / 2));
+            let deltaHeight = 0;
+
+            let tempAngle = curAngle;
+
+            //чтобы выстроить карты по дуге, нужно их все (кроме центральной, если нечетное кол-во) сдвигать вниз
+            // (т.к. при повороте карты становятся чуть больше по высоте),
+            // поэтому сдвиг каждой карты = сдвиг соседней(которая ближе к центру) + сдвиг самой карты,
+            //центральная карта(если их нечетное кол-во) не сдвигается
+            //можно через рекурсию, но будет слишком сложночитаемо
+            if (tempAngle < 0) {
+                while (tempAngle < 0) {
+                    deltaHeight += this.calculateCardDeltaHeight(cardWidth, tempAngle);
+                    tempAngle += this.cardBetweenAngle;
+                }
+            } else if (tempAngle > 0) {
+                while (tempAngle > 0) {
+                    deltaHeight += this.calculateCardDeltaHeight(cardWidth, tempAngle);
+                    tempAngle -= this.cardBetweenAngle;
+                }
+            }
+
+            //все карты, кроме крайней левой залезают на соседнюю слева
+            if (cardIndex !== 0) {
+                card.style.marginLeft = `-${cardWidth * this.cardCoverArea}px`;
+            }
+
+            //для карт, повернутых по часовой стрелке, ориджином является точка на верхней границе, удаленная от
+            // правой ганицы на величину, на которую она перекрывается следующей картой
+            //для карт, повернутых против часовой стрелки - удаленная от левой границы на ту же величину
+            //расположение ориджинов в этих точках необходимо, чтобы карты верно позиционировались друг рядом с другом
+            if (curAngle < 0) {
+                card.style.transformOrigin = `${(this.cardCoverArea) * 100}% top`;
+            } else if (curAngle > 0) {
+                card.style.transformOrigin = `${(1 -this.cardCoverArea) * 100}% top`;
+            } else {
+                card.style.transformOrigin = 'center top'
+            }
+
+            card.style.transform = `translate(0, ${deltaHeight}px) rotate(${curAngle}deg)`;
+
+            curAngle += this.cardBetweenAngle;
+        })
+    }
+
+    /***
+     * Расчет дельты высоты карты (половины дельты, считается только приращение высоты с одного конца карты),
+     * после поворота на заданный угол
+     * @param cardWidth - ширина карты
+     * @param angle - угол, на который карта поворачивается
+     * @return {number} - приращение высоты карты(половина приращения)
+     */
+    calculateCardDeltaHeight(cardWidth, angle) {
+        return Math.floor(cardWidth * Math.sin(percentsToRadians(Math.abs(angle))) * (1 - this.cardCoverArea))
     }
 
     updateGame() {

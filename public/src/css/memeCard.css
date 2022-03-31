@@ -1,0 +1,110 @@
+.meme-card {
+    height: 185px;
+    width: 137px;
+    background: url(../img/defaultBackground.png) repeat center/40%,
+    #A00CC6 no-repeat center/cover;
+    border: 5px solid #EE3434;
+    border-radius: 8px;
+    transition: all 0.1s linear 0s;
+}
+
+.meme-card:hover {
+    border-color: #6FEE34;
+    z-index: 100;
+}
+
+.meme-card_in_hand {
+    margin-left: -2.17%;
+}
+
+.meme-card_rotation {
+    /*margin-left: -30px;*/
+    margin-left: -2.17%;
+}
+
+.meme-card_rotation:nth-child(1) {
+    margin-left: 0;
+    transform: rotate(-21deg) translate(0, 63px);
+}
+
+.meme-card_rotation:nth-child(1):hover {
+    border-color: #6FEE34;
+    z-index: 100;
+    transform: rotate(-21deg) scale(1.5);
+}
+
+.meme-card_rotation:nth-child(2) {
+    transform: rotate(-14deg) translate(0, 29px);
+}
+
+.meme-card_rotation:nth-child(2):hover {
+    border-color: #6FEE34;
+    z-index: 100;
+    transform: rotate(-14deg) scale(1.5);
+}
+
+.meme-card_rotation:nth-child(3) {
+    transform: rotate(-7deg) translate(0, 8px);
+}
+
+.meme-card_rotation:nth-child(3):hover {
+    border-color: #6FEE34;
+    z-index: 100;
+    transform: rotate(-7deg) scale(1.5);
+}
+
+.meme-card_rotation:nth-child(4) {
+    transform: rotate(0deg) translate(0, 0);
+
+}
+
+.meme-card_rotation:nth-child(4):hover {
+    border-color: #6FEE34;
+    z-index: 100;
+    transform: scale(1.5);
+}
+
+.meme-card_rotation:nth-child(5) {
+    transform: rotate(7deg) translate(0, 8px);
+}
+
+.meme-card_rotation:nth-child(5):hover {
+    border-color: #6FEE34;
+    z-index: 100;
+    transform: rotate(7deg) scale(1.5);
+}
+
+.meme-card_rotation:nth-child(6) {
+    transform: rotate(14deg) translate(0, 29px);
+}
+
+.meme-card_rotation:nth-child(6):hover {
+    border-color: #6FEE34;
+    z-index: 100;
+    transform: rotate(14deg) scale(1.5);
+}
+
+.meme-card_rotation:nth-child(7) {
+    transform: rotate(21deg) translate(0, 63px);
+}
+
+.meme-card_rotation:nth-child(7):hover {
+    border-color: #6FEE34;
+    z-index: 100;
+    transform: rotate(21deg) scale(1.5);
+}
+
+.meme-card__meme {
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    background-image: url(../img/shrekMeme.jpg);
+}
+
+.meme-card_size_m {
+    /*transform: scale(1.5);*/
+    width: 205px;
+    height: 276px;
+}
