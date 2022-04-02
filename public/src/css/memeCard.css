@@ -6,12 +6,30 @@
     border: 5px solid #EE3434;
     border-radius: 8px;
     /*transition: all 0.1s linear 0s;*/
-    visibility: visible;
+    visibility: hidden;
 }
 
 .meme-card:hover {
     border-color: #6FEE34;
     z-index: 100;
+}
+
+.flipping-card {
+    height: 185px;
+    width: 137px;
+    transform-style: preserve-3d;
+    position: absolute;
+    /*backface-visibility: hidden;*/
+}
+
+.flipping-card__back-side {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: #A00CC6 no-repeat center/cover;
+    border: 5px solid #EE3434;
+    border-radius: 8px;
+    transform: rotateY(180deg);
 }
 
 .meme-card_selected {

@@ -110,6 +110,8 @@ class IngameView extends BaseView {
 
                     this.takingCardAnimation(addedCard);
 
+                    addedCard.style.transition = 'all 0.2s ease-in 0s';
+
 
                     })
                 );
@@ -151,6 +153,7 @@ class IngameView extends BaseView {
         let cardWidth = playerCards[0].offsetWidth;
 
         playerCards.forEach((card, cardIndex) => {
+
             // let deltaHeight = Math.floor(cardWidth * Math.sin(percentsToRadians(Math.abs(curAngle)) / 2));
             let deltaHeight = 0;
 
@@ -193,8 +196,6 @@ class IngameView extends BaseView {
             }
 
             card.style.transform = `translate(0, ${deltaHeight}px) rotate(${curAngle}deg)`;
-
-            console.log(`${card.id} arrangedX: ${card.getBoundingClientRect().x}`);
 
             curAngle += this.cardBetweenAngle;
         })
@@ -293,19 +294,33 @@ class IngameView extends BaseView {
     takingCardAnimation(card) {
 
         console.log(`${card.id} animationX: ${card.getBoundingClientRect().x}`);
+        let flippingCard = document.createElement('div');
+        flippingCard.classList.add('flipping-card');
+
+        let backSide = document.createElement('div');
+        backSide.classList.add('flipping-card__back-side');
+
         let clone = card.cloneNode(true);
+
+        flippingCard.append(clone);
+        flippingCard.append(backSide);
 
         let memeCardDeck = document.getElementById('memeCardDeck');
         let memeCardDeckCoords = memeCardDeck.getBoundingClientRect();
         clone.style.position = 'absolute';
-        clone.style.left = `${memeCardDeckCoords.x + window.scrollX}px`;
-        clone.style.top = `${memeCardDeckCoords.y + window.scrollY}px`;
+        clone.style.width = '100%';
+        clone.style.height = '100%';
+        flippingCard.style.left = `${memeCardDeckCoords.x + window.scrollX}px`;
+        flippingCard.style.top = `${memeCardDeckCoords.y + window.scrollY}px`;
         clone.style.marginLeft = '';
-        clone.style.transform = 'translate(100%, 0) rotateY(180deg)';
-        clone.style.transformOrigin = 'left top';
+        flippingCard.style.transform = 'translate(100%, 0) rotateY(180deg)';
+        clone.style.transform = '';
+        flippingCard.style.transformOrigin = 'left top';
+        flippingCard.style.pointerEvents = 'none';
         clone.style.pointerEvents = 'none';
-        clone.style.transition = 'top 0.5s ease-in 0s, left 0.5s ease-in 0s, transform 0.5s ease-in 0s';
+        flippingCard.style.transition = 'top 0.5s ease-in 0s, left 0.5s ease-in 0s, transform 0.5s ease-in 0s';
 
+        flippingCard.style.visibility = 'visible';
         clone.style.visibility = 'visible';
 
 
@@ -323,41 +338,31 @@ class IngameView extends BaseView {
         let fixingX = rotationAngle > 0 ? Math.sin(degreesToRadians(rotationAngle)) * card.offsetHeight * scaleValue : 0;
         let fixingY = rotationAngle < 0 ? Math.sin(degreesToRadians(rotationAngle)) * card.offsetWidth * scaleValue : 0;
 
-        let square = document.createElement('div');
-        square.style.width = '3px';
-        square.style.height = '3px';
-        square.style.background = 'white';
-        square.style.position = 'absolute';
-        square.style.left = `${cardCoords.x + window.scrollX + fixingX}px`;
-        square.style.top = `${cardCoords.y + window.scrollY - fixingY}px`;
+        document.body.append(flippingCard);
 
-        document.body.append(square);
-
-        document.body.appendChild(clone)
 
         //выставление координат и трансформаций карты в руке:
-
         setTimeout(() => {
-            clone.style.transform = transformProps.filter((prop) => {
+            flippingCard.style.transform = transformProps.filter((prop) => {
                 return (prop.includes('rotate') || prop.includes('scale'))
             }).join(' ');
         }, 0);
 
-        clone.style.left = `${cardCoords.x + window.scrollX + fixingX}px`;
-        clone.style.top = `${cardCoords.y + window.scrollY - fixingY}px`;
-        clone.style.transformOrigin = 'left top';
+        flippingCard.style.left = `${cardCoords.x + window.scrollX + fixingX}px`;
+        flippingCard.style.top = `${cardCoords.y + window.scrollY - fixingY}px`;
+        flippingCard.style.transformOrigin = 'left top';
 
 
-        clone.addEventListener('transitionend', () => {
+        flippingCard.addEventListener('transitionend', () => {
             let cardBounding = card.getBoundingClientRect();
             let cloneBounding = clone.getBoundingClientRect()
             // console.log(`Card#${card.id}`);
             // console.log(`cardX: ${cardBounding.x}; cardY: ${cardBounding.y};`);
             // console.log(`cloneX: ${cloneBounding.x}; cloneY: ${cloneBounding.y};`);
+            card.style.visibility = 'visible';
             setTimeout(() => {
-                card.style.visibility = 'visible';
-                clone.remove();
-            }, 0);
+                flippingCard.remove();
+            }, 10);
         });
     }
 
