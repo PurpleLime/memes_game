@@ -1,4 +1,4 @@
-function pug_rethrow(n,e,r,t){if(!(n instanceof Error))throw n;if(!("undefined"==typeof window&&e||t))throw n.message+=" on line "+r,n;try{t=t||require("fs").readFileSync(e,"utf8")}catch(e){pug_rethrow(n,null,r)}var i=3,a=t.split("\n"),o=Math.max(r-i,0),h=Math.min(a.length,r+i),i=a.slice(o,h).map(function(n,e){var t=e+o+1;return(t==r?"  > ":"    ")+t+"| "+n}).join("\n");throw n.path=e,n.message=(e||"Pug")+":"+r+"\n"+i+"\n\n"+n.message,n}function ingameTemplate(locals) {var pug_html = "", pug_mixins = {}, pug_interp;var pug_debug_filename, pug_debug_line;try {var pug_debug_sources = {"public\u002Ftemplates\u002Fingame\u002Fingame.pug":".container\n    .standart-button.standart-button_size_l.ingame-menu-button\n        .menu-icon\n    .standart-button.standart-button_size_m.ingame-pull-out-mode-button\n        .pull-out-mode-icon\n    .standart-button.standart-button_size_m.ingame-confirm-button\n        .confirm-icon\n    .ingame-page-upper-cap\n    #playersCircle.players-circle\n        .cur-situation-card\n            | Когда вы списываете тест и смотрите в глаза учителю\n        .situation-card-deck\n        .meme-card-deck\n        #playersContainer.players-circle__container\n    #playerHand.player-hand\n"};
+function pug_rethrow(n,e,r,t){if(!(n instanceof Error))throw n;if(!("undefined"==typeof window&&e||t))throw n.message+=" on line "+r,n;try{t=t||require("fs").readFileSync(e,"utf8")}catch(e){pug_rethrow(n,null,r)}var i=3,a=t.split("\n"),o=Math.max(r-i,0),h=Math.min(a.length,r+i),i=a.slice(o,h).map(function(n,e){var t=e+o+1;return(t==r?"  > ":"    ")+t+"| "+n}).join("\n");throw n.path=e,n.message=(e||"Pug")+":"+r+"\n"+i+"\n\n"+n.message,n}function ingameTemplate(locals) {var pug_html = "", pug_mixins = {}, pug_interp;var pug_debug_filename, pug_debug_line;try {var pug_debug_sources = {"public\u002Ftemplates\u002Fingame\u002Fingame.pug":".container\n    .standart-button.standart-button_size_l.ingame-menu-button\n        .menu-icon\n    .standart-button.standart-button_size_m.ingame-pull-out-mode-button\n        .pull-out-mode-icon\n    #confirmButton.standart-button.standart-button_size_m.ingame-confirm-button\n        .confirm-icon\n    .ingame-page-upper-cap\n    #playersCircle.players-circle\n        .cur-situation-card\n            | Когда вы списываете тест и смотрите в глаза учителю\n        .situation-card-deck\n        #memeCardDeck.meme-card-deck\n        #playersContainer.players-circle__container\n    #playerHand.player-hand\n"};
 ;pug_debug_line = 1;pug_debug_filename = "public\u002Ftemplates\u002Fingame\u002Fingame.pug";
 pug_html = pug_html + "\u003Cdiv class=\"container\"\u003E";
 ;pug_debug_line = 2;pug_debug_filename = "public\u002Ftemplates\u002Fingame\u002Fingame.pug";
@@ -10,7 +10,7 @@ pug_html = pug_html + "\u003Cdiv class=\"standart-button standart-button_size_m 
 ;pug_debug_line = 5;pug_debug_filename = "public\u002Ftemplates\u002Fingame\u002Fingame.pug";
 pug_html = pug_html + "\u003Cdiv class=\"pull-out-mode-icon\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";
 ;pug_debug_line = 6;pug_debug_filename = "public\u002Ftemplates\u002Fingame\u002Fingame.pug";
-pug_html = pug_html + "\u003Cdiv class=\"standart-button standart-button_size_m ingame-confirm-button\"\u003E";
+pug_html = pug_html + "\u003Cdiv class=\"standart-button standart-button_size_m ingame-confirm-button\" id=\"confirmButton\"\u003E";
 ;pug_debug_line = 7;pug_debug_filename = "public\u002Ftemplates\u002Fingame\u002Fingame.pug";
 pug_html = pug_html + "\u003Cdiv class=\"confirm-icon\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";
 ;pug_debug_line = 8;pug_debug_filename = "public\u002Ftemplates\u002Fingame\u002Fingame.pug";
@@ -24,7 +24,7 @@ pug_html = pug_html + "Когда вы списываете тест и смот
 ;pug_debug_line = 12;pug_debug_filename = "public\u002Ftemplates\u002Fingame\u002Fingame.pug";
 pug_html = pug_html + "\u003Cdiv class=\"situation-card-deck\"\u003E\u003C\u002Fdiv\u003E";
 ;pug_debug_line = 13;pug_debug_filename = "public\u002Ftemplates\u002Fingame\u002Fingame.pug";
-pug_html = pug_html + "\u003Cdiv class=\"meme-card-deck\"\u003E\u003C\u002Fdiv\u003E";
+pug_html = pug_html + "\u003Cdiv class=\"meme-card-deck\" id=\"memeCardDeck\"\u003E\u003C\u002Fdiv\u003E";
 ;pug_debug_line = 14;pug_debug_filename = "public\u002Ftemplates\u002Fingame\u002Fingame.pug";
 pug_html = pug_html + "\u003Cdiv class=\"players-circle__container\" id=\"playersContainer\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";
 ;pug_debug_line = 15;pug_debug_filename = "public\u002Ftemplates\u002Fingame\u002Fingame.pug";

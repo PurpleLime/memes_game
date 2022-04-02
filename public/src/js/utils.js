@@ -3,7 +3,7 @@
  * @param {number} degrees - величина угла в градусах
  * @return {number} - величина угла в радианах
  */
-export function percentsToRadians(degrees) {
+export function degreesToRadians(degrees) {
     return degrees * Math.PI / 180;
 }
 
@@ -32,8 +32,8 @@ export function getDistanceBetweenCoords({x: x1, y: y1}, {x: x2, y: y2}) {
  * @returns {Object} - объект с двумя свойствами 'x' и 'y', содержащими координаты по оси X и по оси Y соответственно
  */
 export function getEllipseDotCoord(a, b, angle) {
-    let sin = Math.sin(percentsToRadians(angle));
-    let cos = Math.cos(percentsToRadians(angle));
+    let sin = Math.sin(degreesToRadians(angle));
+    let cos = Math.cos(degreesToRadians(angle));
 
     //определение радиуса эллипса в заданном углу
     let ellipseRadius = a * b / Math.sqrt((a ** 2) * (sin ** 2) + (b ** 2) * (cos ** 2));
