@@ -15,6 +15,7 @@ class IngameModel extends BaseModel {
         this.playerId = '';
         this.slotIndex = -1;
         this.curPlayerIndex = -1;
+        this.confirmedCardId = -1;
     }
 
     init(data) {
@@ -49,6 +50,11 @@ class IngameModel extends BaseModel {
             default:
                 break;
         }
+    }
+
+    setConfirmedCard(cardId) {
+        this.confirmedCardId = cardId;
+        console.log(`Выбрана карта номер ${this.confirmedCardId}`);
     }
 
 }

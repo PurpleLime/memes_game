@@ -14,7 +14,13 @@
     z-index: 100;
 }
 
+.meme-card_nohover:hover {
+    border-color: #EE3434;
+    z-index: unset;
+}
+
 .flipping-card {
+    z-index: 2;
     height: 185px;
     width: 137px;
     transform-style: preserve-3d;
@@ -26,10 +32,33 @@
     position: absolute;
     height: 100%;
     width: 100%;
+    transform: rotateY(180deg);
+}
+
+.flipping-card__back-side_meme {
     background: #A00CC6 no-repeat center/cover;
     border: 5px solid #EE3434;
     border-radius: 8px;
-    transform: rotateY(180deg);
+}
+
+.flipping-card__back-side_situation {
+    background: #1769E3;
+    border: 5px solid #AD00FF;
+    border-radius: 8px;
+}
+
+@keyframes animation-situation-card-take {
+    0% {
+    }
+    40% {
+        transform: translate(-100%, 0) rotateY(-180deg) translate(-50%, -20%) scale(0.9);
+    }
+    70% {
+        transform: rotateY(-90deg) translate(50%, -20%) scale(0.9);
+    }
+    100% {
+        transform: none;
+    }
 }
 
 .meme-card_selected {
@@ -42,83 +71,6 @@
 
 .meme-card_in_hand {
     margin-left: -2.17%;
-}
-
-.meme-card_rotation {
-    /*margin-left: -30px;*/
-    margin-left: -2.17%;
-}
-
-.meme-card_rotation:nth-child(1) {
-    margin-left: 0;
-    transform: rotate(-21deg) translate(0, 63px);
-}
-
-.meme-card_rotation:nth-child(1):hover {
-    border-color: #6FEE34;
-    z-index: 100;
-    transform: rotate(-21deg) scale(1.5);
-}
-
-.meme-card_rotation:nth-child(2) {
-    transform: rotate(-14deg) translate(0, 29px);
-}
-
-.meme-card_rotation:nth-child(2):hover {
-    border-color: #6FEE34;
-    z-index: 100;
-    transform: rotate(-14deg) scale(1.5);
-}
-
-.meme-card_rotation:nth-child(3) {
-    transform: rotate(-7deg) translate(0, 8px);
-}
-
-.meme-card_rotation:nth-child(3):hover {
-    border-color: #6FEE34;
-    z-index: 100;
-    transform: rotate(-7deg) scale(1.5);
-}
-
-.meme-card_rotation:nth-child(4) {
-    transform: rotate(0deg) translate(0, 0);
-
-}
-
-.meme-card_rotation:nth-child(4):hover {
-    border-color: #6FEE34;
-    z-index: 100;
-    transform: scale(1.5);
-}
-
-.meme-card_rotation:nth-child(5) {
-    transform: rotate(7deg) translate(0, 8px);
-}
-
-.meme-card_rotation:nth-child(5):hover {
-    border-color: #6FEE34;
-    z-index: 100;
-    transform: rotate(7deg) scale(1.5);
-}
-
-.meme-card_rotation:nth-child(6) {
-    transform: rotate(14deg) translate(0, 29px);
-}
-
-.meme-card_rotation:nth-child(6):hover {
-    border-color: #6FEE34;
-    z-index: 100;
-    transform: rotate(14deg) scale(1.5);
-}
-
-.meme-card_rotation:nth-child(7) {
-    transform: rotate(21deg) translate(0, 63px);
-}
-
-.meme-card_rotation:nth-child(7):hover {
-    border-color: #6FEE34;
-    z-index: 100;
-    transform: rotate(21deg) scale(1.5);
 }
 
 .meme-card__meme {

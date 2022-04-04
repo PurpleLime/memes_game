@@ -5,7 +5,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1;
+    z-index: 10;
     transition: all 0.1s linear 0s;
 }
 
@@ -26,6 +26,11 @@
 .standart-button_size_s {
     width: 44px;
     height: 44px;
+}
+
+.standart-button_size_xs {
+    width: 22px;
+    height: 22px;
 }
 
 .menu-icon {
@@ -50,6 +55,12 @@
     width: 28px;
     height: 28px;
     background: url(../img/starIcon.svg) no-repeat center/cover;
+}
+
+.close-icon {
+    width: 50%;
+    height: 50%;
+    background: url(../img/closeIcon.png) no-repeat center/cover;
 }
 
 .standart-input {

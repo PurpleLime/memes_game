@@ -35,13 +35,34 @@
     right: 40px;
 }
 
-.cur-situation-card {
+/*.cur-situation-card {*/
+/*    !*position: absolute;*!*/
+/*    !*top: 50%;*!*/
+/*    !*left: 50%;*!*/
+/*    !*transform: translate(-50%, -50%);*!*/
+/*    !*height: 340px;*!*/
+/*    !*width: 251px;*!*/
+/*    height: 100%;*/
+/*    width: 100%;*/
+/*    background: #1769E3;*/
+/*    border: 5px solid #AD00FF;*/
+/*    border-radius: 8px;*/
+/*    color: white;*/
+/*    font-weight: bold;*/
+/*    font-size: 24px;*/
+/*    line-height: 28px;*/
+/*    padding: 20px;*/
+/*}*/
+
+.situation-card-deck {
     position: absolute;
     top: 50%;
-    left: 50%;
+    left: 33%;
     transform: translate(-50%, -50%);
-    height: 340px;
-    width: 251px;
+    /*height: 185px;*/
+    /*width: 137px;*/
+    height: 277px;
+    width: 205px;
     background: #1769E3;
     border: 5px solid #AD00FF;
     border-radius: 8px;
@@ -50,27 +71,24 @@
     font-size: 24px;
     line-height: 28px;
     padding: 20px;
+    z-index: 1;
 }
 
-.situation-card-deck {
-    position: absolute;
-    top: 50%;
-    left: 25%;
-    transform: translate(-50%, -50%);
-    height: 185px;
-    width: 137px;
-    background: #1769E3;
-    border: 5px solid #AD00FF;
-    border-radius: 8px;
+.situation-card-deck_extra {
+    left: 0;
+    transform: translate(0, -50%);
+    display: none;
 }
 
 .meme-card-deck {
     position: absolute;
     top: 50%;
-    left: 75%;
+    left: 66%;
     transform: translate(-50%, -50%);
-    height: 185px;
-    width: 137px;
+    /*height: 185px;*/
+    /*width: 137px;*/
+    height: 277px;
+    width: 205px;
     background: #A00CC6;
     border: 5px solid #EE3434;
     border-radius: 8px;
@@ -84,6 +102,7 @@
     transform: translate(-50%);
     width: 100%;
     justify-content: center;
+    z-index: 2;
 }
 
 .results-list {

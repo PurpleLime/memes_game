@@ -17,6 +17,7 @@ class IngameController extends BaseController {
     addEvents() {
         this._model.on('initView', this._view.init.bind(this._view));
         this._model.on('updateGame', this._view.updateGame.bind(this._view));
+        this._view.on('confirmCard', this._model.setConfirmedCard.bind(this._model));
 
     }
 
