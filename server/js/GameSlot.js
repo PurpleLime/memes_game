@@ -33,4 +33,8 @@ export default class GameSlot {
         this.isHost = false;
     }
 
+    drawCard(id) {
+        return this.cards.drawCard(id);
+    }
+
 }

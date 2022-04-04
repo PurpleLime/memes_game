@@ -91,6 +91,7 @@ app.listen(PORT, () => {
 function onSocketConnect(ws) {
 
     clients.add(ws);
+    let slot;
 
     ws.on('message', function (message) {
         message = JSON.parse(message);
@@ -172,14 +173,38 @@ function onSocketConnect(ws) {
 
             case 'startGame':
                 desiredRoom = rooms.findRoomByCode(message.roomCode);
-                let slot = desiredRoom.findPlayerByWS(ws);
+                if(!desiredRoom) break;
+                slot = desiredRoom.findPlayerByWS(ws);
+                if (!slot) break;
                 if (slot.isHost) {
                     console.log("Начало игры");
-                    desiredRoom.startGame();
                     desiredRoom.sendToAll({
                         header: 'startGame/ok'
                     });
+                    setTimeout(() => {
+                        desiredRoom.startGame();
+                    }, 1000);
+                } else {
+                    ws.send(JSON.stringify({
+                        header: "startRoom/error",
+                        errorMessage: "Нет прав для начала игры"
+                    }));
                 }
+                break;
+
+            case 'turnDone':
+                desiredRoom = rooms.findRoomByCode(message.roomCode);
+                if(!desiredRoom) break;
+                slot = desiredRoom.findPlayerByWS(ws);
+                if (!slot) break;
+                let confirmedCardIndex = slot.drawCard(Number(message.confirmedCardId));
+                if (!confirmedCardIndex) break;
+                console.log('test');
+                desiredRoom.sendToAll({
+                    header: 'turnDone/ok',
+                    confirmedCardId: message.confirmedCardId,
+                });
+
                 break;
 
             default:

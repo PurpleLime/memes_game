@@ -243,6 +243,7 @@ class IngameView extends BaseView {
     }
 
     confirmSelectedCard(e) {
+        if (!this._model.isMyTurn) return;
         if (this.selectedCard === -1) return;
 
         let card = this.selectedCard;
@@ -251,11 +252,10 @@ class IngameView extends BaseView {
 
         this.removingMemeCardAnimation(card);
 
-        this.emit('confirmCard', card.id.match(/\d+/));
+        let cardId = card.id.match(/\d+/);
+        if (cardId === null) return;
+        this.emit('confirmCard', card.id.match(/\d+/)[0]);
 
-        this.renderPlayerHand();
-
-        this.showConfirmedCard();
     }
 
     removingMemeCardAnimation(card) {
@@ -400,6 +400,8 @@ class IngameView extends BaseView {
         popupCard.style.transform = 'translate(-50%, -50%) scale(2.5)';
         popupCard.style.transition = 'all 0.6s ease-in'
         popupCard.style.borderWidth = '3px';
+        popupCard.style.animation = 'animation-popup-card 0.6s ease-in 1'
+        popupCard.style.animationFillMode = 'forwards';
 
         let closeButton = document.createElement('div');
         closeButton.classList.add('standart-button');
@@ -421,22 +423,33 @@ class IngameView extends BaseView {
 
         document.body.append(popupCard);
 
-        popupCard.addEventListener('transitionend', () => {
+        popupCard.addEventListener('animationend', () => {
             setTimeout(() => {
                 closeButton.style.visibility = 'visible';
                 closeButton.style.opacity = '1';
+                popupCard.style.top = '40%';
+                popupCard.style.animation = 'none';
             }, 1000);
         })
 
+        //TODO: исправить это как-нибудь
+        //без задержки может слиться с изначально заданными параметрами и сделать эти параметры
+        // исходными = не будет перехода и, соответственно, анимации
+        //время задержки зависит от мощности устройства (например, не телефоне не хватает 1мс, на компах - хватает), поэтому с сильным запасом - 100мс
         setTimeout(() => {
-            popupCard.style.left = '50%';
-            popupCard.style.top = '40%';
-        }, 0);
+            // popupCard.style.top = '40%';
+        }, 100);
+
+        setTimeout(() => {
+            this.hideConfirmedCard();
+        }, 10000);
 
     }
 
     hideConfirmedCard() {
         let popupCard = document.getElementById('popupCard');
+        if (!popupCard) return;
+
         popupCard.style.top = '-40%';
 
         popupCard.addEventListener('transitionend', (e) => {
@@ -573,7 +586,7 @@ class IngameView extends BaseView {
 
             let emblem = userSlot.querySelector('.user-game-avatar__judge-emblem');
 
-            if (slotIndex !== this._model.curPlayerIndex) {
+            if (slotIndex !== this._model.curJudgeIndex) {
                 emblem.classList.add('user-game-avatar__judge-emblem_none');
             } else {
                 emblem.classList.remove('user-game-avatar__judge-emblem_none');

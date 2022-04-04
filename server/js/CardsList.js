@@ -10,8 +10,12 @@ export default class CardsList {
     }
 
     drawCard(id) {
-        let cardIndex = this.cards.findIndex(card => card.id === id);
-        return this.cards.splice(cardIndex, 1)[0];
+        console.log(id);
+        let cardIndex = this.cards.findIndex(card => {
+            console.log(card.id);
+            return card.id === id;
+        });
+        return cardIndex !== -1 ? this.cards.splice(cardIndex, 1)[0] : null;
     }
 
     getAllCards() {

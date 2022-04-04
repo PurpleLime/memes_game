@@ -7,7 +7,8 @@ class Room {
         this.slots = [];
         this.code = code;
         this.status = 'lobby';
-        this.curPlayerIndex = 0;
+        this.curJudgeIndex = -1;
+        this.playerTurnIndex = -1;
     }
 
     static maxPlayers = 8;
@@ -103,21 +104,27 @@ class Room {
             setTimeout(resolve, 3000);
         }).then(value => {
 
-            this.curPlayerIndex = (this.curPlayerIndex + 1) % this.slots.length
+            this.curJudgeIndex = (this.curJudgeIndex + 1) % this.slots.length
             this.sendToAll({
-                header: 'updateGame',
-                curPlayerIndex: this.curPlayerIndex,
+                header: 'updateTurn',
+                curJudgeIndex: this.curJudgeIndex,
             });
         })
     }
 
     async startGame() {
         this.status = 'game';
-        console.log("startGameLoop")
-        while (true) {
-            await this.func();
-        }
+        this.curJudgeIndex = 0;
+        this.playerTurnIndex = 1;
+        this.updateTurnData();
+    }
 
+    updateTurnData() {
+        this.sendToAll({
+            header: 'updateTurn',
+            curJudgeIndex: this.curJudgeIndex,
+            playerTurnIndex: this.playerTurnIndex,
+        });
     }
 
 }

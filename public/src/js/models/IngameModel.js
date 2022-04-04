@@ -14,12 +14,15 @@ class IngameModel extends BaseModel {
         this.isHost = false;
         this.playerId = '';
         this.slotIndex = -1;
-        this.curPlayerIndex = -1;
+        this.curJudgeIndex = -1;
         this.confirmedCardId = -1;
+        this.playerTurnIndex = -1;
+        this.isMyTurn = false;
     }
 
     init(data) {
         this.socket = data.socket;
+        this.roomCode = data.roomCode;
         this.slots = data.slots;
         this.isHost = data.isHost;
         this.playerId = data.playerId;
@@ -43,18 +46,31 @@ class IngameModel extends BaseModel {
         console.log(message);
         let data = null;
         switch (message.header) {
-            case 'updateGame':
-                this.curPlayerIndex = message.curPlayerIndex;
-                this.emit('updateGame');
+            case 'updateTurn':
+                this.curJudgeIndex = message.curJudgeIndex;
+                this.playerTurnIndex = message.playerTurnIndex;
+                this.isMyTurn = this.slotIndex === this.playerTurnIndex;
+                console.log(`slotIndex: ${this.slotIndex}; playerTurnIndex: ${this.playerTurnIndex}`);
+                this.emit('updateTurn');
+                break;
+            case 'turnDone/ok':
+                this.confirmedCardId = message.confirmedCardId;
+                this.emit('showConfirmedCard');
                 break;
             default:
                 break;
         }
     }
 
-    setConfirmedCard(cardId) {
+    confirmCard(cardId) {
         this.confirmedCardId = cardId;
         console.log(`Выбрана карта номер ${this.confirmedCardId}`);
+        this.socket.send(JSON.stringify({
+            header: 'turnDone',
+            roomCode: this.roomCode,
+            playerId: this.playerId,
+            confirmedCardId: this.confirmedCardId,
+        }));
     }
 
 }

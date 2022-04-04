@@ -61,6 +61,20 @@
     }
 }
 
+@keyframes animation-popup-card {
+    0% {
+        top: -40%;
+    }
+    100% {
+        top: 40%;
+    }
+}
+
+.popup-card {
+    top: -40%;
+    left: 50%;
+}
+
 .meme-card_selected {
     border-color: #0c51ba;
 }
