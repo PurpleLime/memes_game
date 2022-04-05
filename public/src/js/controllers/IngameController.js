@@ -16,7 +16,8 @@ class IngameController extends BaseController {
 
     addEvents() {
         this._model.on('initView', this._view.init.bind(this._view));
-        this._model.on('updateTurn', this._view.updateGame.bind(this._view));
+        this._model.on('newTurn', this._view.newTurn.bind(this._view));
+        this._model.on('newRound', this._view.newRound.bind(this._view));
         this._model.on('showConfirmedCard', this._view.showConfirmedCard.bind(this._view));
         this._view.on('confirmCard', this._model.confirmCard.bind(this._model));
 

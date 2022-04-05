@@ -18,6 +18,9 @@ class IngameModel extends BaseModel {
         this.confirmedCardId = -1;
         this.playerTurnIndex = -1;
         this.isMyTurn = false;
+        this.isTurnDone = false;
+        this.cards = [];
+        this.situation = '';
     }
 
     init(data) {
@@ -26,6 +29,7 @@ class IngameModel extends BaseModel {
         this.slots = data.slots;
         this.isHost = data.isHost;
         this.playerId = data.playerId;
+        this.cards = data.cards;
         this.slotIndex = this.slots.findIndex(slot => slot.id === this.playerId);
 
         this.socket.onmessage = this.ingameHandleResponse.bind(this);
@@ -47,11 +51,28 @@ class IngameModel extends BaseModel {
         let data = null;
         switch (message.header) {
             case 'updateTurn':
+                this.isTurnDone = false;
                 this.curJudgeIndex = message.curJudgeIndex;
                 this.playerTurnIndex = message.playerTurnIndex;
+                this.isHost = message.isHost;
                 this.isMyTurn = this.slotIndex === this.playerTurnIndex;
+                this.cards = message.cards;
+                this.situation = message.situation;
                 console.log(`slotIndex: ${this.slotIndex}; playerTurnIndex: ${this.playerTurnIndex}`);
-                this.emit('updateTurn');
+                this.emit('newTurn');
+                break;
+            case 'updateTurn/newRound':
+                this.isTurnDone = false;
+                this.curJudgeIndex = message.curJudgeIndex;
+                this.playerTurnIndex = message.playerTurnIndex;
+                this.isHost = message.isHost;
+                this.isMyTurn = this.slotIndex === this.playerTurnIndex;
+                this.situation = message.situation;
+                this.cards = message.cards;
+                console.log(`slotIndex: ${this.slotIndex}; playerTurnIndex: ${this.playerTurnIndex}`);
+                this.emit('newRound');
+
+
                 break;
             case 'turnDone/ok':
                 this.confirmedCardId = message.confirmedCardId;
@@ -63,6 +84,8 @@ class IngameModel extends BaseModel {
     }
 
     confirmCard(cardId) {
+        if (this.isTurnDone) return;
+        this.isTurnDone = true;
         this.confirmedCardId = cardId;
         console.log(`Выбрана карта номер ${this.confirmedCardId}`);
         this.socket.send(JSON.stringify({

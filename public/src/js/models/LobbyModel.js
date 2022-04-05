@@ -89,8 +89,9 @@ class LobbyModel extends BaseModel {
                     routerInfo: "lobbyToIngame",
                     socket: this.socket,
                     roomCode: this.roomCode,
-                    slots: this.slots,
-                    isHost: this.isHost,
+                    slots: message.slots,
+                    cards: message.cards,
+                    isHost: message.isHost,
                     playerId: this.playerId,
 
                 });

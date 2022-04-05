@@ -179,8 +179,9 @@ function onSocketConnect(ws) {
                 if (slot.isHost) {
                     console.log("Начало игры");
                     desiredRoom.sendToAll({
-                        header: 'startGame/ok'
-                    });
+                        header: 'startGame/ok',
+                        slots: desiredRoom.slots,
+                    }, {needUpdateCards: true});
                     setTimeout(() => {
                         desiredRoom.startGame();
                     }, 1000);
@@ -194,16 +195,21 @@ function onSocketConnect(ws) {
 
             case 'turnDone':
                 desiredRoom = rooms.findRoomByCode(message.roomCode);
-                if(!desiredRoom) break;
+                if(!desiredRoom || desiredRoom.isTurnDone) break;
                 slot = desiredRoom.findPlayerByWS(ws);
                 if (!slot) break;
                 let confirmedCardIndex = slot.drawCard(Number(message.confirmedCardId));
                 if (!confirmedCardIndex) break;
+                desiredRoom.isTurnDone = true;
                 console.log('test');
                 desiredRoom.sendToAll({
                     header: 'turnDone/ok',
                     confirmedCardId: message.confirmedCardId,
                 });
+
+                setTimeout(() => {
+                    desiredRoom.updateTurnData();
+                }, 12000);
 
                 break;
 

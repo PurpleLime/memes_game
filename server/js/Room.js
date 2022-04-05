@@ -9,6 +9,9 @@ class Room {
         this.status = 'lobby';
         this.curJudgeIndex = -1;
         this.playerTurnIndex = -1;
+        this.isTurnDone = false;
+        this.maxCardsAmount = 7;
+        this.situation = 'Когда вы списываете тест и смотрите в глаза учителю';
     }
 
     static maxPlayers = 8;
@@ -77,8 +80,9 @@ class Room {
         })
     }
 
-    sendToAll(json) {
+    sendToAll(json, config = {}) {
         this.slots.forEach((slot) => {
+            if (config.needUpdateCards) json.cards = slot.cards.getAllCards();
             json.isHost = slot.isHost;
             slot.websocket.send(JSON.stringify(json));
         });
@@ -112,19 +116,44 @@ class Room {
         })
     }
 
-    async startGame() {
+    startGame() {
         this.status = 'game';
         this.curJudgeIndex = 0;
-        this.playerTurnIndex = 1;
+        this.playerTurnIndex = -1;
         this.updateTurnData();
     }
 
     updateTurnData() {
-        this.sendToAll({
-            header: 'updateTurn',
-            curJudgeIndex: this.curJudgeIndex,
-            playerTurnIndex: this.playerTurnIndex,
-        });
+        this.playerTurnIndex = (this.playerTurnIndex + 1) % this.slots.length;
+        this.isTurnDone = false;
+
+        if (this.playerTurnIndex === this.curJudgeIndex) {
+
+            this.situation += '+';
+            this.curJudgeIndex = (this.curJudgeIndex + 1) % this.slots.length;
+            this.playerTurnIndex = (this.curJudgeIndex + 1) % this.slots.length;
+            this.slots.forEach((slot) => {
+                if (slot.cards.getCardsAmount() < this.maxCardsAmount) {
+                    slot.cards.addCard(10);
+                }
+            });
+            this.sendToAll({
+                header: 'updateTurn/newRound',
+                curJudgeIndex: this.curJudgeIndex,
+                playerTurnIndex: this.playerTurnIndex,
+                situation: this.situation,
+            }, {needUpdateCards: true});
+
+        } else {
+
+            this.sendToAll({
+                header: 'updateTurn',
+                curJudgeIndex: this.curJudgeIndex,
+                playerTurnIndex: this.playerTurnIndex,
+                situation: this.situation,
+            },{needUpdateCards: true});
+
+        }
     }
 
 }

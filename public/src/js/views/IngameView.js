@@ -20,7 +20,7 @@ class IngameView extends BaseView {
         this.cardCoverArea = 1 / 5;
         //угол поворота между двумя соседними картами
         this.cardBetweenAngle = 7;
-        this.selectedCard = -1;
+        this.selectedCard = null;
     }
 
     init() {
@@ -48,11 +48,28 @@ class IngameView extends BaseView {
         situationCardDeck.addEventListener('mouseover', this.showExtraSituationCard);
         situationCardDeck.addEventListener('mouseleave', this.hideExtraSituationCard);
 
+        let confirmButton = document.getElementById('confirmButton');
+        confirmButton.addEventListener('click', this.confirmSelectedCard.bind(this));
+
         this.renderPlayers();
         this.setUsersPositionsByCoords();
 
+        // this.renderPlayerHand();
+        // this.takingSituationCardAnimation();
+    }
+
+    newTurn() {
+        // this.updateJudge();
+    }
+
+    newRound() {
+        console.log('new Round');
+        this.updateJudge();
         this.renderPlayerHand();
-        this.takingSituationCardAnimation();
+        this.removingSituationCardAnimation().then((resolve) => {
+            this.takingSituationCardAnimation();
+        });
+
     }
 
 
@@ -87,8 +104,11 @@ class IngameView extends BaseView {
     async renderPlayerHand() {
         let playerHand = document.getElementById('playerHand');
 
-        let playerSlot = this._model.slots.find(slot => slot.id === this._model.playerId);
-        let playerCards = playerSlot.cards;
+        // let playerSlot = this._model.slots.find(slot => slot.id === this._model.playerId);
+        // let playerCards = playerSlot.cards;
+
+        let playerCards = this._model.cards;
+        console.log(`playerCards: ${playerCards}`);
 
         //удаляем из руки карты, которых не должно быть
         playerHand.querySelectorAll('.meme-card').forEach((memeCard) => {
@@ -111,6 +131,10 @@ class IngameView extends BaseView {
                         addedCard.id = `cardID${card.id}`;
                         addedCard.querySelector('.meme-card__meme').style.backgroundImage = `url(src/img/memes/${card.id})`;
 
+                        addedCard.addEventListener('mouseover', this.cardMouseoverHandler);
+                        addedCard.addEventListener('mouseleave', this.cardMouseleaveHandler);
+                        addedCard.addEventListener('click', this.cardClickHandler.bind(this));
+
                         this.arrangeCardsInHand();
 
                         this.takingMemeCardAnimation(addedCard);
@@ -129,13 +153,13 @@ class IngameView extends BaseView {
         this.arrangeCardsInHand();
 
         playerHand.querySelectorAll('.meme-card').forEach((card) => {
-            card.addEventListener('mouseover', this.cardMouseoverHandler);
-            card.addEventListener('mouseleave', this.cardMouseleaveHandler);
-            card.addEventListener('click', this.cardClickHandler.bind(this));
+            // card.addEventListener('mouseover', this.cardMouseoverHandler);
+            // card.addEventListener('mouseleave', this.cardMouseleaveHandler);
+            // card.addEventListener('click', this.cardClickHandler.bind(this));
         });
 
-        let confirmButton = document.getElementById('confirmButton');
-        confirmButton.addEventListener('click', this.confirmSelectedCard.bind(this));
+        // let confirmButton = document.getElementById('confirmButton');
+        // confirmButton.addEventListener('click', this.confirmSelectedCard.bind(this));
 
     }
 
@@ -233,7 +257,7 @@ class IngameView extends BaseView {
 
     cardClickHandler(e) {
 
-        if (this.selectedCard !== -1) {
+        if (this.selectedCard !== null) {
             this.selectedCard.classList.remove('meme-card_selected');
         }
 
@@ -243,12 +267,16 @@ class IngameView extends BaseView {
     }
 
     confirmSelectedCard(e) {
-        if (!this._model.isMyTurn) return;
-        if (this.selectedCard === -1) return;
+        console.log(`confirmSelectedCard:\nisMyTurn: ${this._model.isMyTurn}\nisTurnDone: ${this._model.isTurnDone}\nselectedCard: ${this.selectedCard}`);
+
+        if (!this._model.isMyTurn || this._model.isTurnDone) return;
+
+        if (this.selectedCard === null) return;
+
 
         let card = this.selectedCard;
 
-        this.selectedCard = -1;
+        this.selectedCard = null;
 
         this.removingMemeCardAnimation(card);
 
@@ -459,91 +487,105 @@ class IngameView extends BaseView {
     }
 
     takingSituationCardAnimation() {
+        return new Promise((resolve) => {
+            let flippingCard = document.createElement('div');
+            flippingCard.classList.add('flipping-card');
 
-        let flippingCard = document.createElement('div');
-        flippingCard.classList.add('flipping-card');
+            let backSide = document.createElement('div');
+            backSide.classList.add('flipping-card__back-side');
+            backSide.classList.add('flipping-card__back-side_situation');
+            // backSide.style.transform = '';
 
-        let backSide = document.createElement('div');
-        backSide.classList.add('flipping-card__back-side');
-        backSide.classList.add('flipping-card__back-side_situation');
-        // backSide.style.transform = '';
+            let frontSide = document.createElement('div');
+            frontSide.classList.add('situation-card-deck');
+            frontSide.style.top = 'unset';
+            frontSide.style.left = 'unset';
+            frontSide.style.position = 'absolute';
+            frontSide.style.width = '100%';
+            frontSide.style.height = '100%';
+            frontSide.style.transform = 'none';
+            frontSide.textContent = this._model.situation;
 
-        let frontSide = document.createElement('div');
-        frontSide.classList.add('situation-card-deck');
-        frontSide.style.top = 'unset';
-        frontSide.style.left = 'unset';
-        frontSide.style.position = 'absolute';
-        frontSide.style.width = '100%';
-        frontSide.style.height = '100%';
-        frontSide.style.transform = 'none';
-        frontSide.textContent = 'Когда вы списываете тест и смотрите в глаза учителю';
+            // let clone = card.cloneNode(true);
 
-        // let clone = card.cloneNode(true);
+            flippingCard.append(frontSide);
+            flippingCard.append(backSide);
 
-        flippingCard.append(frontSide);
-        flippingCard.append(backSide);
+            let situationCardDeck = document.getElementById('situationCardDeck');
+            let situationCardDeckCoords = situationCardDeck.getBoundingClientRect();
 
-        let situationCardDeck = document.getElementById('situationCardDeck');
-        let situationCardDeckCoords = situationCardDeck.getBoundingClientRect();
+            flippingCard.style.left = `${situationCardDeckCoords.x + window.scrollX}px`;
+            flippingCard.style.top = `${situationCardDeckCoords.y + window.scrollY}px`;
+            flippingCard.style.width = `${situationCardDeckCoords.width}px`;
+            flippingCard.style.height = `${situationCardDeckCoords.height}px`;
+            flippingCard.style.transform = 'translate(-100%, 0) rotateY(-180deg)';
+            flippingCard.style.transformOrigin = 'right center';
+            flippingCard.style.pointerEvents = 'none';
+            flippingCard.style.transition = 'top 0.5s ease-in, left 0.5s ease-in, transform 0.5s ease-in, width 0.5s ease-in, height 0.5s ease-in';
+            flippingCard.style.visibility = 'visible';
 
-        flippingCard.style.left = `${situationCardDeckCoords.x + window.scrollX}px`;
-        flippingCard.style.top = `${situationCardDeckCoords.y + window.scrollY}px`;
-        flippingCard.style.width = `${situationCardDeckCoords.width}px`;
-        flippingCard.style.height = `${situationCardDeckCoords.height}px`;
-        flippingCard.style.transform = 'translate(-100%, 0) rotateY(-180deg)';
-        flippingCard.style.transformOrigin = 'right center';
-        flippingCard.style.pointerEvents = 'none';
-        flippingCard.style.transition = 'top 0.5s ease-in, left 0.5s ease-in, transform 0.5s ease-in, width 0.5s ease-in, height 0.5s ease-in';
-        flippingCard.style.visibility = 'visible';
+            document.body.append(flippingCard);
 
-        document.body.append(flippingCard);
+            // flippingCard.style.left = `${cardCoords.x + window.scrollX + fixingX}px`;
+            // flippingCard.style.top = `${cardCoords.y + window.scrollY - fixingY}px`;
+            // flippingCard.style.transformOrigin = 'left top';
+            // flippingCard.style.width = `${card.offsetWidth}px`;
+            // flippingCard.style.height = `${card.offsetHeight}px`;
 
-        // flippingCard.style.left = `${cardCoords.x + window.scrollX + fixingX}px`;
-        // flippingCard.style.top = `${cardCoords.y + window.scrollY - fixingY}px`;
-        // flippingCard.style.transformOrigin = 'left top';
-        // flippingCard.style.width = `${card.offsetWidth}px`;
-        // flippingCard.style.height = `${card.offsetHeight}px`;
-
-        setTimeout(() => {
-            // flippingCard.style.transform = 'rotateY(180deg) translate(-20%, 0)';
-            flippingCard.style.animation = 'animation-situation-card-take 2s ease-in 1'
-            flippingCard.style.animationFillMode = 'forwards';
-        }, 0);
+            setTimeout(() => {
+                // flippingCard.style.transform = 'rotateY(180deg) translate(-20%, 0)';
+                flippingCard.style.animation = 'animation-situation-card-take 2s ease-in 1'
+                flippingCard.style.animationFillMode = 'forwards';
+            }, 0);
 
 
-        flippingCard.addEventListener('animationend', () => {
-            situationCardDeck.textContent = frontSide.textContent;
-            flippingCard.remove();
-            // this.removingSituationCardAnimation();
-        })
+            flippingCard.addEventListener('animationend', () => {
+                situationCardDeck.textContent = frontSide.textContent;
+                flippingCard.remove();
+                resolve();
+                // this.removingSituationCardAnimation();
+            })
 
+        });
     }
 
     removingSituationCardAnimation() {
-        let card = document.getElementById('situationCardDeck');
-        let clone = card.cloneNode(true);
-        clone.style.position = 'absolute';
-        clone.style.transform = 'none';
+        return new Promise((resolve) => {
 
-        let cardCoords = card.getBoundingClientRect();
+            let card = document.getElementById('situationCardDeck');
 
-        clone.style.left = `${cardCoords.x + window.scrollX}px`;
-        clone.style.top = `${cardCoords.y + window.scrollY}px`;
+            console.log(card.textContent === '');
+            if (card.textContent === '') {
+                resolve();
+                return;
+            }
 
-        clone.style.transition = 'top 0.5s ease-in 0s, left 1s ease-in 0s, transform 0.5s ease-in 0s';
+            let clone = card.cloneNode(true);
+            clone.style.position = 'absolute';
+            clone.style.transform = 'none';
 
-        document.body.append(clone);
+            let cardCoords = card.getBoundingClientRect();
 
-        card.textContent = '';
+            clone.style.left = `${cardCoords.x + window.scrollX}px`;
+            clone.style.top = `${cardCoords.y + window.scrollY}px`;
 
-        setTimeout(() => {
-            clone.style.transform = 'scale(0.7)';
-            clone.style.top = `-50%`;
-            clone.style.left = '50%';
-        }, 0);
+            clone.style.transition = 'top 0.5s ease-in 0s, left 1s ease-in 0s, transform 0.5s ease-in 0s';
 
-        clone.addEventListener('transitionend', () => {
-            clone.remove();
+            document.body.append(clone);
+
+            card.textContent = '';
+
+            setTimeout(() => {
+                clone.style.transform = 'scale(0.7)';
+                clone.style.top = `-50%`;
+                clone.style.left = '50%';
+            }, 0);
+
+            clone.addEventListener('transitionend', () => {
+                clone.remove();
+                resolve();
+            });
+
         });
 
     }
@@ -577,7 +619,7 @@ class IngameView extends BaseView {
         return Math.floor(cardWidth * Math.sin(degreesToRadians(Math.abs(angle))) * (1 - this.cardCoverArea))
     }
 
-    updateGame() {
+    updateJudge() {
         let slots = this._model.slots;
         slots.forEach((slot, slotIndex) => {
 

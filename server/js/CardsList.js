@@ -22,4 +22,8 @@ export default class CardsList {
         return this.cards;
     }
 
+    getCardsAmount() {
+        return this.cards.length;
+    }
+
 }

@@ -21,7 +21,7 @@ export default class GameSlot {
             nickname: this.nickname,
             isHost: this.isHost,
             type: this.type,
-            cards: this.cards.getAllCards(),
+            // cards: this.cards.getAllCards(),
         }
     }
 
