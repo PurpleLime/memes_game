@@ -36,7 +36,8 @@
 }
 
 .flipping-card__back-side_meme {
-    background: #A00CC6 no-repeat center/cover;
+    background: url(../img/memeCardIcon.png) no-repeat center/50%,
+    #A00CC6 no-repeat center/cover;
     border: 5px solid #EE3434;
     border-radius: 8px;
 }
@@ -45,6 +46,11 @@
     background: #1769E3;
     border: 5px solid #AD00FF;
     border-radius: 8px;
+}
+
+.situation-card_backside {
+    background: url(../img/situationCardIcon.svg) no-repeat center/40%,
+    #1769E3;
 }
 
 @keyframes animation-situation-card-take {

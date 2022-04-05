@@ -494,6 +494,7 @@ class IngameView extends BaseView {
             let backSide = document.createElement('div');
             backSide.classList.add('flipping-card__back-side');
             backSide.classList.add('flipping-card__back-side_situation');
+            backSide.classList.add('situation-card_backside');
             // backSide.style.transform = '';
 
             let frontSide = document.createElement('div');
@@ -541,6 +542,7 @@ class IngameView extends BaseView {
 
             flippingCard.addEventListener('animationend', () => {
                 situationCardDeck.textContent = frontSide.textContent;
+                situationCardDeck.classList.remove('situation-card_backside');
                 flippingCard.remove();
                 resolve();
                 // this.removingSituationCardAnimation();
@@ -573,6 +575,7 @@ class IngameView extends BaseView {
 
             document.body.append(clone);
 
+            card.classList.add('situation-card_backside');
             card.textContent = '';
 
             setTimeout(() => {
