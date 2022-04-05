@@ -96,6 +96,13 @@ class IngameModel extends BaseModel {
         }));
     }
 
+    skipPopup() {
+        this.socket.send(JSON.stringify({
+            header: 'skipPopup',
+            roomCode: this.roomCode,
+        }));
+    }
+
 }
 
 export default new IngameModel();

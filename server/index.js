@@ -31,7 +31,6 @@ const app = express();
 // })
 
 
-
 // const httpsOptions = {
 //     cert: fs.readFileSync('path...'),
 //     key: fs.readFileSync('path..')
@@ -42,7 +41,7 @@ rooms.addNewRoom('XXXX');
 
 app.get("/createRoom", (req, res) => {
     console.log(`request for creating room: ${req.query.nickname}`);
-    if  (req.query.nickname) {
+    if (req.query.nickname) {
         let newRoomCode = rooms.addNewRoom();
         res.json({roomCode: newRoomCode});
     }
@@ -87,7 +86,6 @@ app.listen(PORT, () => {
 
 
 //websocket:
-
 function onSocketConnect(ws) {
 
     clients.add(ws);
@@ -173,7 +171,7 @@ function onSocketConnect(ws) {
 
             case 'startGame':
                 desiredRoom = rooms.findRoomByCode(message.roomCode);
-                if(!desiredRoom) break;
+                if (!desiredRoom) break;
                 slot = desiredRoom.findPlayerByWS(ws);
                 if (!slot) break;
                 if (slot.isHost) {
@@ -195,7 +193,7 @@ function onSocketConnect(ws) {
 
             case 'turnDone':
                 desiredRoom = rooms.findRoomByCode(message.roomCode);
-                if(!desiredRoom || desiredRoom.isTurnDone) break;
+                if (!desiredRoom || desiredRoom.isTurnDone) break;
                 slot = desiredRoom.findPlayerByWS(ws);
                 if (!slot) break;
                 let confirmedCardIndex = slot.drawCard(Number(message.confirmedCardId));
@@ -207,9 +205,27 @@ function onSocketConnect(ws) {
                     confirmedCardId: message.confirmedCardId,
                 });
 
-                setTimeout(() => {
+                new Promise((resolve) => {
+                    desiredRoom.skipPopupController = new AbortController();
+                    desiredRoom.skipPopupController.signal.addEventListener('abort', resolve);
+                    setTimeout(() => resolve(), 12000);
+                }).then(() => {
                     desiredRoom.updateTurnData();
-                }, 12000);
+                })
+
+                break;
+
+            case 'skipPopup':
+                desiredRoom = rooms.findRoomByCode(message.roomCode);
+                if (!desiredRoom) break;
+                slot = desiredRoom.findPlayerByWS(ws);
+                if (!slot) break;
+                slot.skipPopup = true;
+                console.log(`all skkips: ${desiredRoom.allSkippedPopup()}`);
+                if (desiredRoom.allSkippedPopup()) {
+                    desiredRoom.skipPopupController.abort();
+                    desiredRoom.disableAllSkipsPopup();
+                }
 
                 break;
 

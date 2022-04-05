@@ -445,7 +445,7 @@ class IngameView extends BaseView {
         closeButton.style.visibility = 'hidden';
         closeButton.style.opacity = '0';
         closeButton.style.transition = 'opacity 0.3s linear'
-        closeButton.addEventListener('click', this.hideConfirmedCard);
+        closeButton.addEventListener('click', this.popupCloseButtonClickHandler.bind(this));
 
         popupCard.append(closeButton);
 
@@ -469,12 +469,16 @@ class IngameView extends BaseView {
         }, 100);
 
         setTimeout(() => {
-            this.hideConfirmedCard();
+            this.hidePopupCard();
         }, 10000);
 
     }
 
-    hideConfirmedCard() {
+    popupCloseButtonClickHandler() {
+        this.hidePopupCard();
+    }
+
+    hidePopupCard() {
         let popupCard = document.getElementById('popupCard');
         if (!popupCard) return;
 
@@ -483,6 +487,7 @@ class IngameView extends BaseView {
         popupCard.addEventListener('transitionend', (e) => {
             if (e.propertyName !== 'top') return;
             popupCard.remove();
+            this.emit('skipPopup');
         })
     }
 

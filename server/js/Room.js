@@ -7,11 +7,14 @@ class Room {
         this.slots = [];
         this.code = code;
         this.status = 'lobby';
+        //индекс текущего судьи
         this.curJudgeIndex = -1;
+        //индекс игрока, который ходит сейчас
         this.playerTurnIndex = -1;
         this.isTurnDone = false;
         this.maxCardsAmount = 7;
         this.situation = 'Когда вы списываете тест и смотрите в глаза учителю';
+        this.skipPopupController = new AbortController();
     }
 
     static maxPlayers = 8;
@@ -154,6 +157,20 @@ class Room {
             },{needUpdateCards: true});
 
         }
+    }
+
+    allSkippedPopup() {
+        let notSkipped = this.slots.findIndex((slot) => {
+            return !slot.skipPopup;
+        });
+
+        return notSkipped === -1;
+    }
+
+    disableAllSkipsPopup() {
+        this.slots.forEach((slot) => {
+            slot.skipPopup = false;
+        });
     }
 
 }
