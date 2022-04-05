@@ -57,7 +57,7 @@
 .situation-card-deck {
     position: absolute;
     top: 50%;
-    left: 33%;
+    left: 40%;
     transform: translate(-50%, -50%);
     /*height: 185px;*/
     /*width: 137px;*/
@@ -83,7 +83,7 @@
 .meme-card-deck {
     position: absolute;
     top: 50%;
-    left: 66%;
+    left: 60%;
     transform: translate(-50%, -50%);
     /*height: 185px;*/
     /*width: 137px;*/
