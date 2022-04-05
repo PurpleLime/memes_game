@@ -198,6 +198,10 @@ function onSocketConnect(ws) {
                 if (!slot) break;
                 let confirmedCardIndex = slot.drawCard(Number(message.confirmedCardId));
                 if (!confirmedCardIndex) break;
+                desiredRoom.roundResultsList.push({
+                    cardId: message.confirmedCardId,
+                    playerId: slot.id,
+                });
                 desiredRoom.isTurnDone = true;
                 console.log('test');
                 desiredRoom.sendToAll({

@@ -15,6 +15,7 @@ class Room {
         this.maxCardsAmount = 7;
         this.situation = 'Когда вы списываете тест и смотрите в глаза учителю';
         this.skipPopupController = new AbortController();
+        this.roundResultsList = [];
     }
 
     static maxPlayers = 8;
@@ -106,19 +107,6 @@ class Room {
         });
     }
 
-    func() {
-        return new Promise((resolve) => {
-            setTimeout(resolve, 3000);
-        }).then(value => {
-
-            this.curJudgeIndex = (this.curJudgeIndex + 1) % this.slots.length
-            this.sendToAll({
-                header: 'updateTurn',
-                curJudgeIndex: this.curJudgeIndex,
-            });
-        })
-    }
-
     startGame() {
         this.status = 'game';
         this.curJudgeIndex = 0;
@@ -126,11 +114,25 @@ class Room {
         this.updateTurnData();
     }
 
+    prepareNextTurn() {
+        //если следующим ходящим игроком по осереди должен быть ведущий, то обработать конец раунда
+        if ((this.playerTurnIndex + 1) % this.slots.length === this.curJudgeIndex) {
+            this.slots[this.curJudgeIndex].websocket.send(JSON.stringify({
+                header: 'resultsList',
+                results: this.roundResultsList,
+            }));
+        } else {
+            this.updateTurnData();
+        }
+
+    }
+
     updateTurnData() {
         this.playerTurnIndex = (this.playerTurnIndex + 1) % this.slots.length;
         this.isTurnDone = false;
 
         if (this.playerTurnIndex === this.curJudgeIndex) {
+
 
             this.situation += '+';
             this.curJudgeIndex = (this.curJudgeIndex + 1) % this.slots.length;
@@ -140,6 +142,7 @@ class Room {
                     slot.cards.addCard(10);
                 }
             });
+
             this.sendToAll({
                 header: 'updateTurn/newRound',
                 curJudgeIndex: this.curJudgeIndex,

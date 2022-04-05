@@ -65,10 +65,15 @@ class IngameView extends BaseView {
     newRound() {
         console.log('new Round');
         this.updateJudge();
-        this.renderPlayerHand();
-        this.removingSituationCardAnimation().then((resolve) => {
-            this.takingSituationCardAnimation();
-        });
+
+        // this.renderPlayerHand();
+        // this.removingSituationCardAnimation().then(() => {
+        //     this.takingSituationCardAnimation();
+        // });
+
+        this.renderPlayerHand()
+            .then(() => this.removingSituationCardAnimation())
+            .then(() => this.takingSituationCardAnimation());
 
     }
 
@@ -148,18 +153,17 @@ class IngameView extends BaseView {
             }
         });
 
-        await Promise.all(promises);
+        return new Promise((resolve) => {
+            resolve(Promise.all(promises));
 
-        this.arrangeCardsInHand();
-
-        playerHand.querySelectorAll('.meme-card').forEach((card) => {
-            // card.addEventListener('mouseover', this.cardMouseoverHandler);
-            // card.addEventListener('mouseleave', this.cardMouseleaveHandler);
-            // card.addEventListener('click', this.cardClickHandler.bind(this));
+        }).then(() => {
+            this.arrangeCardsInHand();
         });
 
-        // let confirmButton = document.getElementById('confirmButton');
-        // confirmButton.addEventListener('click', this.confirmSelectedCard.bind(this));
+        // await Promise.all(promises);
+
+        // this.arrangeCardsInHand();
+
 
     }
 
@@ -561,7 +565,7 @@ class IngameView extends BaseView {
 
             let card = document.getElementById('situationCardDeck');
 
-            console.log(card.textContent === '');
+            console.log(`Строка ситуации пустая? - ${card.textContent === ''}`);
             if (card.textContent === '') {
                 resolve();
                 return;
@@ -578,18 +582,15 @@ class IngameView extends BaseView {
 
             clone.style.transition = 'top 0.5s ease-in 0s, left 1s ease-in 0s, transform 0.5s ease-in 0s';
 
+            clone.style.animation = 'animation-situation-card-remove 0.5s ease-in 1'
+            clone.style.animationFillMode = 'forwards';
+
             document.body.append(clone);
 
             card.classList.add('situation-card_backside');
             card.textContent = '';
 
-            setTimeout(() => {
-                clone.style.transform = 'scale(0.7)';
-                clone.style.top = `-50%`;
-                clone.style.left = '50%';
-            }, 0);
-
-            clone.addEventListener('transitionend', () => {
+            clone.addEventListener('animationend', () => {
                 clone.remove();
                 resolve();
             });
