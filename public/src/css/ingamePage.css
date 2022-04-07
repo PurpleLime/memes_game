@@ -101,6 +101,7 @@
     line-height: 28px;
     padding: 20px;
     z-index: 1;
+    backface-visibility: hidden;
 }
 
 .situation-card-deck_extra {
