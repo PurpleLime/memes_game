@@ -60,11 +60,13 @@ class IngameView extends BaseView {
 
     newTurn() {
         this.updateConfirmButton();
+        this.updateSelfJudgeEmblem();
     }
 
     newRound() {
-        console.log('new Round');
         this.updateConfirmButton();
+        this.updateSelfJudgeEmblem();
+
         this.updatePlayersScores();
         this.updateJudge();
 
@@ -170,6 +172,15 @@ class IngameView extends BaseView {
             confirmButton.classList.remove('disabled-button');
         } else {
             confirmButton.classList.add('disabled-button');
+        }
+    }
+
+    updateSelfJudgeEmblem() {
+        let selfJudgeEmblem = document.getElementById('selfJudgeEmblem');
+        if (this._model.slotIndex === this._model.curJudgeIndex) {
+            selfJudgeEmblem.classList.remove('self_judge_emblem_none');
+        } else {
+            selfJudgeEmblem.classList.add('self_judge_emblem_none');
         }
     }
 
@@ -783,9 +794,14 @@ class IngameView extends BaseView {
     updatePlayersScores() {
         let players = this._model.slots;
         players.forEach((player, playerIndex) => {
-            if (playerIndex === this._model.slotIndex) return;
-            let playerSlot = document.getElementById(`playerSlot${playerIndex}`);
-            playerSlot.querySelector('.user-game-avatar__score-amount').textContent = player.score;
+            if (playerIndex === this._model.slotIndex) {
+                let selfScore = document.getElementById('selfScore');
+                selfScore.querySelector('.self-score-block__score-amount').textContent = player.score;
+
+            } else {
+                let playerSlot = document.getElementById(`playerSlot${playerIndex}`);
+                playerSlot.querySelector('.user-game-avatar__score-amount').textContent = player.score;
+            }
         });
     }
 

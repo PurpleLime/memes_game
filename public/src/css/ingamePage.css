@@ -35,6 +35,35 @@
     right: 40px;
 }
 
+.self_judge_emblem {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    background: url(../img/judgeEmblemIcon.png) no-repeat center/cover;
+    z-index: 11;
+}
+
+.self_judge_emblem_none {
+    display: none;
+}
+
+.self-score-block {
+    position: absolute;
+    bottom: 3%;
+    left: 50%;
+    transform: translate(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 15px;
+}
+
+.self-score-block__score-amount {
+    font-size: 34px;
+    font-weight: bold;
+    color: white;
+}
+
 /*.cur-situation-card {*/
 /*    !*position: absolute;*!*/
 /*    !*top: 50%;*!*/
