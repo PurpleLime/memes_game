@@ -116,3 +116,64 @@
     column-gap: 7%;
     row-gap: 5vh;
 }
+
+.round-results-container {
+    position: absolute;
+    z-index: 200;
+}
+
+@keyframes animation-show-round-results-container {
+    0% {
+        top: -100%;
+    }
+    100% {
+        top: 0;
+    }
+}
+
+@keyframes animation-hide-round-results-container {
+    0% {
+        top: 0;
+    }
+    100% {
+        top: -100%;
+    }
+}
+
+.round-results-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 80px;
+    font-weight: bold;
+    color: #FAF009;
+    margin-top: 5%;
+}
+
+.round-winner-title {
+    position: absolute;
+    width: max-content;
+    top: -20%;
+    left: 50%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 30px;
+    font-weight: bold;
+    color: #FAF009;
+    transform: translate(-50%, -50%);
+}
+
+.round-winner-nickname {
+    position: absolute;
+    width: max-content;
+    bottom: -20%;
+    left: 50%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: #FAF009;
+    transform: translate(-50%, -50%);
+}

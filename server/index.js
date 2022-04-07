@@ -200,7 +200,7 @@ function onSocketConnect(ws) {
                 if (!confirmedCardIndex) break;
                 desiredRoom.roundResultsList.push({
                     cardId: message.confirmedCardId,
-                    playerId: slot.id,
+                    slotIndex: desiredRoom.slots.findIndex((slt) => slt === slot),
                 });
                 desiredRoom.isTurnDone = true;
                 console.log('test');
@@ -225,12 +225,21 @@ function onSocketConnect(ws) {
                 slot = desiredRoom.findPlayerByWS(ws);
                 if (!slot) break;
                 slot.skipPopup = true;
-                console.log(`all skkips: ${desiredRoom.allSkippedPopup()}`);
                 if (desiredRoom.allSkippedPopup()) {
                     desiredRoom.skipPopupController.abort();
                     desiredRoom.disableAllSkipsPopup();
                 }
 
+                break;
+
+            case 'roundWinnerIsChosen':
+                desiredRoom = rooms.findRoomByCode(message.roomCode);
+                if (!desiredRoom) break;
+                slot = desiredRoom.findPlayerByWS(ws);
+                if (!slot) break;
+                let slotIndex = desiredRoom.slots.findIndex((slt) => slt === slot);
+                if (slotIndex !== desiredRoom.curJudgeIndex) break;
+                desiredRoom.roundWinnerIsChosen(message.cardId);
                 break;
 
             default:

@@ -47,3 +47,7 @@ html, body {
     align-items: center;
     position: relative;
 }
+
+.container_nopointer {
+    pointer-events: none;
+}

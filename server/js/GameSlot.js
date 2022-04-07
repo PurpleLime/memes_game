@@ -9,6 +9,7 @@ export default class GameSlot {
         this.isHost = false;
         this.websocket = websocket;
         this.type = 'player';
+        this.score = 0;
         this.skipPopup = false;
         this.cards = new CardsList();
         for (let i = 1; i <= 7; ++i) {

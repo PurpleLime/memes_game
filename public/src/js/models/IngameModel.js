@@ -13,6 +13,7 @@ class IngameModel extends BaseModel {
         this.roomCode = '';
         this.isHost = false;
         this.playerId = '';
+        //мой индекс
         this.slotIndex = -1;
         this.curJudgeIndex = -1;
         this.confirmedCardId = -1;
@@ -21,6 +22,9 @@ class IngameModel extends BaseModel {
         this.isTurnDone = false;
         this.cards = [];
         this.situation = '';
+        this.roundResultsList = [];
+        this.roundWinnerNickname = '';
+        this.roundWinnerCardId = 0;
     }
 
     init(data) {
@@ -78,6 +82,20 @@ class IngameModel extends BaseModel {
                 this.confirmedCardId = message.confirmedCardId;
                 this.emit('showConfirmedCard');
                 break;
+
+            case 'roundResults':
+                this.roundResults = message.roundResults;
+                this.curJudgeIndex = message.curJudgeIndex;
+                if (this.slotIndex === this.curJudgeIndex) {
+                    this.emit('roundResults');
+                }
+                break;
+
+            case 'roundWinnerIsChosen/ok':
+                this.roundWinnerNickname = message.winnerNickname;
+                this.roundWinnerCardId = message.winnerCardId;
+                this.emit('showRoundWinner');
+                break;
             default:
                 break;
         }
@@ -100,6 +118,14 @@ class IngameModel extends BaseModel {
         this.socket.send(JSON.stringify({
             header: 'skipPopup',
             roomCode: this.roomCode,
+        }));
+    }
+
+    roundWinnerIsChosen(cardId) {
+        this.socket.send(JSON.stringify({
+            header: 'roundWinnerIsChosen',
+            roomCode: this.roomCode,
+            cardId,
         }));
     }
 

@@ -412,7 +412,7 @@ class IngameView extends BaseView {
         });
     }
 
-    showConfirmedCard() {
+    showPopupCard() {
         let popupCard = document.createElement('div');
         popupCard.classList.add('meme-card');
         popupCard.classList.add('meme-card_nohover');
@@ -464,14 +464,6 @@ class IngameView extends BaseView {
             }, 1000);
         })
 
-        //TODO: исправить это как-нибудь
-        //без задержки может слиться с изначально заданными параметрами и сделать эти параметры
-        // исходными = не будет перехода и, соответственно, анимации
-        //время задержки зависит от мощности устройства (например, не телефоне не хватает 1мс, на компах - хватает), поэтому с сильным запасом - 100мс
-        setTimeout(() => {
-            // popupCard.style.top = '40%';
-        }, 100);
-
         setTimeout(() => {
             this.hidePopupCard();
         }, 10000);
@@ -480,6 +472,10 @@ class IngameView extends BaseView {
 
     popupCloseButtonClickHandler() {
         this.hidePopupCard();
+    }
+
+    roundWinnerCloseButtonClickHandler() {
+        this.hideRoundWinner();
     }
 
     hidePopupCard() {
@@ -615,6 +611,165 @@ class IngameView extends BaseView {
         if (extraSituationCard.style.display === 'none' || extraSituationCard.style.display === '') return;
         situationCard.textContent = extraSituationCard.textContent;
         extraSituationCard.style.display = 'none';
+    }
+
+    showRoundResults() {
+        let roundResults = this._model.roundResults;
+
+        let container = document.getElementById('container');
+        let roundResultsContainer = container.cloneNode(false);
+
+        container.classList.add('container_nopointer');
+
+        roundResultsContainer.id = 'roundResultsContainer';
+        roundResultsContainer.classList.add('round-results-container');
+        roundResultsContainer.style.animation = 'animation-show-round-results-container 1s ease-out 1'
+        roundResultsContainer.style.animationFillMode = 'forwards';
+
+        let roundResultsTitle = document.createElement('div');
+        roundResultsTitle.classList.add('round-results-title');
+        roundResultsTitle.textContent = 'Выбери победителя';
+
+        let resultsList = document.createElement('div');
+        resultsList.classList.add('results-list');
+
+        roundResults.forEach((result) => {
+            let card = document.createElement('div');
+            card.classList.add('meme-card');
+            card.classList.add('meme-card_size_m');
+            card.style.visibility = 'visible';
+            card.id = result.cardId;
+
+
+            let meme = document.createElement('div');
+            meme.classList.add('meme-card__meme');
+            meme.style.backgroundImage = `url(src/img/memes/${result.cardId})`;
+
+            card.append(meme);
+            resultsList.append(card);
+
+            card.addEventListener('click', () => {
+                this.hideRoundResults().then(() => {
+                    this.emit('roundWinnerIsChosen', card.id);
+                });
+            });
+
+        });
+
+        roundResultsContainer.append(roundResultsTitle);
+        roundResultsContainer.append(resultsList);
+
+        let wrapper = document.getElementById('wrapper');
+        wrapper.append(roundResultsContainer);
+    }
+
+    hideRoundResults() {
+        return new Promise((resolve) => {
+
+            let container = document.getElementById('container');
+            container.classList.remove('container_nopointer');
+
+            let roundResultsContainer = document.getElementById('roundResultsContainer');
+            roundResultsContainer.classList.add('container_nopointer');
+
+            if (!roundResultsContainer) {
+                resolve();
+                return;
+            }
+
+            roundResultsContainer.addEventListener('animationend', (e) => {
+                roundResultsContainer.remove();
+                resolve();
+            })
+
+            roundResultsContainer.style.animation = 'animation-hide-round-results-container 1s ease-in 1';
+        });
+    }
+
+    showRoundWinner() {
+        console.log('showWinner');
+        let winnerCard = document.createElement('div');
+        winnerCard.classList.add('meme-card');
+        winnerCard.classList.add('meme-card_nohover');
+
+        let winnerCardMeme = document.createElement('div');
+        winnerCardMeme.classList.add('meme-card__meme');
+        winnerCardMeme.style.backgroundImage = `url(src/img/memes/${this._model.roundWinnerCardId})`
+
+        winnerCard.append(winnerCardMeme);
+
+        winnerCard.id = 'roundWinnerCard';
+
+        winnerCard.style.position = 'absolute';
+        winnerCard.style.zIndex = '3';
+        winnerCard.style.pointerEvents = 'none';
+        winnerCard.style.left = '50%';
+        winnerCard.style.top = '-40%';
+        winnerCard.style.transformOrigin = 'center center';
+        winnerCard.style.visibility = 'visible';
+        winnerCard.style.transform = 'translate(-50%, -50%) scale(2.5)';
+        winnerCard.style.transition = 'all 0.6s ease-in'
+        winnerCard.style.borderWidth = '3px';
+        winnerCard.style.animation = 'animation-popup-card 0.6s ease-in 1'
+        winnerCard.style.animationFillMode = 'forwards';
+
+        let closeButton = document.createElement('div');
+        closeButton.classList.add('standart-button');
+        closeButton.classList.add('standart-button_size_xs');
+        let closeIcon = document.createElement('div');
+        closeIcon.classList.add('close-icon');
+        closeButton.append(closeIcon);
+
+        closeButton.style.position = 'absolute';
+        closeButton.style.top = '0';
+        closeButton.style.left = '105%';
+        closeButton.style.pointerEvents = 'auto';
+        closeButton.style.visibility = 'hidden';
+        closeButton.style.opacity = '0';
+        closeButton.style.transition = 'opacity 0.3s linear'
+        closeButton.addEventListener('click', this.roundWinnerCloseButtonClickHandler.bind(this));
+
+        let roundWinnerTitle = document.createElement('div');
+        roundWinnerTitle.classList.add('round-winner-title');
+        roundWinnerTitle.textContent = 'Победитель раунда';
+
+        let roundWinnerNickname = document.createElement('div');
+        roundWinnerNickname.classList.add('round-winner-nickname');
+        roundWinnerNickname.textContent = this._model.roundWinnerNickname;
+
+        winnerCard.append(closeButton);
+        winnerCard.append(roundWinnerTitle);
+        winnerCard.append(roundWinnerNickname);
+
+        document.body.append(winnerCard);
+
+        winnerCard.addEventListener('animationend', () => {
+            setTimeout(() => {
+                closeButton.style.visibility = 'visible';
+                closeButton.style.opacity = '1';
+                winnerCard.style.top = '40%';
+                winnerCard.style.animation = 'none';
+            }, 1000);
+        })
+
+        setTimeout(() => {
+            this.hideRoundWinner();
+        }, 3000);
+
+
+
+    }
+
+    hideRoundWinner() {
+        let roundWinner = document.getElementById('roundWinnerCard');
+        if (!roundWinner) return;
+
+        roundWinner.style.top = '-40%';
+
+        roundWinner.addEventListener('transitionend', (e) => {
+            if (e.propertyName !== 'top') return;
+            roundWinner.remove();
+        })
     }
 
     /***

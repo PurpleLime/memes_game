@@ -16,6 +16,7 @@ class Room {
         this.situation = 'Когда вы списываете тест и смотрите в глаза учителю';
         this.skipPopupController = new AbortController();
         this.roundResultsList = [];
+        this.roundNumber = 0;
     }
 
     static maxPlayers = 8;
@@ -115,7 +116,7 @@ class Room {
     }
 
     prepareNextTurn() {
-        //если следующим ходящим игроком по осереди должен быть ведущий, то обработать конец раунда
+        //если следующим ходящим игроком по очереди должен быть ведущий, то обработать конец раунда
         if ((this.playerTurnIndex + 1) % this.slots.length === this.curJudgeIndex) {
             this.slots[this.curJudgeIndex].websocket.send(JSON.stringify({
                 header: 'resultsList',
@@ -127,37 +128,58 @@ class Room {
 
     }
 
+    roundEnd() {
+        this.sendToAll({
+            header: 'roundResults',
+            curJudgeIndex: this.curJudgeIndex,
+            roundResults: this.roundResultsList,
+        });
+
+    }
+
+    newRound() {
+        this.roundNumber++;
+        this.situation += '+';
+        this.curJudgeIndex = (this.curJudgeIndex + 1) % this.slots.length;
+        this.playerTurnIndex = (this.curJudgeIndex + 1) % this.slots.length;
+        this.slots.forEach((slot) => {
+            if (slot.cards.getCardsAmount() < this.maxCardsAmount) {
+                slot.cards.addCard(10);
+            }
+        });
+
+        this.sendToAll({
+            header: 'updateTurn/newRound',
+            curJudgeIndex: this.curJudgeIndex,
+            playerTurnIndex: this.playerTurnIndex,
+            situation: this.situation,
+        }, {needUpdateCards: true});
+    }
+
+
+    newTurn() {
+        this.sendToAll({
+            header: 'updateTurn',
+            curJudgeIndex: this.curJudgeIndex,
+            playerTurnIndex: this.playerTurnIndex,
+            situation: this.situation,
+        }, {needUpdateCards: true});
+    }
+
     updateTurnData() {
         this.playerTurnIndex = (this.playerTurnIndex + 1) % this.slots.length;
         this.isTurnDone = false;
 
         if (this.playerTurnIndex === this.curJudgeIndex) {
-
-
-            this.situation += '+';
-            this.curJudgeIndex = (this.curJudgeIndex + 1) % this.slots.length;
-            this.playerTurnIndex = (this.curJudgeIndex + 1) % this.slots.length;
-            this.slots.forEach((slot) => {
-                if (slot.cards.getCardsAmount() < this.maxCardsAmount) {
-                    slot.cards.addCard(10);
-                }
-            });
-
-            this.sendToAll({
-                header: 'updateTurn/newRound',
-                curJudgeIndex: this.curJudgeIndex,
-                playerTurnIndex: this.playerTurnIndex,
-                situation: this.situation,
-            }, {needUpdateCards: true});
+            if (this.roundNumber !== 0) {
+                this.roundEnd();
+            } else {
+                this.newRound();
+            }
 
         } else {
 
-            this.sendToAll({
-                header: 'updateTurn',
-                curJudgeIndex: this.curJudgeIndex,
-                playerTurnIndex: this.playerTurnIndex,
-                situation: this.situation,
-            },{needUpdateCards: true});
+            this.newTurn();
 
         }
     }
@@ -174,6 +196,31 @@ class Room {
         this.slots.forEach((slot) => {
             slot.skipPopup = false;
         });
+    }
+
+    roundWinnerIsChosen(cardId) {
+        //в списке разыгранных в этом раунде карт находим по id карты объект, содержащий id карты и индекс игрока в массиве слотов
+        console.log(cardId);
+        console.log(this.roundResultsList);
+        let winner = this.roundResultsList.find((result) => Number(result.cardId) === Number(cardId));
+        this.roundResultsList = [];
+        if (!winner) return;
+        //достаем из объекта индекс игрока в массиве слотов
+        let winnerIndex = winner.slotIndex;
+        console.log(this.slots[winnerIndex]);
+        if (!this.slots[winnerIndex]) return;
+        ++this.slots[winnerIndex].score;
+
+        this.sendToAll({
+            header: 'roundWinnerIsChosen/ok',
+            winnerNickname: this.slots[winnerIndex].nickname,
+            winnerCardId: cardId,
+        });
+
+        setTimeout(() => {
+            this.newRound();
+        }, 5000);
+
     }
 
 }
