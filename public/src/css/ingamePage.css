@@ -207,3 +207,27 @@
     color: #FAF009;
     transform: translate(-50%, -50%);
 }
+
+.your-turn-title {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    width: max-content;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 84px;
+    font-weight: bold;
+    color: #FAF009;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+@keyframes animation-show-your-turn-title {
+    0% {
+        top: -20%;
+    }
+    100% {
+        top: 20%;
+    }
+}

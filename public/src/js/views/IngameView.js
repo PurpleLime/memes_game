@@ -61,11 +61,15 @@ class IngameView extends BaseView {
     newTurn() {
         this.updateConfirmButton();
         this.updateSelfJudgeEmblem();
+        this.updateYourTurnTitle();
+
     }
 
     newRound() {
-        this.updateConfirmButton();
-        this.updateSelfJudgeEmblem();
+        // this.updateMyTurnTitle();
+        // this.updateConfirmButton();
+        // this.updateSelfJudgeEmblem();
+        this.newTurn();
 
         this.updatePlayersScores();
         this.updateJudge();
@@ -830,6 +834,30 @@ class IngameView extends BaseView {
                 playerSlot.querySelector('.user-game-avatar__score-amount').textContent = player.score;
             }
         });
+    }
+
+    updateYourTurnTitle() {
+        console.log('myTurn');
+        if (!this._model.isMyTurn) return;
+        let yourTurnTitle = document.createElement('div');
+        yourTurnTitle.classList.add('your-turn-title');
+        yourTurnTitle.style.animation = 'animation-show-your-turn-title 0.6s ease-out 1';
+        yourTurnTitle.style.transition = 'top 0.6s ease-in'
+        yourTurnTitle.style.animationFillMode = 'forwards';
+        yourTurnTitle.textContent = 'Твой ход';
+
+        yourTurnTitle.addEventListener('transitionend', () => {
+            yourTurnTitle.remove();
+        });
+
+        yourTurnTitle.addEventListener('animationend', () => {
+            yourTurnTitle.style.animation = 'none';
+            setTimeout(() => {
+                yourTurnTitle.style.top = '-20%';
+            }, 3000);
+        })
+
+        document.body.append(yourTurnTitle);
     }
 
     /***
