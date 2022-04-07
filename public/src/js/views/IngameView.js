@@ -59,17 +59,14 @@ class IngameView extends BaseView {
     }
 
     newTurn() {
-        // this.updateJudge();
+        this.updateConfirmButton();
     }
 
     newRound() {
         console.log('new Round');
+        this.updateConfirmButton();
+        this.updatePlayersScores();
         this.updateJudge();
-
-        // this.renderPlayerHand();
-        // this.removingSituationCardAnimation().then(() => {
-        //     this.takingSituationCardAnimation();
-        // });
 
         this.renderPlayerHand()
             .then(() => this.removingSituationCardAnimation())
@@ -165,6 +162,15 @@ class IngameView extends BaseView {
         // this.arrangeCardsInHand();
 
 
+    }
+
+    updateConfirmButton() {
+        let confirmButton = document.getElementById('confirmButton');
+        if (this._model.isMyTurn) {
+            confirmButton.classList.remove('disabled-button');
+        } else {
+            confirmButton.classList.add('disabled-button');
+        }
     }
 
     //повернуть(и сдвинуть) карты в руке
@@ -277,6 +283,9 @@ class IngameView extends BaseView {
 
         if (this.selectedCard === null) return;
 
+
+        let confirmButton = document.getElementById('confirmButton');
+        confirmButton.classList.add('disabled-button');
 
         let card = this.selectedCard;
 
@@ -757,7 +766,6 @@ class IngameView extends BaseView {
         }, 3000);
 
 
-
     }
 
     hideRoundWinner() {
@@ -770,6 +778,15 @@ class IngameView extends BaseView {
             if (e.propertyName !== 'top') return;
             roundWinner.remove();
         })
+    }
+
+    updatePlayersScores() {
+        let players = this._model.slots;
+        players.forEach((player, playerIndex) => {
+            if (playerIndex === this._model.slotIndex) return;
+            let playerSlot = document.getElementById(`playerSlot${playerIndex}`);
+            playerSlot.querySelector('.user-game-avatar__score-amount').textContent = player.score;
+        });
     }
 
     /***

@@ -73,6 +73,7 @@ class IngameModel extends BaseModel {
                 this.isMyTurn = this.slotIndex === this.playerTurnIndex;
                 this.situation = message.situation;
                 this.cards = message.cards;
+                this.slots = message.slots;
                 console.log(`slotIndex: ${this.slotIndex}; playerTurnIndex: ${this.playerTurnIndex}`);
                 this.emit('newRound');
 

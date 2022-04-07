@@ -153,6 +153,7 @@ class Room {
             curJudgeIndex: this.curJudgeIndex,
             playerTurnIndex: this.playerTurnIndex,
             situation: this.situation,
+            slots: this.slots,
         }, {needUpdateCards: true});
     }
 

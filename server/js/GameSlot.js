@@ -23,6 +23,7 @@ export default class GameSlot {
             nickname: this.nickname,
             isHost: this.isHost,
             type: this.type,
+            score: this.score,
             // cards: this.cards.getAllCards(),
         }
     }

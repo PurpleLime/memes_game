@@ -63,6 +63,11 @@
     background: url(../img/closeIcon.png) no-repeat center/cover;
 }
 
+.disabled-button {
+    pointer-events: none;
+    filter: grayscale(50%) brightness(0.65);
+}
+
 .standart-input {
     background-color: transparent;
     border: none;
