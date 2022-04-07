@@ -3,16 +3,15 @@ export default class CardsList {
         this.cards = [];
     }
 
-    addCard(id) {
+    addCard(id, orientation = 'horizontal') {
         this.cards.push({
             id,
+            orientation
         });
     }
 
     drawCard(id) {
-        console.log(id);
         let cardIndex = this.cards.findIndex(card => {
-            console.log(card.id);
             return card.id === id;
         });
         return cardIndex !== -1 ? this.cards.splice(cardIndex, 1)[0] : null;

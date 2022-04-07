@@ -471,6 +471,15 @@ class IngameView extends BaseView {
         closeButton.style.transition = 'opacity 0.3s linear'
         closeButton.addEventListener('click', this.popupCloseButtonClickHandler.bind(this));
 
+
+        if (this._model.confirmedCardOrientation === 'horizontal') {
+            popupCard.style.transform += 'rotate(90deg)';
+            closeButton.style.left = '0';
+            closeButton.style.top = '';
+            closeButton.style.bottom = '105%';
+        }
+
+
         popupCard.append(closeButton);
 
         document.body.append(popupCard);
@@ -665,6 +674,8 @@ class IngameView extends BaseView {
             meme.classList.add('meme-card__meme');
             meme.style.backgroundImage = `url(src/img/memes/${result.cardId})`;
 
+            if (result.cardOrientation === 'horizontal') card.style.transform = 'rotate(90deg)';
+
             card.append(meme);
             resultsList.append(card);
 
@@ -707,7 +718,6 @@ class IngameView extends BaseView {
     }
 
     showRoundWinner() {
-        console.log('showWinner');
         let winnerCard = document.createElement('div');
         winnerCard.classList.add('meme-card');
         winnerCard.classList.add('meme-card_nohover');
@@ -756,6 +766,23 @@ class IngameView extends BaseView {
         let roundWinnerNickname = document.createElement('div');
         roundWinnerNickname.classList.add('round-winner-nickname');
         roundWinnerNickname.textContent = this._model.roundWinnerNickname;
+
+        console.log(this._model.roundWinnerOrientation);
+        if (this._model.roundWinnerOrientation === 'horizontal') {
+            winnerCard.style.transform += ' rotate(90deg)';
+
+            closeButton.style.left = '0';
+            closeButton.style.top = '';
+            closeButton.style.bottom = '105%';
+
+            roundWinnerTitle.style.top = '50%';
+            roundWinnerTitle.style.left = '-30%';
+            roundWinnerTitle.style.transform = 'translate(-50%, -50%) rotate(-90deg)';
+
+            roundWinnerNickname.style.top = '50%';
+            roundWinnerNickname.style.left = '113%';
+            roundWinnerNickname.style.transform = 'translate(-50%, -50%) rotate(-90deg)';
+        }
 
         winnerCard.append(closeButton);
         winnerCard.append(roundWinnerTitle);

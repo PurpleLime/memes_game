@@ -196,17 +196,18 @@ function onSocketConnect(ws) {
                 if (!desiredRoom || desiredRoom.isTurnDone) break;
                 slot = desiredRoom.findPlayerByWS(ws);
                 if (!slot) break;
-                let confirmedCardIndex = slot.drawCard(Number(message.confirmedCardId));
-                if (!confirmedCardIndex) break;
+                let confirmedCard = slot.drawCard(Number(message.confirmedCardId));
+                if (!confirmedCard) break;
                 desiredRoom.roundResultsList.push({
-                    cardId: message.confirmedCardId,
+                    cardId: confirmedCard.id,
+                    cardOrientation: confirmedCard.orientation,
                     slotIndex: desiredRoom.slots.findIndex((slt) => slt === slot),
                 });
                 desiredRoom.isTurnDone = true;
-                console.log('test');
                 desiredRoom.sendToAll({
                     header: 'turnDone/ok',
-                    confirmedCardId: message.confirmedCardId,
+                    confirmedCardId: confirmedCard.id,
+                    confirmedCardOrientation: confirmedCard.orientation,
                 });
 
                 new Promise((resolve) => {

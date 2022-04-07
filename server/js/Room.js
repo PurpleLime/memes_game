@@ -201,21 +201,19 @@ class Room {
 
     roundWinnerIsChosen(cardId) {
         //в списке разыгранных в этом раунде карт находим по id карты объект, содержащий id карты и индекс игрока в массиве слотов
-        console.log(cardId);
-        console.log(this.roundResultsList);
         let winner = this.roundResultsList.find((result) => Number(result.cardId) === Number(cardId));
         this.roundResultsList = [];
         if (!winner) return;
         //достаем из объекта индекс игрока в массиве слотов
         let winnerIndex = winner.slotIndex;
-        console.log(this.slots[winnerIndex]);
         if (!this.slots[winnerIndex]) return;
         ++this.slots[winnerIndex].score;
 
         this.sendToAll({
             header: 'roundWinnerIsChosen/ok',
             winnerNickname: this.slots[winnerIndex].nickname,
-            winnerCardId: cardId,
+            winnerCardId: winner.cardId,
+            winnerOrientation: winner.cardOrientation,
         });
 
         setTimeout(() => {

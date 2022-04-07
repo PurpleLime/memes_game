@@ -25,6 +25,7 @@ class IngameModel extends BaseModel {
         this.roundResultsList = [];
         this.roundWinnerNickname = '';
         this.roundWinnerCardId = 0;
+        this.roundWinnerOrientation = '';
     }
 
     init(data) {
@@ -81,6 +82,7 @@ class IngameModel extends BaseModel {
                 break;
             case 'turnDone/ok':
                 this.confirmedCardId = message.confirmedCardId;
+                this.confirmedCardOrientation = message.confirmedCardOrientation;
                 this.emit('showConfirmedCard');
                 break;
 
@@ -95,6 +97,7 @@ class IngameModel extends BaseModel {
             case 'roundWinnerIsChosen/ok':
                 this.roundWinnerNickname = message.winnerNickname;
                 this.roundWinnerCardId = message.winnerCardId;
+                this.roundWinnerOrientation = message.winnerOrientation;
                 this.emit('showRoundWinner');
                 break;
             default:
