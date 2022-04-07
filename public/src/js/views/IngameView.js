@@ -372,6 +372,11 @@ class IngameView extends BaseView {
         backSide.classList.add('flipping-card__back-side');
         backSide.classList.add('flipping-card__back-side_meme');
 
+        let memeIcon = document.createElement('div');
+        memeIcon.classList.add('meme-card-icon');
+
+        backSide.append(memeIcon);
+
         let clone = card.cloneNode(true);
 
         flippingCard.append(clone);
@@ -533,8 +538,13 @@ class IngameView extends BaseView {
             let backSide = document.createElement('div');
             backSide.classList.add('flipping-card__back-side');
             backSide.classList.add('flipping-card__back-side_situation');
-            backSide.classList.add('situation-card_backside');
+            // backSide.classList.add('situation-card_backside');
             // backSide.style.transform = '';
+
+            let situationIcon = document.createElement('div');
+            situationIcon.classList.add('situation-card-icon');
+
+            backSide.append(situationIcon);
 
             let frontSide = document.createElement('div');
             frontSide.classList.add('situation-card-deck');
@@ -580,11 +590,10 @@ class IngameView extends BaseView {
 
 
             flippingCard.addEventListener('animationend', () => {
+                //тут же удаляются и все дети у situationCardDeck
                 situationCardDeck.textContent = frontSide.textContent;
-                situationCardDeck.classList.remove('situation-card_backside');
                 flippingCard.remove();
                 resolve();
-                // this.removingSituationCardAnimation();
             })
 
         });
@@ -617,8 +626,11 @@ class IngameView extends BaseView {
 
             document.body.append(clone);
 
-            card.classList.add('situation-card_backside');
+            let situationIcon = document.createElement('div');
+            situationIcon.classList.add('situation-card-icon');
+
             card.textContent = '';
+            card.append(situationIcon);
 
             clone.addEventListener('animationend', () => {
                 clone.remove();

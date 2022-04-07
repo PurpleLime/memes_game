@@ -69,6 +69,28 @@
     background: url(../img/closeIcon.png) no-repeat center/cover;
 }
 
+.meme-card-icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 50%;
+    height: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 50%;
+    background: url(../img/memeCardIcon.png) no-repeat center/contain;
+}
+
+.situation-card-icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 50%;
+    height: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 50%;
+    background: url(../img/situationCardIcon.svg) no-repeat center/contain;
+}
+
 .disabled-button {
     pointer-events: none;
     filter: grayscale(50%) brightness(0.65);

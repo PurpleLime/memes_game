@@ -119,8 +119,9 @@
     /*width: 137px;*/
     height: 277px;
     width: 205px;
-    background: url(../img/memeCardIcon.png) no-repeat center/50%,
-    #A00CC6;
+    /*background: url(../img/memeCardIcon.png) no-repeat center/50%,*/
+    /*#A00CC6;*/
+    background: #A00CC6;
     border: 5px solid #EE3434;
     border-radius: 8px;
 }
