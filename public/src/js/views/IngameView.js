@@ -62,6 +62,7 @@ class IngameView extends BaseView {
         this.updateConfirmButton();
         this.updateSelfJudgeEmblem();
         this.updateYourTurnTitle();
+        this.updateCurrentPlayer();
 
     }
 
@@ -858,6 +859,20 @@ class IngameView extends BaseView {
         })
 
         document.body.append(yourTurnTitle);
+    }
+
+    updateCurrentPlayer() {
+        let players = this._model.slots;
+        players.forEach((player, playerIndex) => {
+            if (playerIndex === this._model.slotIndex) return;
+
+            let playerSlot = document.getElementById(`playerSlot${playerIndex}`);
+            if (playerIndex === this._model.playerTurnIndex) {
+                playerSlot.classList.add('user-game-avatar_current');
+            } else {
+                playerSlot.classList.remove('user-game-avatar_current');
+            }
+        });
     }
 
     /***

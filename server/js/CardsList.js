@@ -3,7 +3,10 @@ export default class CardsList {
         this.cards = [];
     }
 
-    addCard(id, orientation = 'horizontal') {
+    addCard(id, orientation = 'vertical') {
+        if (id > 1000) {
+            orientation = 'horizontal';
+        }
         this.cards.push({
             id,
             orientation
