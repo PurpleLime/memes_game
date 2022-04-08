@@ -180,6 +180,15 @@ function onSocketConnect(ws) {
                 slot = desiredRoom.findPlayerByWS(ws);
                 if (!slot) break;
                 if (slot.isHost) {
+
+                    if (desiredRoom.slots.length < 3) {
+                        ws.send(JSON.stringify({
+                            header: "startRoom/error",
+                            errorMessage: "Недостаточно игроков для начала игры"
+                        }));
+                        break;
+                    }
+
                     console.log("Начало игры");
                     desiredRoom.prepareToStartGame();
                     desiredRoom.sendToAll({
