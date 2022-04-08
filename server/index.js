@@ -71,6 +71,10 @@ app.get('*', (req, res) => {
     console.log('mime: ', mime.getType(path.resolve(__dirname, 'public', file)));
     // res.setHeader('Content-Type', mime.getType(`public/${file}`));
 
+    if (file.includes('src/img/memes/')) {
+        file += '.png';
+    }
+
     res.sendFile(path.resolve(__dirname, 'public', file));
 })
 

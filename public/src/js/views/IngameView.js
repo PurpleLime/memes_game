@@ -453,7 +453,7 @@ class IngameView extends BaseView {
 
         popupCard.id = 'popupCard';
         popupCard.style.position = 'absolute';
-        popupCard.style.zIndex = '3';
+        popupCard.style.zIndex = '3333';
         popupCard.style.pointerEvents = 'none';
         popupCard.style.left = '50%';
         popupCard.style.top = '-40%';
@@ -748,7 +748,7 @@ class IngameView extends BaseView {
         winnerCard.id = 'roundWinnerCard';
 
         winnerCard.style.position = 'absolute';
-        winnerCard.style.zIndex = '3';
+        winnerCard.style.zIndex = '3333';
         winnerCard.style.pointerEvents = 'none';
         winnerCard.style.left = '50%';
         winnerCard.style.top = '-40%';
