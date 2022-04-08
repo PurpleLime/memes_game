@@ -1,6 +1,10 @@
 import GameSlot from "./GameSlot.js";
 import Observable from "../../public/src/js/Observable.js";
 import BaseModel from "../../public/src/js/models/BaseModel.js";
+import CardsList from "./CardsList.js";
+import fs from 'fs';
+import path from "path";
+import SituationsClass from "./SituationsClass.js";
 
 class Room {
     constructor(code) {
@@ -13,10 +17,14 @@ class Room {
         this.playerTurnIndex = -1;
         this.isTurnDone = false;
         this.maxCardsAmount = 7;
-        this.situation = 'Когда вы списываете тест и смотрите в глаза учителю';
+        this.situation = '';
         this.skipPopupController = new AbortController();
         this.roundResultsList = [];
         this.roundNumber = 0;
+        this.memesDeck = new CardsList();
+        this.playedMemesCards = new CardsList();
+        this.situationDeck = new SituationsClass();
+        this.playedSituations = [];
     }
 
     static maxPlayers = 8;
@@ -115,16 +123,21 @@ class Room {
         this.updateTurnData();
     }
 
-    prepareNextTurn() {
-        //если следующим ходящим игроком по очереди должен быть ведущий, то обработать конец раунда
-        if ((this.playerTurnIndex + 1) % this.slots.length === this.curJudgeIndex) {
-            this.slots[this.curJudgeIndex].websocket.send(JSON.stringify({
-                header: 'resultsList',
-                results: this.roundResultsList,
-            }));
-        } else {
-            this.updateTurnData();
-        }
+    prepareToStartGame() {
+        const memesFolder = path.resolve() + '/public/src/img/memes/';
+
+        fs.readdirSync(memesFolder).forEach(file => {
+            let cardId = file.split('.')[0];
+            this.memesDeck.addCard(Number(cardId));
+        });
+
+        this.memesDeck.shuffle();
+
+        this.slots.forEach((slot) => {
+            while(slot.cards.getCardsAmount() < this.maxCardsAmount) {
+                slot.cards.addCard(this.memesDeck.drawFirstCard().id);
+            }
+        });
 
     }
 
@@ -139,12 +152,28 @@ class Room {
 
     newRound() {
         this.roundNumber++;
-        this.situation += '+';
+
         this.curJudgeIndex = (this.curJudgeIndex + 1) % this.slots.length;
         this.playerTurnIndex = (this.curJudgeIndex + 1) % this.slots.length;
+
+        if (this.situationDeck.situations.length === 0) {
+            this.situationDeck.situations.splice(0, 0, ...this.playedSituations);
+            this.situationDeck.shuffle();
+            this.playedSituations = [];
+        }
+
+        this.situation = this.situationDeck.drawFirstSituation();
+        this.playedSituations.push(this.situation);
+
+        if (this.memesDeck.getCardsAmount() < this.slots.length) {
+            this.playedMemesCards.shuffle();
+            this.memesDeck.cards.splice(this.memesDeck.getCardsAmount(), 0,  ...this.playedMemesCards.getAllCards())
+            this.playedMemesCards.clear();
+        }
+
         this.slots.forEach((slot) => {
             if (slot.cards.getCardsAmount() < this.maxCardsAmount) {
-                slot.cards.addCard(10);
+                slot.cards.addCard(this.memesDeck.drawFirstCard().id);
             }
         });
 

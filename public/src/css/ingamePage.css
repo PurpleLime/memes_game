@@ -97,9 +97,9 @@
     border-radius: 8px;
     color: white;
     font-weight: bold;
-    font-size: 24px;
+    font-size: 20px;
     line-height: 28px;
-    padding: 20px;
+    padding: 10px;
     z-index: 1;
     backface-visibility: hidden;
 }

@@ -49,7 +49,7 @@ app.get("/createRoom", (req, res) => {
 
 app.get('*', (req, res) => {
 
-    console.log(acceptWS(req));
+    // console.log(acceptWS(req));
 
     if (acceptWS(req)) {
         try {
@@ -60,7 +60,7 @@ app.get('*', (req, res) => {
         return
     }
 
-    console.log('request', req.url);
+    // console.log('request', req.url);
 
     let file = 'index.html';
 
@@ -68,7 +68,8 @@ app.get('*', (req, res) => {
         file = req.url.replace('/', '')
     }
 
-    console.log('mime: ', mime.getType(path.resolve(__dirname, 'public', file)));
+    // console.log('mime: ', mime.getType(path.resolve(__dirname, 'public', file)));
+
     // res.setHeader('Content-Type', mime.getType(`public/${file}`));
 
     if (file.includes('src/img/memes/')) {
@@ -180,6 +181,7 @@ function onSocketConnect(ws) {
                 if (!slot) break;
                 if (slot.isHost) {
                     console.log("Начало игры");
+                    desiredRoom.prepareToStartGame();
                     desiredRoom.sendToAll({
                         header: 'startGame/ok',
                         slots: desiredRoom.slots,
@@ -202,6 +204,7 @@ function onSocketConnect(ws) {
                 if (!slot) break;
                 let confirmedCard = slot.drawCard(Number(message.confirmedCardId));
                 if (!confirmedCard) break;
+                desiredRoom.playedMemesCards.addCard(confirmedCard.id);
                 desiredRoom.roundResultsList.push({
                     cardId: confirmedCard.id,
                     cardOrientation: confirmedCard.orientation,

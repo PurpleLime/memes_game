@@ -12,9 +12,10 @@ export default class GameSlot {
         this.score = 0;
         this.skipPopup = false;
         this.cards = new CardsList();
-        for (let i = 1; i <= 7; ++i) {
-            this.cards.addCard(i);
-        }
+
+        // for (let i = 1; i <= 7; ++i) {
+        //     this.cards.addCard(i);
+        // }
     }
 
     toJSON() {
