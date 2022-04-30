@@ -1,4 +1,5 @@
 import Room from "./Room.js";
+import {generateRoomCode} from "./serverUtils.js";
 
 export default class RoomsContainer {
     constructor() {
@@ -8,7 +9,7 @@ export default class RoomsContainer {
     addNewRoom(code) {
         if (!code) {
             do {
-                code = this.generateRoomCode(4);
+                code = generateRoomCode(4);
             } while (this.findRoomByCode(code) === -1);
         }
         let newRoom = new Room(code);
@@ -19,16 +20,6 @@ export default class RoomsContainer {
 
     findRoomByCode(code) {
         return this.rooms.find(room => room.code === code);
-    }
-
-    //TODO: overload functionality
-    generateRoomCode(codeLength) {
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        let code = '';
-        for (let i = 0; i < codeLength; ++i) {
-            code += chars[Math.floor(Math.random() * chars.length)];
-        }
-        return code;
     }
 
     deleteRoom(code) {
