@@ -15,6 +15,8 @@ const wss = new WebSocketServer({noServer: true}, () => console.log("WebSocket s
 
 const app = express();
 
+//TODO: options
+app.use(express.json({limit: "300Kb"}));
 // app.on('upgrade', function upgrade(request, socket, head) {
 //
 //     console.log(acceptWS(request));

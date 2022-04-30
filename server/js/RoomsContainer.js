@@ -21,6 +21,7 @@ export default class RoomsContainer {
         return this.rooms.find(room => room.code === code);
     }
 
+    //TODO: overload functionality
     generateRoomCode(codeLength) {
         const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         let code = '';
