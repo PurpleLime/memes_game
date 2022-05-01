@@ -37,7 +37,10 @@ class IngameModel extends BaseModel {
         this.cards = data.cards;
         this.slotIndex = this.slots.findIndex(slot => slot.id === this.playerId);
 
-        this.socket.onmessage = this.ingameHandleResponse.bind(this);
+        // this.socket.onmessage = this.ingameHandleResponse.bind(this);
+        this.socket.onmessage = (event) => {
+            this.ingameHandleResponse(event);
+        }
 
         this.emit('initView');
     }

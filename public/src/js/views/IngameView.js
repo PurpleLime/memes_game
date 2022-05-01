@@ -49,7 +49,10 @@ class IngameView extends BaseView {
         situationCardDeck.addEventListener('mouseleave', this.hideExtraSituationCard);
 
         let confirmButton = document.getElementById('confirmButton');
-        confirmButton.addEventListener('click', this.confirmSelectedCard.bind(this));
+        // confirmButton.addEventListener('click', this.confirmSelectedCard.bind(this));
+        confirmButton.addEventListener('click', (e) => {
+            this.confirmSelectedCard(e);
+        });
 
         this.renderPlayers();
         this.setUsersPositionsByCoords();
@@ -142,7 +145,10 @@ class IngameView extends BaseView {
 
                         addedCard.addEventListener('mouseover', this.cardMouseoverHandler);
                         addedCard.addEventListener('mouseleave', this.cardMouseleaveHandler);
-                        addedCard.addEventListener('click', this.cardClickHandler.bind(this));
+                        // addedCard.addEventListener('click', this.cardClickHandler.bind(this));
+                        addedCard.addEventListener('click', (e) => {
+                            this.cardClickHandler(e);
+                        });
 
                         this.arrangeCardsInHand();
 
@@ -479,7 +485,10 @@ class IngameView extends BaseView {
         closeButton.style.visibility = 'hidden';
         closeButton.style.opacity = '0';
         closeButton.style.transition = 'opacity 0.3s linear'
-        closeButton.addEventListener('click', this.popupCloseButtonClickHandler.bind(this));
+        // closeButton.addEventListener('click', this.popupCloseButtonClickHandler.bind(this));
+        closeButton.addEventListener('click', () => {
+            this.popupCloseButtonClickHandler();
+        });
 
 
         if (this._model.confirmedCardOrientation === 'horizontal') {
@@ -774,7 +783,10 @@ class IngameView extends BaseView {
         closeButton.style.visibility = 'hidden';
         closeButton.style.opacity = '0';
         closeButton.style.transition = 'opacity 0.3s linear'
-        closeButton.addEventListener('click', this.roundWinnerCloseButtonClickHandler.bind(this));
+        // closeButton.addEventListener('click', this.roundWinnerCloseButtonClickHandler.bind(this));
+        closeButton.addEventListener('click', () => {
+            this.roundWinnerCloseButtonClickHandler();
+        });
 
         let roundWinnerTitle = document.createElement('div');
         roundWinnerTitle.classList.add('round-winner-title');

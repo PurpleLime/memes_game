@@ -28,10 +28,16 @@ class MainPageView extends BaseView {
 
         let userNickname = document.getElementById('usernameInput');
         userNickname.value = this._model.userNickname;
-        userNickname.addEventListener('input', this.userNicknameClickHandler.bind(this));
+        // userNickname.addEventListener('input', this.userNicknameClickHandler.bind(this));
+        userNickname.addEventListener('input', (e) => {
+            this.userNicknameClickHandler(e)
+        });
 
         let createButton = document.getElementById('createButton');
-        createButton.addEventListener('click', this.createButtonClickHandler.bind(this));
+        // createButton.addEventListener('click', this.createButtonClickHandler.bind(this));
+        createButton.addEventListener('click', (e) => {
+            this.createButtonClickHandler(e);
+        });
 
         let joinButton = document.getElementById('joinButton');
         joinButton.addEventListener('click', this.joinButtonHandler);

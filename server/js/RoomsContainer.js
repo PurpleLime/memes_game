@@ -13,7 +13,10 @@ export default class RoomsContainer {
             } while (this.findRoomByCode(code) === -1);
         }
         let newRoom = new Room(code);
-        newRoom.on('deleteMe', this.deleteRoom.bind(this));
+        // newRoom.on('deleteMe', this.deleteRoom.bind(this));
+        newRoom.on('deleteMe', (code) => {
+            this.deleteRoom(code);
+        });
         this.rooms.push(newRoom);
         return code;
     }
