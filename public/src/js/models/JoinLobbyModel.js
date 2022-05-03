@@ -28,6 +28,7 @@ class JoinLobbyModel extends BaseModel {
     connectWebSocket() {
         return new Promise((resolve, reject) => {
                 this.socket = new WebSocket(wsServer);
+                console.log(this.socket);
                 // this.socket.onmessage = this.joinLobbyHandleResponse.bind(this);
                 this.socket.onmessage = (event) => {
                     this.joinLobbyHandleResponse(event);

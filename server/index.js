@@ -7,6 +7,7 @@ import path from 'path';
 import GameSlot from "./js/GameSlot.js";
 import Room from "./js/Room.js";
 import RoomsContainer from "./js/RoomsContainer.js";
+import serveStatic from "serve-static";
 
 const __dirname = path.resolve();
 const PORT = process.env.PORT ?? 3000;
@@ -14,6 +15,8 @@ const PORT = process.env.PORT ?? 3000;
 const wss = new WebSocketServer({noServer: true}, () => console.log("WebSocket server started"));
 
 const app = express();
+
+app.use(serveStatic(path.join(__dirname, 'public')));
 
 //TODO: options
 app.use(express.json({limit: "300Kb"}));
@@ -49,37 +52,32 @@ app.get("/createRoom", (req, res) => {
     }
 });
 
-app.get('*', (req, res) => {
-
-    // console.log(acceptWS(req));
-
-    if (acceptWS(req)) {
-        try {
-            wss.handleUpgrade(req, req.socket, Buffer.alloc(0), onSocketConnect);
-        } catch (e) {
-            console.log(e);
-        }
-        return
-    }
-
-    // console.log('request', req.url);
-
-    let file = 'index.html';
-
-    if (req.url !== '/') {
-        file = req.url.replace('/', '')
-    }
-
-    // console.log('mime: ', mime.getType(path.resolve(__dirname, 'public', file)));
-
-    // res.setHeader('Content-Type', mime.getType(`public/${file}`));
-
-    if (file.includes('src/img/memes/')) {
-        file += '.png';
-    }
-
-    res.sendFile(path.resolve(__dirname, 'public', file));
-})
+// app.get('*', (req, res) => {
+//
+//     if (acceptWS(req)) {
+//         try {
+//             wss.handleUpgrade(req, req.socket, Buffer.alloc(0), onSocketConnect);
+//         } catch (e) {
+//             console.log(e);
+//         }
+//         return
+//     }
+//
+//
+//     let file = 'index.html';
+//
+//     if (req.url !== '/') {
+//         file = req.url.replace('/', '')
+//     }
+//
+//     // res.setHeader('Content-Type', mime.getType(`public/${file}`));
+//
+//     if (file.includes('src/img/memes/')) {
+//         file += '.png';
+//     }
+//
+//     res.sendFile(path.resolve(__dirname, 'public', file));
+// })
 
 const clients = new Set();
 
@@ -87,9 +85,26 @@ const clients = new Set();
 //     console.log(`Server has been started on port ${PORT}...`);
 // })
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server has been started on port ${PORT}...`);
 })
+
+server.on('upgrade', function upgrade(request, socket, head) {
+
+    // console.log(acceptWS(request));
+
+    if (acceptWS(request)) {
+        try {
+            wss.handleUpgrade(request, socket, Buffer.alloc(0), onSocketConnect);
+        }
+        catch (e) {
+            console.log(e);
+        }
+        return
+    }
+})
+
+
 
 
 //websocket:
