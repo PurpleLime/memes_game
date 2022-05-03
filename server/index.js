@@ -16,7 +16,9 @@ const wss = new WebSocketServer({noServer: true}, () => console.log("WebSocket s
 
 const app = express();
 
-app.use(serveStatic(path.join(__dirname, 'public')));
+app.use(serveStatic(path.join(__dirname, 'public'),{
+    extensions: ['png'],
+}));
 
 //TODO: options
 app.use(express.json({limit: "300Kb"}));
