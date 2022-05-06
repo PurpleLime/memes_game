@@ -128,6 +128,15 @@ function onSocketConnect(ws) {
         switch (message.header) {
             case 'checkRoom':
                 // desiredRoom = rooms.find(room => room.code === message.roomCode);
+
+                if (!rooms.checkRoomExistence(message.roomCode)) {
+                    ws.send(JSON.stringify({
+                        header: "checkRoom/error",
+                        errorMessage: "Комната не существует"
+                    }));
+                    break;
+                }
+
                 desiredRoom = rooms.findRoomByCode(message.roomCode);
 
                 if (desiredRoom !== undefined) {

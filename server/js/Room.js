@@ -80,7 +80,7 @@ class Room {
                 if (!this.isEmpty()) {
                     if (wasHost) this.slots[0].isHost = true;
                 } else {
-                    this.emit('deleteMe');
+                    this.emit('deleteMe', this.code);
                 }
 
             }
