@@ -1,0 +1,19 @@
+{
+  "name": "Memes Game",
+  "short_name": "memes",
+  "lang": "ru-RU",
+  "start_url": "/index.html",
+  "display": "fullscreen",
+  "orientation": "any",
+  "background_color": "red",
+  "theme_color": "blue",
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/src/img/memes_img.png",
+      "type": "image/png",
+      "sizes": "24x24"
+    }
+  ]
+}

@@ -21,7 +21,6 @@ class MainPageView extends BaseView {
     }
 
     renderMainPage() {
-        window.scroll(0, 0);
         document.title = 'Главная страница';
 
         this.wrapper.innerHTML = mainPageTemplate({});
