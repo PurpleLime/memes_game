@@ -55,7 +55,15 @@ class IngameView extends BaseView {
         });
 
         this.renderPlayers();
+
         this.setUsersPositionsByCoords();
+
+        window.addEventListener('resize', (e) => {
+            this.setUsersPositionsByCoords();
+            setTimeout(() => {
+                this.arrangeCardsInHand();
+            }, 500);
+        });
 
         // this.renderPlayerHand();
         // this.takingSituationCardAnimation();
@@ -339,20 +347,23 @@ class IngameView extends BaseView {
 
         let cardCoords = card.getBoundingClientRect();
 
+        let container = document.getElementById('container');
+        let containerCoords = container.getBoundingClientRect();
+
         //нам нужна именно координата левого верхнего угла карты, а не прямоугольника, заключающего эту карту, а
         //т.к. карты повернута, то их углы не совпадают, поэтому находим расстояние между их углами
         let fixingX = rotationAngle > 0 ? Math.sin(degreesToRadians(rotationAngle)) * card.offsetHeight * scaleValue : 0;
         let fixingY = rotationAngle < 0 ? Math.sin(degreesToRadians(rotationAngle)) * card.offsetWidth * scaleValue : 0;
 
-        clone.style.left = `${cardCoords.x + window.scrollX + fixingX}px`;
-        clone.style.top = `${cardCoords.y + window.scrollY - fixingY}px`;
+        clone.style.left = `${cardCoords.x - containerCoords.x + window.scrollX + fixingX}px`;
+        clone.style.top = `${cardCoords.y - containerCoords.y + window.scrollY - fixingY}px`;
 
         clone.style.marginLeft = '';
         clone.style.transformOrigin = 'left top';
         clone.style.pointerEvents = 'none';
         clone.style.transition = 'top 0.5s ease-in 0s, left 1s ease-in 0s, transform 0.5s ease-in 0s';
 
-        document.body.appendChild(clone)
+        container.appendChild(clone)
 
         setTimeout(() => {
             clone.style.transform = '';
@@ -390,11 +401,14 @@ class IngameView extends BaseView {
 
         let memeCardDeck = document.getElementById('memeCardDeck');
         let memeCardDeckCoords = memeCardDeck.getBoundingClientRect();
+        let container = document.getElementById('container');
+        let containerCoords = container.getBoundingClientRect();
+
         clone.style.position = 'absolute';
         clone.style.width = '100%';
         clone.style.height = '100%';
-        flippingCard.style.left = `${memeCardDeckCoords.x + window.scrollX}px`;
-        flippingCard.style.top = `${memeCardDeckCoords.y + window.scrollY}px`;
+        flippingCard.style.left = `${memeCardDeckCoords.x - containerCoords.x + window.scrollX}px`;
+        flippingCard.style.top = `${memeCardDeckCoords.y - containerCoords.y + window.scrollY}px`;
         flippingCard.style.width = `${memeCardDeckCoords.width}px`;
         flippingCard.style.height = `${memeCardDeckCoords.height}px`;
         clone.style.marginLeft = '';
@@ -423,7 +437,7 @@ class IngameView extends BaseView {
         let fixingX = rotationAngle > 0 ? Math.sin(degreesToRadians(rotationAngle)) * card.offsetHeight * scaleValue : 0;
         let fixingY = rotationAngle < 0 ? Math.sin(degreesToRadians(rotationAngle)) * card.offsetWidth * scaleValue : 0;
 
-        document.body.append(flippingCard);
+        container.append(flippingCard);
 
 
         //выставление координат и трансформаций карты в руке:
@@ -433,8 +447,8 @@ class IngameView extends BaseView {
             }).join(' ');
         }, 0);
 
-        flippingCard.style.left = `${cardCoords.x + window.scrollX + fixingX}px`;
-        flippingCard.style.top = `${cardCoords.y + window.scrollY - fixingY}px`;
+        flippingCard.style.left = `${cardCoords.x - containerCoords.x + window.scrollX + fixingX}px`;
+        flippingCard.style.top = `${cardCoords.y - containerCoords.y + window.scrollY - fixingY}px`;
         flippingCard.style.transformOrigin = 'left top';
         flippingCard.style.width = `${card.offsetWidth}px`;
         flippingCard.style.height = `${card.offsetHeight}px`;
@@ -462,12 +476,10 @@ class IngameView extends BaseView {
         popupCard.style.zIndex = '3333';
         popupCard.style.pointerEvents = 'none';
         popupCard.style.left = '50%';
-        popupCard.style.top = '-40%';
         popupCard.style.transformOrigin = 'center center';
         popupCard.style.visibility = 'visible';
         popupCard.style.transform = 'translate(-50%, -50%) scale(2.5)';
         popupCard.style.transition = 'all 0.6s ease-in'
-        popupCard.style.borderWidth = '3px';
         popupCard.style.animation = 'animation-popup-card 0.6s ease-in 1'
         popupCard.style.animationFillMode = 'forwards';
 
@@ -501,7 +513,9 @@ class IngameView extends BaseView {
 
         popupCard.append(closeButton);
 
-        document.body.append(popupCard);
+        let container = document.getElementById('container');
+        // document.body.append(popupCard);
+        container.append(popupCard);
 
         popupCard.addEventListener('animationend', () => {
             setTimeout(() => {
@@ -572,9 +586,11 @@ class IngameView extends BaseView {
 
             let situationCardDeck = document.getElementById('situationCardDeck');
             let situationCardDeckCoords = situationCardDeck.getBoundingClientRect();
+            let container = document.getElementById('container');
+            let containerCoords = container.getBoundingClientRect();
 
-            flippingCard.style.left = `${situationCardDeckCoords.x + window.scrollX}px`;
-            flippingCard.style.top = `${situationCardDeckCoords.y + window.scrollY}px`;
+            flippingCard.style.left = `${situationCardDeckCoords.x - containerCoords.x + window.scrollX}px`;
+            flippingCard.style.top = `${situationCardDeckCoords.y - containerCoords.y + window.scrollY}px`;
             flippingCard.style.width = `${situationCardDeckCoords.width}px`;
             flippingCard.style.height = `${situationCardDeckCoords.height}px`;
             flippingCard.style.transform = 'translate(-100%, 0) rotateY(-180deg)';
@@ -583,7 +599,7 @@ class IngameView extends BaseView {
             flippingCard.style.transition = 'top 0.5s ease-in, left 0.5s ease-in, transform 0.5s ease-in, width 0.5s ease-in, height 0.5s ease-in';
             flippingCard.style.visibility = 'visible';
 
-            document.body.append(flippingCard);
+            container.append(flippingCard)
 
             // flippingCard.style.left = `${cardCoords.x + window.scrollX + fixingX}px`;
             // flippingCard.style.top = `${cardCoords.y + window.scrollY - fixingY}px`;
@@ -619,21 +635,23 @@ class IngameView extends BaseView {
                 return;
             }
 
+            let container = document.getElementById('container');
             let clone = card.cloneNode(true);
             clone.style.position = 'absolute';
             clone.style.transform = 'none';
 
             let cardCoords = card.getBoundingClientRect();
+            let containerCoords = container.getBoundingClientRect();
 
-            clone.style.left = `${cardCoords.x + window.scrollX}px`;
-            clone.style.top = `${cardCoords.y + window.scrollY}px`;
+            clone.style.left = `${cardCoords.x - containerCoords.x + window.scrollX}px`;
+            clone.style.top = `${cardCoords.y - containerCoords.y + window.scrollY}px`;
 
             clone.style.transition = 'top 0.5s ease-in 0s, left 1s ease-in 0s, transform 0.5s ease-in 0s';
 
             clone.style.animation = 'animation-situation-card-remove 0.5s ease-in 1'
             clone.style.animationFillMode = 'forwards';
 
-            document.body.append(clone);
+            container.append(clone);
 
             let situationIcon = document.createElement('div');
             situationIcon.classList.add('situation-card-icon');
@@ -680,6 +698,8 @@ class IngameView extends BaseView {
         roundResultsContainer.classList.add('round-results-container');
         roundResultsContainer.style.animation = 'animation-show-round-results-container 1s ease-out 1'
         roundResultsContainer.style.animationFillMode = 'forwards';
+        roundResultsContainer.style.position = 'absolute';
+        roundResultsContainer.style.pointerEvents = 'all';
 
         let roundResultsTitle = document.createElement('div');
         roundResultsTitle.classList.add('round-results-title');
@@ -716,8 +736,7 @@ class IngameView extends BaseView {
         roundResultsContainer.append(roundResultsTitle);
         roundResultsContainer.append(resultsList);
 
-        let wrapper = document.getElementById('wrapper');
-        wrapper.append(roundResultsContainer);
+        container.append(roundResultsContainer);
     }
 
     hideRoundResults() {
@@ -760,12 +779,11 @@ class IngameView extends BaseView {
         winnerCard.style.zIndex = '3333';
         winnerCard.style.pointerEvents = 'none';
         winnerCard.style.left = '50%';
-        winnerCard.style.top = '-40%';
         winnerCard.style.transformOrigin = 'center center';
         winnerCard.style.visibility = 'visible';
         winnerCard.style.transform = 'translate(-50%, -50%) scale(2.5)';
         winnerCard.style.transition = 'all 0.6s ease-in'
-        winnerCard.style.borderWidth = '3px';
+        // winnerCard.style.borderWidth = '3px';
         winnerCard.style.animation = 'animation-popup-card 0.6s ease-in 1'
         winnerCard.style.animationFillMode = 'forwards';
 
@@ -817,7 +835,8 @@ class IngameView extends BaseView {
         winnerCard.append(roundWinnerTitle);
         winnerCard.append(roundWinnerNickname);
 
-        document.body.append(winnerCard);
+        let container = document.getElementById('container');
+        container.append(winnerCard);
 
         winnerCard.addEventListener('animationend', () => {
             setTimeout(() => {
@@ -882,7 +901,8 @@ class IngameView extends BaseView {
             }, 3000);
         })
 
-        document.body.append(yourTurnTitle);
+        let container = document.getElementById('container');
+        container.append(yourTurnTitle);
     }
 
     updateCurrentPlayer() {

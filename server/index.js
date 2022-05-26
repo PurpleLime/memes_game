@@ -209,7 +209,7 @@ function onSocketConnect(ws) {
                 if (!slot) break;
                 if (slot.isHost) {
 
-                    if (desiredRoom.slots.length < 3) {
+                    if (desiredRoom.slots.length < 1) {
                         ws.send(JSON.stringify({
                             header: "startRoom/error",
                             errorMessage: "Недостаточно игроков для начала игры"

@@ -1,0 +1,354 @@
+@import "main";
+
+.players-circle {
+    position: relative;
+    width: 82.5%;
+    height: 70%;
+    /*margin-top: 12.6vh;*/
+}
+
+.players-circle__container {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.ingame-page-upper-cap {
+    width: 100%;
+    height: 12.6%;
+}
+
+.ingame-menu-button {
+    position: absolute;
+    top: adapt-by-game-area-height(30);
+    left: adapt-by-game-area-height(30);
+}
+
+.ingame-pull-out-mode-button {
+    position: absolute;
+    bottom: adapt-by-game-area-height(40);
+    left: adapt-by-game-area-height(40);
+}
+
+.ingame-confirm-button {
+    position: absolute;
+    bottom: adapt-by-game-area-height(40);
+    right: adapt-by-game-area-height(40);
+}
+
+.self_judge_emblem {
+    position: absolute;
+    bottom: adapt-by-game-area-height(40);
+    right: adapt-by-game-area-height(40);
+    background: url(../img/judgeEmblemIcon.png) no-repeat center/cover;
+    z-index: 11;
+    display: none;
+}
+
+.self_judge_emblem_none {
+    display: none;
+}
+
+.self-score-block {
+    position: absolute;
+    bottom: 3%;
+    left: 50%;
+    transform: translate(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: adapt-by-game-area-height(15);
+}
+
+.self-score-block__score-amount {
+    font-size: adapt-by-game-area-height(34);
+    font-weight: bold;
+    color: white;
+}
+
+/*.cur-situation-card {*/
+/*    !*position: absolute;*!*/
+/*    !*top: 50%;*!*/
+/*    !*left: 50%;*!*/
+/*    !*transform: translate(-50%, -50%);*!*/
+/*    !*height: 340px;*!*/
+/*    !*width: 251px;*!*/
+/*    height: 100%;*/
+/*    width: 100%;*/
+/*    background: #1769E3;*/
+/*    border: 5px solid #AD00FF;*/
+/*    border-radius: 8px;*/
+/*    color: white;*/
+/*    font-weight: bold;*/
+/*    font-size: 24px;*/
+/*    line-height: 28px;*/
+/*    padding: 20px;*/
+/*}*/
+
+.situation-card-deck {
+    position: absolute;
+    top: 50%;
+    left: 40%;
+    transform: translate(-50%, -50%);
+    /*height: 185px;*/
+    /*width: 137px;*/
+    height: adapt-by-game-area-height(277);
+    width: adapt-by-game-area-height(205);
+    background: #1769E3;
+    border: adapt-by-game-area-height(5) solid #AD00FF;
+    border-radius: adapt-by-game-area-height(8);
+    color: white;
+    font-weight: bold;
+    font-size: adapt-by-game-area-height(20);
+    line-height: adapt-by-game-area-height(28);
+    padding: adapt-by-game-area-height(10);
+    z-index: 1;
+    backface-visibility: hidden;
+}
+
+.situation-card-deck_extra {
+    left: 0;
+    transform: translate(0, -50%);
+    display: none;
+}
+
+.meme-card-deck {
+    position: absolute;
+    top: 50%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+    /*height: 185px;*/
+    /*width: 137px;*/
+    height: adapt-by-game-area-height(277);
+    width: adapt-by-game-area-height(205);
+    /*background: url(../img/memeCardIcon.png) no-repeat center/50%,*/
+    /*#A00CC6;*/
+    background: #A00CC6;
+    border: adapt-by-game-area-height(5) solid #EE3434;
+    border-radius: adapt-by-game-area-height(8);
+}
+
+.player-hand {
+    position: absolute;
+    left: 50%;
+    bottom: adapt-by-game-area-height(100);
+    display: flex;
+    transform: translate(-50%);
+    width: 100%;
+    justify-content: center;
+    z-index: 2;
+}
+
+.results-list {
+    width: 100%;
+    margin: auto 0 auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    column-gap: 7%;
+    row-gap: 5vh;
+}
+
+.round-results-container {
+    position: absolute;
+    z-index: 200;
+}
+
+@keyframes animation-show-round-results-container {
+    0% {
+        top: -100%;
+    }
+    100% {
+        top: 0;
+        //transform: translateY(-50%);
+    }
+}
+
+@keyframes animation-hide-round-results-container {
+    0% {
+        top: 0;
+    }
+    100% {
+        top: -100%;
+    }
+}
+
+.round-results-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: adapt-by-game-area-height(80);
+    font-weight: bold;
+    color: #FAF009;
+    margin-top: 5%;
+}
+
+.round-winner-title {
+    position: absolute;
+    width: max-content;
+    top: -20%;
+    left: 50%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: adapt-by-game-area-height(30);
+    font-weight: bold;
+    color: #FAF009;
+    transform: translate(-50%, -50%);
+}
+
+.round-winner-nickname {
+    position: absolute;
+    width: max-content;
+    bottom: -20%;
+    left: 50%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: adapt-by-game-area-height(20);
+    font-weight: bold;
+    color: #FAF009;
+    transform: translate(-50%, -50%);
+}
+
+.your-turn-title {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    width: max-content;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: adapt-by-game-area-height(84);
+    font-weight: bold;
+    color: #FAF009;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+@keyframes animation-show-your-turn-title {
+    0% {
+        top: -20%;
+    }
+    100% {
+        top: 20%;
+    }
+}
+
+.meme-card {
+    height: adapt-by-game-area-height(185);
+    width: adapt-by-game-area-height(137);
+    background: url(../img/defaultBackground.png) repeat center/40%,
+    #A00CC6 no-repeat center/cover;
+    border: adapt-by-game-area-height(5) solid #EE3434;
+    border-radius: adapt-by-game-area-height(8);
+    /*transition: all 0.1s linear 0s;*/
+    visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.meme-card:hover {
+    border-color: #6FEE34;
+    z-index: 100;
+}
+
+.meme-card_nohover:hover {
+    border-color: #EE3434;
+    z-index: unset;
+}
+
+.flipping-card {
+    position: absolute;
+    z-index: 2;
+    height: adapt-by-game-area-height(185);
+    width: adapt-by-game-area-height(137);
+    transform-style: preserve-3d;
+}
+
+.flipping-card__back-side {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+}
+
+.flipping-card__back-side_meme {
+    background: #A00CC6;
+    border: adapt-by-game-area-height(5) solid #EE3434;
+    border-radius: adapt-by-game-area-height(8);
+}
+
+.flipping-card__back-side_situation {
+    background: #1769E3;
+    border: adapt-by-game-area-height(5) solid #AD00FF;
+    border-radius: adapt-by-game-area-height(8);
+}
+
+@keyframes animation-situation-card-take {
+    0% {
+    }
+    40% {
+        transform: translate(-100%, 0) rotateY(-180deg) translate(-50%, -20%) scale(0.9);
+    }
+    70% {
+        transform: rotateY(-90deg) translate(50%, -20%) scale(0.9);
+    }
+    100% {
+        transform: none;
+    }
+}
+
+@keyframes animation-situation-card-remove {
+    0% {
+    }
+    100% {
+        transform: scale(0.7);
+        top: -50%;
+        left: 50%;
+    }
+}
+
+@keyframes animation-popup-card {
+    0% {
+        top: -40%;
+    }
+    100% {
+        top: 40%;
+    }
+}
+
+.popup-card {
+    top: -40%;
+    left: 50%;
+}
+
+.meme-card_selected {
+    border-color: #0c51ba;
+}
+
+.meme-card_selected:hover {
+    border-color: #0c51ba;
+}
+
+.meme-card_in_hand {
+    margin-left: -2.17%;
+}
+
+.meme-card__meme {
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-image: url(../img/shrekMeme.jpg);
+    border-radius: adapt-by-game-area-height(4);
+}
+
+.meme-card_size_m {
+    /*transform: scale(1.5);*/
+    width: adapt-by-game-area-height(205);
+    height: adapt-by-game-area-height(276);
+}

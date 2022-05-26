@@ -1,0 +1,81 @@
+@import "main";
+
+.users-list {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: adapt-by-game-area-height(50);
+    width: 100%;
+}
+
+.user-game-avatar {
+    background: url(../img/questionIcon.png) no-repeat center/cover;
+    height: adapt-by-game-area-height(160);
+    width: adapt-by-game-area-height(133);
+    border: adapt-by-game-area-height(3) solid black;
+    border-radius: adapt-by-game-area-height(18);
+    position: relative;
+}
+
+.user-game-avatar_current {
+    border: adapt-by-game-area-height(6) solid #FCD162;
+}
+
+.user-game-avatar_default_avatar {
+    background: url(../img/defaultAvatar.png) no-repeat center/cover;
+}
+
+.user-game-avatar__name-container {
+    width: 100%;
+    height: 22%;
+    position: absolute;
+    bottom: 0;
+    border-radius: 0px 0px adapt-by-game-area-height(13) adapt-by-game-area-height(13);
+    background: linear-gradient(180deg, rgba(196, 196, 196, 0) 0%, rgba(255, 255, 255, 0.72) 33.85%, #FFFFFF 100%);
+    font-size: adapt-by-game-area-height(15);
+    line-height: adapt-by-game-area-height(16);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-game-avatar__name-container_none {
+    display: none;
+}
+
+.user-game-avatar__score-block {
+    position: absolute;
+    top: 105%;
+    left: 50%;
+    transform: translate(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: adapt-by-game-area-height(5);
+}
+
+.user-game-avatar__score-amount {
+    font-size: adapt-by-game-area-height(24);
+    font-weight: bold;
+    color: white;
+}
+
+.user-game-avatar__host-label {
+    width: 50%;
+    height: 40%;
+    background: url(../img/hostLabelIcon.png) no-repeat center/cover;
+}
+
+.user-game-avatar__judge-emblem {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 40%;
+    background: url(../img/judgeEmblemIcon.png) no-repeat center/cover;
+}
+
+.user-game-avatar__judge-emblem_none {
+    display: none;
+}

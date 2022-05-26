@@ -1,0 +1,118 @@
+@import "main";
+
+.standart-button {
+    border-radius: 50%;
+    background-color: #FCD162;
+    border: 1px solid #E49620;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.1s linear 0s;
+}
+
+.standart-button:hover {
+    transform: scale(1.1, 1.1);
+}
+
+.standart-button_size_l {
+    width: adapt-by-game-area-height(150);
+    height: adapt-by-game-area-height(150);
+}
+
+.standart-button_size_m {
+    width: adapt-by-game-area-height(113);
+    height: adapt-by-game-area-height(113);
+}
+
+.standart-button_size_s {
+    width: adapt-by-game-area-height(44);
+    height: adapt-by-game-area-height(44);
+}
+
+.standart-button_size_xs {
+    width: adapt-by-game-area-height(22);
+    height: adapt-by-game-area-height(22);
+}
+
+.menu-icon {
+    width: 50%;
+    height: 50%;
+    background: url(../img/menuIcon.svg) no-repeat center/cover;
+}
+
+.pull-out-mode-icon {
+    width: 50%;
+    height: 50%;
+    background: url(../img/pullOutModeIcon.svg) no-repeat center/cover;
+}
+
+.confirm-icon {
+    width: 50%;
+    height: 50%;
+    background: url(../img/confirmIcon.svg) no-repeat center/cover;
+}
+
+.star-icon {
+    width: adapt-by-game-area-height(28);
+    height: adapt-by-game-area-height(28);
+    background: url(../img/starIcon.svg) no-repeat center/cover;
+}
+
+.self-star-icon {
+    width: adapt-by-game-area-height(40);
+    height: adapt-by-game-area-height(40);
+    background: url(../img/starIcon.svg) no-repeat center/cover;
+}
+
+.close-icon {
+    width: 50%;
+    height: 50%;
+    background: url(../img/closeIcon.png) no-repeat center/cover;
+}
+
+.meme-card-icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 50%;
+    height: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 50%;
+    background: url(../img/memeCardIcon.png) no-repeat center/contain;
+}
+
+.situation-card-icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 50%;
+    height: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 50%;
+    background: url(../img/situationCardIcon.svg) no-repeat center/contain;
+}
+
+.disabled-button {
+    pointer-events: none;
+    filter: grayscale(50%) brightness(0.65);
+}
+
+.standart-input {
+    background-color: transparent;
+    border: none;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    font-size: adapt-by-game-area-height(48);
+    line-height: adapt-by-game-area-height(56);
+    font-weight: bold;
+}
+
+.standart-input:focus {
+    outline: none;
+}
+
+.standart-input__uppercase {
+    text-transform: uppercase;
+}

@@ -28,6 +28,7 @@ class Room {
     }
 
     static maxPlayers = 8;
+    static minPlayers = 3;
 
     playersAmount() {
         return this.slots.length;

@@ -1,0 +1,27 @@
+@import "main";
+
+.lobby-code {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.lobby-code__text {
+    font-size: adapt-by-game-area-height(64);
+    font-weight: bold;
+    color: #FAF009;
+    margin-right: 10%;
+}
+
+.lobby-code__input-block {
+    background: #ECEADA;
+    border-radius: adapt-by-game-area-height(40);
+    width: adapt-by-game-area-height(260);
+    height: adapt-by-game-area-height(127);
+    padding: adapt-by-game-area-height(30) adapt-by-game-area-height(25);
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
