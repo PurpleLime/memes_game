@@ -104,6 +104,7 @@ html, body {
   padding: max(0px, calc(31 / var(--figma-game-area-height) * var(--game-area-height))) max(0px, calc(25 / var(--figma-game-area-height) * var(--game-area-height)));
   width: 100%;
   text-align: center;
+  user-select: none;
 }
 
 .menu-item_none {
