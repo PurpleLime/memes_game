@@ -115,7 +115,6 @@ html, body {
   right: max(0px, calc(40 / var(--figma-game-area-height) * var(--game-area-height)));
   background: url(../img/judgeEmblemIcon.png) no-repeat center/cover;
   z-index: 11;
-  display: none;
 }
 
 .self_judge_emblem_none {
