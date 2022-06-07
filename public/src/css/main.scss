@@ -26,6 +26,10 @@
 html, body {
     height: 100%;
     overflow: hidden;
+
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
 }
 
 .wrapper {

@@ -87,7 +87,7 @@ const clients = new Set();
 //     console.log(`Server has been started on port ${PORT}...`);
 // })
 
-const server = app.listen(PORT, () => {
+const server = app.listen(process.env.PORT || PORT, () => {
     console.log(`Server has been started on port ${PORT}...`);
 })
 
