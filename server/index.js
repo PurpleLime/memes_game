@@ -20,6 +20,11 @@ app.use(serveStatic(path.join(__dirname, 'public'),{
     extensions: ['png'],
 }));
 
+app.get('/bundle.js', (req, res) => {
+    let file = req.url.replace('/', '');
+    res.sendFile(path.resolve(__dirname, 'dist', file));
+})
+
 //TODO: options
 app.use(express.json({limit: "300Kb"}));
 // app.on('upgrade', function upgrade(request, socket, head) {
