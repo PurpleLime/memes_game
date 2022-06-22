@@ -22,8 +22,6 @@ app.use(serveStatic(path.join(__dirname, 'public'),{
 
 app.get('/bundle.js', (req, res) => {
     let file = req.url.replace('/', '');
-    console.log(file);
-    console.log(__dirname);
     res.sendFile(path.resolve(__dirname, 'dist', file));
 })
 
