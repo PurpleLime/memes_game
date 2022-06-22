@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "npm run cast-scss && node server",
-    "build": "./node_modules/.bin/webpack",
+    "start": "node server",
+    "build": "npm run pug-build && npm run cast-scss && ./node_modules/.bin/webpack",
     "pug-build": "./pug.sh",
     "cast-scss": "sass public/src/css/:public/src/css/",
     "test": "echo \"Error: no test specified\" && exit 1"
