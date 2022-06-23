@@ -22,6 +22,7 @@ app.use(serveStatic(path.join(__dirname, 'public'),{
 
 app.get('/bundle.js', (req, res) => {
     let file = req.url.replace('/', '');
+    console.log(__dirname);
     res.sendFile(path.resolve(__dirname, 'dist', file));
 })
 
@@ -93,7 +94,7 @@ const clients = new Set();
 // })
 
 const server = app.listen(process.env.PORT || PORT, () => {
-    console.log(`Server has been started on port ${PORT}...`);
+    console.log(`Server has been started on port ${process.env.PORT || PORT}...`);
 })
 
 server.on('upgrade', function upgrade(request, socket, head) {
