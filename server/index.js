@@ -99,7 +99,7 @@ const server = app.listen(process.env.PORT || PORT, () => {
 
 server.on('upgrade', function upgrade(request, socket, head) {
 
-    // console.log(acceptWS(request));
+    console.log(acceptWS(request));
 
     if (acceptWS(request)) {
         try {

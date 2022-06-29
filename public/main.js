@@ -1,3 +1,5 @@
+// import './style.css'
+
 import Router from "./src/js/Router.js";
 
 window.addEventListener('resize', (e) => {
